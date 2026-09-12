@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Eigentümergemeinschaft" },
   "mode": { "bureau": "Verwaltungsbereich", "coprop": "Eigentümerbereich" },
-  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben", "cash": "Finanzen", "reg": "Abrechnung" },
+  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben", "cash": "Finanzen", "bank": "Bank", "reg": "Abrechnung" },
   "health": { "label": "API-Status", "ok": "verbunden", "down": "nicht erreichbar", "checking": "wird geprüft…" },
   "dashboard": { "title": "Übersicht", "socleNote": "Grundgerüst steht: API, Datenbank und Oberfläche kommunizieren. Funktionen folgen in den nächsten Schritten." },
   "coprop": {
@@ -59,6 +59,21 @@
     "remaining": "Offener Saldo",
     "payRemaining": "Saldo zahlen",
     "payHint": "Eine Zahlung wird automatisch den offenen Forderungen des Zahlers zugeordnet, älteste zuerst."
+  },
+  "bank": {
+    "title": "Bankabgleich",
+    "importHint": "Fügen Sie Ihre Kontoauszugszeilen ein, eine pro Zeile: 'Datum ; Betrag ; Text' (Datum TT/MM/JJJJ oder JJJJ-MM-TT; negativer Betrag für eine Ausgabe).",
+    "importBtn": "Auszug importieren",
+    "imported": "{{ inserted }} von {{ received }} Zeile(n) importiert.",
+    "worklist": "Abzugleichen",
+    "showAll": "Alle anzeigen",
+    "showTodo": "Nur abzugleichen",
+    "empty": "Nichts abzugleichen.",
+    "label": "Text",
+    "reconcile": "Abgleichen",
+    "isPaymentFrom": "Das ist eine Zahlung von:",
+    "noSuggestion": "Kein Vorschlag aus dem Text.",
+    "ledgerNote": "Der Auszug ist ein fortlaufendes Kontobuch: eine nicht abgeglichene Zeile bleibt auch nach einem Jahresabschluss verfügbar."
   },
   "th": { "lot": "Einheit", "owner": "Eigentümer", "tantiemes": "Anteile", "quotePart": "Anteil %", "actions": "", "supplier": "Lieferant", "date": "Datum", "category": "Kategorie", "amount": "Betrag", "paid": "Bezahlt", "status": "Status", "charge": "Kosten" },
   "field": { "name": "Name", "address": "Adresse", "postalCode": "PLZ", "city": "Ort", "lotNumber": "Nummer", "tantiemes": "Anteile", "owner": "Eigentümer", "supplier": "Lieferant", "exerciseLabel": "Bezeichnung (z. B. 2024)", "startDate": "Beginn", "endDate": "Ende", "invoiceDate": "Datum", "amount": "Betrag (€)", "category": "Kategorie", "subscriptionAmount": "Grundgebühr (€)", "consumptionAmount": "Verbrauch (€)" },

@@ -110,6 +110,30 @@ export interface RegularisationLot {
   amount: number;
 }
 
+export interface BankTx {
+  id: string;
+  transactionDate: string;
+  amount: string;
+  label: string | null;
+  reconciled: string;
+  remaining: number;
+  status: string;
+  direction: 'CREDIT' | 'DEBIT';
+}
+
+export interface PayerSuggestion {
+  personId: string;
+  name: string;
+  lotNumber: string;
+}
+
+export interface BankImportRow {
+  transactionDate: string;
+  amount: number;
+  label?: string | null;
+  externalId?: string | null;
+}
+
 export interface FundCall {
   id: string;
   label: string;
@@ -238,5 +262,24 @@ export class ApiService {
     input: { personId: string; paymentDate: string; amount: number; autoAllocate: boolean },
   ): Observable<unknown> {
     return this.http.post(`/api/coproperties/${copId}/payments`, input);
+  }
+
+  listBankTransactions(copId: string, unreconciled: boolean): Observable<BankTx[]> {
+    return this.http.get<BankTx[]>(`/api/coproperties/${copId}/bank-transactions?unreconciled=${unreconciled}`);
+  }
+
+  importBankTransactions(copId: string, rows: BankImportRow[]): Observable<{ inserted: number; received: number }> {
+    return this.http.post<{ inserted: number; received: number }>(
+      `/api/coproperties/${copId}/bank-transactions/import`,
+      { rows },
+    );
+  }
+
+  suggestPayers(copId: string, txId: string): Observable<PayerSuggestion[]> {
+    return this.http.get<PayerSuggestion[]>(`/api/coproperties/${copId}/bank-transactions/${txId}/suggest`);
+  }
+
+  recordOwnerPaymentFromLine(copId: string, txId: string, personId: string): Observable<unknown> {
+    return this.http.post(`/api/coproperties/${copId}/bank-transactions/${txId}/record-owner-payment`, { personId });
   }
 }

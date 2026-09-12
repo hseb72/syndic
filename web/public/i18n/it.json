@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Condominio" },
   "mode": { "bureau": "Area del consiglio", "coprop": "Area condomini" },
-  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio", "expenses": "Spese", "cash": "Tesoreria", "reg": "Conguaglio" },
+  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio", "expenses": "Spese", "cash": "Tesoreria", "bank": "Banca", "reg": "Conguaglio" },
   "health": { "label": "Stato API", "ok": "connessa", "down": "non raggiungibile", "checking": "verifica…" },
   "dashboard": { "title": "Cruscotto", "socleNote": "Base pronta: API, database e interfaccia comunicano. Le funzionalità arrivano nei passi successivi." },
   "coprop": {
@@ -59,6 +59,21 @@
     "remaining": "Saldo dovuto",
     "payRemaining": "Salda il dovuto",
     "payHint": "Un pagamento viene applicato automaticamente ai crediti aperti del pagatore, dal più vecchio."
+  },
+  "bank": {
+    "title": "Riconciliazione bancaria",
+    "importHint": "Incolla le righe dell'estratto conto, una per riga: 'data ; importo ; causale' (data GG/MM/AAAA o AAAA-MM-GG; importo negativo per una spesa).",
+    "importBtn": "Importa estratto",
+    "imported": "{{ inserted }} riga/e importate su {{ received }}.",
+    "worklist": "Da riconciliare",
+    "showAll": "Mostra tutto",
+    "showTodo": "Solo da riconciliare",
+    "empty": "Niente da riconciliare.",
+    "label": "Causale",
+    "reconcile": "Riconcilia",
+    "isPaymentFrom": "È un pagamento di:",
+    "noSuggestion": "Nessun suggerimento dalla causale.",
+    "ledgerNote": "L'estratto è un libro continuo: una riga non riconciliata resta disponibile anche dopo una chiusura d'esercizio."
   },
   "th": { "lot": "Unità", "owner": "Proprietario", "tantiemes": "Millesimi", "quotePart": "Quota %", "actions": "", "supplier": "Fornitore", "date": "Data", "category": "Categoria", "amount": "Importo", "paid": "Pagato", "status": "Stato", "charge": "Spesa" },
   "field": { "name": "Nome", "address": "Indirizzo", "postalCode": "CAP", "city": "Città", "lotNumber": "Numero", "tantiemes": "Millesimi", "owner": "Proprietario", "supplier": "Fornitore", "exerciseLabel": "Etichetta (es. 2024)", "startDate": "Inizio", "endDate": "Fine", "invoiceDate": "Data", "amount": "Importo (€)", "category": "Categoria", "subscriptionAmount": "Abbonamento (€)", "consumptionAmount": "Consumo (€)" },

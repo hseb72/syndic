@@ -1,0 +1,101 @@
+<ng-container *transloco="let t">
+  @if (!copId()) {
+    <div class="card"><div class="empty">{{ t('coprop.none') }}</div></div>
+  } @else {
+    <!-- Import -->
+    <div class="card">
+      <div class="card-head">
+        <h2>{{ t('bank.title') }}</h2>
+      </div>
+      <div class="field">
+        <textarea
+          rows="4"
+          [ngModel]="importText()"
+          (ngModelChange)="importText.set($event)"
+          [placeholder]="t('bank.importHint')"
+          style="width:100%; border:1px solid var(--line-strong); border-radius:8px; padding:10px; background:var(--surface); color:var(--ink); font-family:inherit; resize:vertical;"
+        ></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn primary" type="button" [disabled]="saving() || !importText().trim()" (click)="importStatement()">
+          {{ t('bank.importBtn') }}
+        </button>
+        @if (importResult(); as r) {
+          <span class="pill good">{{ t('bank.imported', { inserted: r.inserted, received: r.received }) }}</span>
+        }
+      </div>
+      <div class="disclaimer" style="margin-top:10px;">{{ t('bank.ledgerNote') }}</div>
+    </div>
+
+    <!-- Worklist -->
+    <div class="card">
+      <div class="card-head">
+        <h2>{{ showAll() ? t('bank.title') : t('bank.worklist') }}</h2>
+        <button class="btn sm" type="button" (click)="toggleShowAll()">
+          {{ showAll() ? t('bank.showTodo') : t('bank.showAll') }}
+        </button>
+      </div>
+
+      @if (transactions().length === 0) {
+        <div class="empty">{{ t('bank.empty') }}</div>
+      } @else {
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ t('th.date') }}</th>
+                <th>{{ t('bank.label') }}</th>
+                <th class="num">{{ t('th.amount') }}</th>
+                <th>{{ t('th.status') }}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (tx of transactions(); track tx.id) {
+                <tr>
+                  <td>{{ tx.transactionDate }}</td>
+                  <td>{{ tx.label || '—' }}</td>
+                  <td class="num" [style.color]="tx.direction === 'CREDIT' ? 'var(--good)' : 'var(--critical)'">
+                    {{ num(tx.amount) | number: '1.2-2' }}
+                  </td>
+                  <td>
+                    <span class="pill" [class.good]="tx.status === 'RECONCILED'" [class.warning]="tx.status !== 'RECONCILED'">
+                      {{ tx.status === 'RECONCILED' ? t('bank.reconcile') + '✓' : t('bank.worklist') }}
+                    </span>
+                  </td>
+                  <td style="text-align:right; white-space:nowrap;">
+                    @if (tx.status !== 'RECONCILED' && tx.direction === 'CREDIT') {
+                      <button class="btn sm" type="button" (click)="startReconcile(tx)">{{ t('bank.reconcile') }}</button>
+                    }
+                  </td>
+                </tr>
+                @if (activeTxId() === tx.id) {
+                  <tr>
+                    <td colspan="5" style="background:var(--surface-2);">
+                      <div style="padding:6px 4px;">
+                        <span style="font-size:13px; font-weight:600; color:var(--ink-soft); margin-right:8px;">
+                          {{ t('bank.isPaymentFrom') }}
+                        </span>
+                        @if (loadingSuggest()) {
+                          <span class="pill neutral">{{ t('health.checking') }}</span>
+                        } @else if (suggestions().length === 0) {
+                          <span style="color:var(--muted); font-size:13px;">{{ t('bank.noSuggestion') }}</span>
+                        } @else {
+                          @for (s of suggestions(); track s.personId) {
+                            <button class="btn sm primary" type="button" style="margin:2px 4px 2px 0;" [disabled]="saving()" (click)="record(tx, s.personId)">
+                              {{ s.name }} · {{ t('th.lot') }} {{ s.lotNumber }}
+                            </button>
+                          }
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+</ng-container>
