@@ -44,7 +44,9 @@
     "empty": "No condominium recorded yet.",
     "add": "Add a condominium",
     "created": "Condominium created.",
-    "count": "{{ n }} condominium(s)"
+    "count": "{{ n }} condominium(s)",
+    "edit": "Edit",
+    "current": "Active property"
   },
   "lots": {
     "title": "Units & co-owners",
@@ -183,7 +185,8 @@
     "amount": "Amount (€)",
     "category": "Category",
     "subscriptionAmount": "Subscription (€)",
-    "consumptionAmount": "Consumption (€)"
+    "consumptionAmount": "Consumption (€)",
+    "country": "Country (code)"
   },
   "btn": {
     "save": "Save",

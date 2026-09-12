@@ -66,6 +66,19 @@ input, select, textarea { font-family: inherit; font-size: 14px; color: var(--in
   display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
 }
 .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.cop-badge {
+  display: inline-flex; flex-direction: column; gap: 1px;
+  margin-left: 6px; padding: 4px 12px;
+  background: var(--accent-wash); border: 1px solid var(--line);
+  border-radius: 10px; min-width: 0;
+}
+.cop-badge-label { font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.cop-badge-name { font-size: 13.5px; font-weight: 600; color: var(--accent-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+@media (max-width: 640px) { .cop-badge { display: none; } }
+.kv { display: grid; gap: 8px 24px; grid-template-columns: repeat(auto-fit, minmax(180px, auto)); }
+.kv > div { display: flex; flex-direction: column; gap: 1px; }
+.kv dt { font-size: 11px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.kv dd { margin: 0; font-size: 14px; color: var(--ink); }
 .brand-text h1 { margin: 0; font-size: 19px; font-weight: 600; line-height: 1.2; }
 .brand-text .sub { margin: 2px 0 0; font-size: 12.5px; color: var(--muted); }
 .topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }

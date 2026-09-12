@@ -44,7 +44,9 @@
     "empty": "Nessun condominio registrato per ora.",
     "add": "Aggiungi un condominio",
     "created": "Condominio creato.",
-    "count": "{{ n }} condominio/i"
+    "count": "{{ n }} condominio/i",
+    "edit": "Modifica",
+    "current": "Condominio attivo"
   },
   "lots": {
     "title": "Unità e condomini",
@@ -183,7 +185,8 @@
     "amount": "Importo (€)",
     "category": "Categoria",
     "subscriptionAmount": "Abbonamento (€)",
-    "consumptionAmount": "Consumo (€)"
+    "consumptionAmount": "Consumo (€)",
+    "country": "Paese (codice)"
   },
   "btn": {
     "save": "Salva",

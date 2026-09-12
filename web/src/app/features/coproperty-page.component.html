@@ -52,6 +52,52 @@
     } @else if (coproperties().length === 0) {
       <div class="empty">{{ t('coprop.none') }}</div>
     }
+
+    <!-- Détails de la copropriété sélectionnée + édition -->
+    @if (selectedCop; as cop) {
+      @if (showEditCop()) {
+        <form class="panel" [formGroup]="editCopForm" (ngSubmit)="submitEditCop()">
+          <div class="form-grid">
+            <div class="field">
+              <label for="ec-name">{{ t('field.name') }}</label>
+              <input id="ec-name" type="text" formControlName="name" />
+            </div>
+            <div class="field">
+              <label for="ec-address">{{ t('field.address') }}</label>
+              <input id="ec-address" type="text" formControlName="address" />
+            </div>
+            <div class="field">
+              <label for="ec-postal">{{ t('field.postalCode') }}</label>
+              <input id="ec-postal" type="text" formControlName="postalCode" />
+            </div>
+            <div class="field">
+              <label for="ec-city">{{ t('field.city') }}</label>
+              <input id="ec-city" type="text" formControlName="city" />
+            </div>
+            <div class="field">
+              <label for="ec-country">{{ t('field.country') }}</label>
+              <input id="ec-country" type="text" maxlength="2" formControlName="country" style="text-transform:uppercase;" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit" [disabled]="editCopForm.invalid || saving()">{{ t('btn.save') }}</button>
+            <button class="btn ghost" type="button" (click)="showEditCop.set(false)">{{ t('btn.cancel') }}</button>
+          </div>
+        </form>
+      } @else {
+        <div class="panel" style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <dl class="kv" style="margin:0;">
+            <div><dt>{{ t('field.name') }}</dt><dd>{{ cop.name }}</dd></div>
+            <div><dt>{{ t('field.address') }}</dt><dd>{{ cop.address || '—' }}</dd></div>
+            <div><dt>{{ t('field.postalCode') }} / {{ t('field.city') }}</dt><dd>{{ (cop.postal_code || '—') + ' ' + (cop.city || '') }}</dd></div>
+            <div><dt>{{ t('field.country') }}</dt><dd>{{ cop.country }}</dd></div>
+          </dl>
+          @if (auth.isBureau()) {
+            <button class="btn sm ghost" type="button" (click)="startEditCop()">{{ t('coprop.edit') }}</button>
+          }
+        </div>
+      }
+    }
   </div>
 
   <!-- Lots de la copropriété sélectionnée -->

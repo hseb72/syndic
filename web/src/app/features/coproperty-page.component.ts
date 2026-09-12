@@ -5,6 +5,7 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
 import { ApiService, type Coproperty, type CopropertyOverview, type LotOverviewRow, type LotOwner } from '../core/api.service';
 import { AuthService } from '../core/auth.service';
+import { CopropertyContextService } from '../core/coproperty-context.service';
 
 const COP_STORAGE_KEY = 'syndic.copId';
 
@@ -35,6 +36,7 @@ export class CopropertyPageComponent implements OnInit {
   private api = inject(ApiService);
   private transloco = inject(TranslocoService);
   readonly auth = inject(AuthService);
+  private copCtx = inject(CopropertyContextService);
 
   readonly coproperties = signal<Coproperty[]>([]);
   readonly selectedId = signal<string | null>(null);
@@ -45,6 +47,7 @@ export class CopropertyPageComponent implements OnInit {
   readonly saving = signal(false);
 
   readonly showCopForm = signal(false);
+  readonly showEditCop = signal(false);
   readonly showLotForm = signal(false);
   readonly editingLotId = signal<string | null>(null);
   readonly lotError = signal<string | null>(null);
@@ -54,6 +57,19 @@ export class CopropertyPageComponent implements OnInit {
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     address: new FormControl('', { nonNullable: true }),
     city: new FormControl('', { nonNullable: true }),
+  });
+
+  /** Copropriété actuellement sélectionnée (détails + édition). */
+  get selectedCop(): Coproperty | null {
+    return this.coproperties().find((c) => c.id === this.selectedId()) ?? null;
+  }
+
+  readonly editCopForm = new FormGroup({
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    address: new FormControl('', { nonNullable: true }),
+    postalCode: new FormControl('', { nonNullable: true }),
+    city: new FormControl('', { nonNullable: true }),
+    country: new FormControl('FR', { nonNullable: true }),
   });
 
   // tantiemes en texte : on parse nous-mêmes (virgule FR acceptée), plutôt que
@@ -108,13 +124,53 @@ export class CopropertyPageComponent implements OnInit {
     this.selectedId.set(id);
     this.editingLotId.set(null);
     this.showLotForm.set(false);
+    this.showEditCop.set(false);
     this.ownersLotId.set(null);
     try {
       localStorage.setItem(COP_STORAGE_KEY, id);
     } catch {
       /* ignore */
     }
+    this.copCtx.select(id); // met à jour le bandeau de l'application
     this.loadOverview();
+  }
+
+  startEditCop(): void {
+    const cop = this.selectedCop;
+    if (!cop) return;
+    this.editError.set(null);
+    this.editCopForm.reset({
+      name: cop.name,
+      address: cop.address ?? '',
+      postalCode: cop.postal_code ?? '',
+      city: cop.city ?? '',
+      country: cop.country ?? 'FR',
+    });
+    this.showEditCop.set(true);
+  }
+
+  submitEditCop(): void {
+    const cop = this.selectedCop;
+    if (!cop || this.editCopForm.invalid) return;
+    this.saving.set(true);
+    const v = this.editCopForm.getRawValue();
+    this.api
+      .updateCoproperty(cop.id, {
+        name: v.name.trim(),
+        address: v.address.trim() || null,
+        postalCode: v.postalCode.trim() || null,
+        city: v.city.trim() || null,
+        country: v.country.trim() || 'FR',
+      })
+      .subscribe({
+        next: (updated) => {
+          this.coproperties.update((list) => list.map((c) => (c.id === updated.id ? updated : c)));
+          this.copCtx.upsert(updated);
+          this.showEditCop.set(false);
+          this.saving.set(false);
+        },
+        error: () => this.saving.set(false),
+      });
   }
 
   private loadOverview(): void {
@@ -137,6 +193,7 @@ export class CopropertyPageComponent implements OnInit {
     this.api.createCoproperty({ name: v.name, address: v.address || null, city: v.city || null }).subscribe({
       next: (created) => {
         this.coproperties.update((list) => [...list, created]);
+        this.copCtx.upsert(created);
         this.copForm.reset();
         this.showCopForm.set(false);
         this.saving.set(false);

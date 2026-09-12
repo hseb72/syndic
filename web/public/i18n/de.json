@@ -44,7 +44,9 @@
     "empty": "Noch keine Gemeinschaft erfasst.",
     "add": "Gemeinschaft hinzufügen",
     "created": "Gemeinschaft angelegt.",
-    "count": "{{ n }} Gemeinschaft(en)"
+    "count": "{{ n }} Gemeinschaft(en)",
+    "edit": "Bearbeiten",
+    "current": "Aktive Gemeinschaft"
   },
   "lots": {
     "title": "Einheiten & Eigentümer",
@@ -183,7 +185,8 @@
     "amount": "Betrag (€)",
     "category": "Kategorie",
     "subscriptionAmount": "Grundgebühr (€)",
-    "consumptionAmount": "Verbrauch (€)"
+    "consumptionAmount": "Verbrauch (€)",
+    "country": "Land (Code)"
   },
   "btn": {
     "save": "Speichern",

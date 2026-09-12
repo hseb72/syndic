@@ -44,7 +44,9 @@
     "empty": "Aún no hay ninguna comunidad registrada.",
     "add": "Añadir una comunidad",
     "created": "Comunidad creada.",
-    "count": "{{ n }} comunidad(es)"
+    "count": "{{ n }} comunidad(es)",
+    "edit": "Editar",
+    "current": "Comunidad activa"
   },
   "lots": {
     "title": "Fincas y propietarios",
@@ -183,7 +185,8 @@
     "amount": "Importe (€)",
     "category": "Categoría",
     "subscriptionAmount": "Abono (€)",
-    "consumptionAmount": "Consumo (€)"
+    "consumptionAmount": "Consumo (€)",
+    "country": "País (código)"
   },
   "btn": {
     "save": "Guardar",

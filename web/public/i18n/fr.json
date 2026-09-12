@@ -44,7 +44,9 @@
     "empty": "Aucune copropriété enregistrée pour l’instant.",
     "add": "Ajouter une copropriété",
     "created": "Copropriété créée.",
-    "count": "{{ n }} copropriété(s)"
+    "count": "{{ n }} copropriété(s)",
+    "edit": "Modifier",
+    "current": "Copropriété active"
   },
   "lots": {
     "title": "Lots & copropriétaires",
@@ -183,7 +185,8 @@
     "amount": "Montant (€)",
     "category": "Catégorie",
     "subscriptionAmount": "Abonnement (€)",
-    "consumptionAmount": "Consommation (€)"
+    "consumptionAmount": "Consommation (€)",
+    "country": "Pays (code)"
   },
   "btn": {
     "save": "Enregistrer",

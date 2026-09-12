@@ -12,6 +12,12 @@
             <h1>{{ t('app.name') }}</h1>
             <p class="sub">{{ t('app.sub') }}</p>
           </div>
+          @if (copCtx.current(); as cop) {
+            <div class="cop-badge" [title]="t('coprop.current')">
+              <span class="cop-badge-label">{{ t('coprop.select') }}</span>
+              <span class="cop-badge-name">{{ cop.name }}</span>
+            </div>
+          }
         </div>
 
         <div class="topbar-right">

@@ -306,6 +306,10 @@ export class ApiService {
     return this.http.post<Coproperty>('/api/coproperties', input);
   }
 
+  updateCoproperty(id: string, input: Partial<CreateCopropertyInput>): Observable<Coproperty> {
+    return this.http.patch<Coproperty>(`/api/coproperties/${id}`, input);
+  }
+
   getOverview(copId: string): Observable<CopropertyOverview> {
     return this.http.get<CopropertyOverview>(`/api/coproperties/${copId}/overview`);
   }

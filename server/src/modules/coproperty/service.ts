@@ -21,6 +21,29 @@ export async function listCoproperties(restrictTo?: string[] | null) {
   return q.execute();
 }
 
+export interface UpdateCopropertyInput {
+  name?: string;
+  address?: string | null;
+  postalCode?: string | null;
+  city?: string | null;
+  country?: string;
+}
+
+export async function getCoproperty(id: string) {
+  return db.selectFrom('coproperty').selectAll().where('id', '=', id).executeTakeFirst();
+}
+
+export async function updateCoproperty(id: string, input: UpdateCopropertyInput) {
+  const set: Record<string, unknown> = {};
+  if (input.name !== undefined) set['name'] = input.name;
+  if (input.address !== undefined) set['address'] = input.address;
+  if (input.postalCode !== undefined) set['postal_code'] = input.postalCode;
+  if (input.city !== undefined) set['city'] = input.city;
+  if (input.country !== undefined) set['country'] = input.country;
+  if (Object.keys(set).length === 0) return getCoproperty(id);
+  return db.updateTable('coproperty').set(set).where('id', '=', id).returningAll().executeTakeFirstOrThrow();
+}
+
 export async function createCoproperty(input: CreateCopropertyInput) {
   const row = await db
     .insertInto('coproperty')
