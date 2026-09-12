@@ -3,7 +3,7 @@
   "mode": { "bureau": "Area del consiglio", "coprop": "Area condomini" },
   "tab": { "dashboard": "Cruscotto", "coprop": "Condominio", "expenses": "Spese", "cash": "Tesoreria", "bank": "Banca", "reg": "Conguaglio" },
   "health": { "label": "Stato API", "ok": "connessa", "down": "non raggiungibile", "checking": "verifica…" },
-  "dashboard": { "title": "Cruscotto", "socleNote": "Base pronta: API, database e interfaccia comunicano. Le funzionalità arrivano nei passi successivi." },
+  "dashboard": { "title": "Cruscotto", "cash": "Saldo di cassa", "unpaid": "Insoluti", "worklist": "Da riconciliare", "lots": "Unità", "budgetTitle": "Bilancio {{ y }}", "budgetVoted": "Bilancio votato", "expensesReal": "Spese reali", "consumed": "consumato", "noData": "Seleziona un condominio (scheda Condominio) per vedere il cruscotto.", "lines": "voci di bilancio" },
   "coprop": {
     "title": "Condomini",
     "select": "Condominio",

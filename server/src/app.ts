@@ -16,6 +16,7 @@ import { fundCallRoutes } from './modules/fundcall/routes.js';
 import { paymentRoutes } from './modules/payment/routes.js';
 import { regularisationRoutes } from './modules/regularisation/routes.js';
 import { bankRoutes } from './modules/bank/routes.js';
+import { dashboardRoutes } from './modules/dashboard/routes.js';
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -64,6 +65,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(paymentRoutes, { prefix: '/api' });
   await app.register(regularisationRoutes, { prefix: '/api' });
   await app.register(bankRoutes, { prefix: '/api' });
+  await app.register(dashboardRoutes, { prefix: '/api' });
 
   return app;
 }

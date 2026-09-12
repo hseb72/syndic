@@ -110,6 +110,19 @@ export interface RegularisationLot {
   amount: number;
 }
 
+export interface DashboardSummary {
+  lotCount: number;
+  totalTantiemes: string;
+  cashBalance: number;
+  unpaidTotal: number;
+  unpaidCount: number;
+  worklistCount: number;
+  exercise: { id: string; label: string | null; status: string } | null;
+  budgetVoted: number | null;
+  expenses: number | null;
+  budgetByCategory: { category: string; planned: number }[];
+}
+
 export interface BankTx {
   id: string;
   transactionDate: string;
@@ -191,6 +204,11 @@ export class ApiService {
 
   health(): Observable<HealthStatus> {
     return this.http.get<HealthStatus>('/health');
+  }
+
+  getDashboard(copId: string, exerciseId?: string): Observable<DashboardSummary> {
+    const q = exerciseId ? `?exerciseId=${exerciseId}` : '';
+    return this.http.get<DashboardSummary>(`/api/coproperties/${copId}/dashboard${q}`);
   }
 
   listCoproperties(): Observable<Coproperty[]> {

@@ -3,7 +3,7 @@
   "mode": { "bureau": "Verwaltungsbereich", "coprop": "Eigentümerbereich" },
   "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben", "cash": "Finanzen", "bank": "Bank", "reg": "Abrechnung" },
   "health": { "label": "API-Status", "ok": "verbunden", "down": "nicht erreichbar", "checking": "wird geprüft…" },
-  "dashboard": { "title": "Übersicht", "socleNote": "Grundgerüst steht: API, Datenbank und Oberfläche kommunizieren. Funktionen folgen in den nächsten Schritten." },
+  "dashboard": { "title": "Übersicht", "cash": "Kontostand", "unpaid": "Offen", "worklist": "Abzugleichen", "lots": "Einheiten", "budgetTitle": "Budget {{ y }}", "budgetVoted": "Beschlossenes Budget", "expensesReal": "Tatsächliche Kosten", "consumed": "verbraucht", "noData": "Wählen Sie eine Gemeinschaft (Reiter Gemeinschaft), um die Übersicht zu sehen.", "lines": "Budgetposten" },
   "coprop": {
     "title": "Eigentümergemeinschaften",
     "select": "Gemeinschaft",

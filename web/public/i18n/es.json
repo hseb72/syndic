@@ -3,7 +3,7 @@
   "mode": { "bureau": "Área de la junta", "coprop": "Área de propietarios" },
   "tab": { "dashboard": "Panel", "coprop": "Comunidad", "expenses": "Gastos", "cash": "Tesorería", "bank": "Banco", "reg": "Regularización" },
   "health": { "label": "Estado de la API", "ok": "conectada", "down": "no disponible", "checking": "comprobando…" },
-  "dashboard": { "title": "Panel", "socleNote": "Base lista: API, base de datos e interfaz se comunican. Las funciones llegan en los siguientes pasos." },
+  "dashboard": { "title": "Panel", "cash": "Saldo de tesorería", "unpaid": "Impagados", "worklist": "Por conciliar", "lots": "Fincas", "budgetTitle": "Presupuesto {{ y }}", "budgetVoted": "Presupuesto votado", "expensesReal": "Gastos reales", "consumed": "consumido", "noData": "Seleccione una comunidad (pestaña Comunidad) para ver el panel.", "lines": "líneas de presupuesto" },
   "coprop": {
     "title": "Comunidades",
     "select": "Comunidad",
