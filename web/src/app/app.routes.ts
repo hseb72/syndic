@@ -1,0 +1,14 @@
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'tableau-de-bord' },
+  {
+    path: 'tableau-de-bord',
+    loadComponent: () => import('./features/dashboard.component').then((m) => m.DashboardComponent),
+  },
+  {
+    path: 'coproprietes',
+    loadComponent: () => import('./features/coproperty-page.component').then((m) => m.CopropertyPageComponent),
+  },
+  { path: '**', redirectTo: 'tableau-de-bord' },
+];

@@ -1,0 +1,58 @@
+<ng-container *transloco="let t">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="34" height="34" rx="8" fill="var(--accent)" />
+          <path d="M9 24V13.5L17 8l8 5.5V24" stroke="var(--gold)" stroke-width="1.8" stroke-linejoin="round" fill="none" />
+          <rect x="14.5" y="17.5" width="5" height="6.5" fill="var(--gold)" />
+        </svg>
+        <div class="brand-text">
+          <h1>{{ t('app.name') }}</h1>
+          <p class="sub">{{ t('app.sub') }}</p>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <select
+          class="lang-select"
+          [value]="activeLang()"
+          (change)="setLang($any($event.target).value)"
+          [attr.aria-label]="'Langue'"
+        >
+          @for (l of langs; track l) {
+            <option [value]="l">{{ langNames[l] }}</option>
+          }
+        </select>
+
+        <button class="theme-btn" type="button" (click)="theme.toggle()">
+          {{ theme.theme() === 'dark' ? '☾ ' + t('theme.dark') : '☀ ' + t('theme.light') }}
+        </button>
+
+        <div class="mode-switch">
+          <button type="button" [class.active]="mode() === 'bureau'" (click)="mode.set('bureau')">
+            {{ t('mode.bureau') }}
+          </button>
+          <button type="button" [class.active]="mode() === 'coprop'" (click)="mode.set('coprop')">
+            {{ t('mode.coprop') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell">
+    <div class="tabbar">
+      <button type="button" routerLink="/tableau-de-bord" routerLinkActive="active">
+        {{ t('tab.dashboard') }}
+      </button>
+      <button type="button" routerLink="/coproprietes" routerLinkActive="active">
+        {{ t('tab.coprop') }}
+      </button>
+    </div>
+
+    <router-outlet />
+
+    <footer class="app-foot">{{ t('footer') }}</footer>
+  </div>
+</ng-container>

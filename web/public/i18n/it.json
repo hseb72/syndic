@@ -1,0 +1,18 @@
+{
+  "app": { "name": "Syndic", "sub": "Condominio" },
+  "mode": { "bureau": "Area del consiglio", "coprop": "Area condomini" },
+  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio" },
+  "health": { "label": "Stato API", "ok": "connessa", "down": "non raggiungibile", "checking": "verifica…" },
+  "dashboard": { "title": "Cruscotto", "socleNote": "Base pronta: API, database e interfaccia comunicano. Le funzionalità arrivano nei passi successivi." },
+  "coprop": {
+    "title": "Condomini",
+    "empty": "Nessun condominio registrato per ora.",
+    "add": "Aggiungi un condominio",
+    "created": "Condominio creato.",
+    "count": "{{ n }} condominio/i"
+  },
+  "field": { "name": "Nome", "address": "Indirizzo", "postalCode": "CAP", "city": "Città" },
+  "btn": { "save": "Salva", "cancel": "Annulla", "add": "Aggiungi", "retry": "Riprova" },
+  "theme": { "toggle": "Tema", "light": "Chiaro", "dark": "Scuro" },
+  "footer": "Gestione volontaria del condominio — strumento interno per il consiglio e i condomini."
+}

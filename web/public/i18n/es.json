@@ -1,0 +1,18 @@
+{
+  "app": { "name": "Syndic", "sub": "Comunidad de propietarios" },
+  "mode": { "bureau": "Área de la junta", "coprop": "Área de propietarios" },
+  "tab": { "dashboard": "Panel", "coprop": "Comunidad" },
+  "health": { "label": "Estado de la API", "ok": "conectada", "down": "no disponible", "checking": "comprobando…" },
+  "dashboard": { "title": "Panel", "socleNote": "Base lista: API, base de datos e interfaz se comunican. Las funciones llegan en los siguientes pasos." },
+  "coprop": {
+    "title": "Comunidades",
+    "empty": "Aún no hay ninguna comunidad registrada.",
+    "add": "Añadir una comunidad",
+    "created": "Comunidad creada.",
+    "count": "{{ n }} comunidad(es)"
+  },
+  "field": { "name": "Nombre", "address": "Dirección", "postalCode": "Código postal", "city": "Ciudad" },
+  "btn": { "save": "Guardar", "cancel": "Cancelar", "add": "Añadir", "retry": "Reintentar" },
+  "theme": { "toggle": "Tema", "light": "Claro", "dark": "Oscuro" },
+  "footer": "Gestión voluntaria de la comunidad — herramienta interna para la junta y los propietarios."
+}

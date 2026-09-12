@@ -1,0 +1,18 @@
+{
+  "app": { "name": "Syndic", "sub": "Eigentümergemeinschaft" },
+  "mode": { "bureau": "Verwaltungsbereich", "coprop": "Eigentümerbereich" },
+  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft" },
+  "health": { "label": "API-Status", "ok": "verbunden", "down": "nicht erreichbar", "checking": "wird geprüft…" },
+  "dashboard": { "title": "Übersicht", "socleNote": "Grundgerüst steht: API, Datenbank und Oberfläche kommunizieren. Funktionen folgen in den nächsten Schritten." },
+  "coprop": {
+    "title": "Eigentümergemeinschaften",
+    "empty": "Noch keine Gemeinschaft erfasst.",
+    "add": "Gemeinschaft hinzufügen",
+    "created": "Gemeinschaft angelegt.",
+    "count": "{{ n }} Gemeinschaft(en)"
+  },
+  "field": { "name": "Name", "address": "Adresse", "postalCode": "PLZ", "city": "Ort" },
+  "btn": { "save": "Speichern", "cancel": "Abbrechen", "add": "Hinzufügen", "retry": "Erneut versuchen" },
+  "theme": { "toggle": "Design", "light": "Hell", "dark": "Dunkel" },
+  "footer": "Ehrenamtliche Hausverwaltung — internes Tool für den Verwaltungsbeirat und Eigentümer."
+}

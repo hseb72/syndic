@@ -1,0 +1,18 @@
+{
+  "app": { "name": "Syndic", "sub": "Copropriété" },
+  "mode": { "bureau": "Espace bureau", "coprop": "Espace copropriétaires" },
+  "tab": { "dashboard": "Tableau de bord", "coprop": "Copropriété" },
+  "health": { "label": "État de l’API", "ok": "connectée", "down": "injoignable", "checking": "vérification…" },
+  "dashboard": { "title": "Tableau de bord", "socleNote": "Socle en place : API, base de données et interface communiquent. Les fonctionnalités arrivent aux étapes suivantes." },
+  "coprop": {
+    "title": "Copropriétés",
+    "empty": "Aucune copropriété enregistrée pour l’instant.",
+    "add": "Ajouter une copropriété",
+    "created": "Copropriété créée.",
+    "count": "{{ n }} copropriété(s)"
+  },
+  "field": { "name": "Nom", "address": "Adresse", "postalCode": "Code postal", "city": "Ville" },
+  "btn": { "save": "Enregistrer", "cancel": "Annuler", "add": "Ajouter", "retry": "Réessayer" },
+  "theme": { "toggle": "Thème", "light": "Clair", "dark": "Sombre" },
+  "footer": "Gestion bénévole de copropriété — outil interne, à usage du conseil syndical et des copropriétaires."
+}
