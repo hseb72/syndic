@@ -32,7 +32,14 @@
     "charges": "Charges allocated per unit",
     "chargesHint": "Allocation of the year's actual expenses — basis of the annual adjustment.",
     "compute": "Compute allocation",
-    "total": "Total charges"
+    "total": "Total charges",
+    "readings": "Water readings",
+    "readingsHint": "Consumption per unit for the period — allocates the 'consumption' part of water bills.",
+    "period": "Period",
+    "consumption": "Consumption",
+    "saveReadings": "Save readings",
+    "readingsSaved": "Readings saved.",
+    "pay": "Pay balance"
   },
   "reg": {
     "title": "Annual adjustment",
@@ -68,6 +75,17 @@
     "carry": "Carry-forward",
     "carryHint": "Unpaid balances carried to the next year. The close touches no bank line.",
     "payHint": "A payment is automatically applied to the payer's open receivables, oldest first."
+  },
+  "budget": {
+    "title": "Planned budget",
+    "add": "Add a line",
+    "empty": "No budget line yet.",
+    "total": "Budget total",
+    "vote": "Vote the budget",
+    "voted": "Voted",
+    "key": "Key",
+    "keyGeneral": "General (shares)",
+    "keyWater": "Water (consumption)"
   },
   "bank": {
     "title": "Bank reconciliation",

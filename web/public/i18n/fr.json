@@ -32,7 +32,14 @@
     "charges": "Charges réparties par lot",
     "chargesHint": "Répartition des dépenses réelles de l’exercice — base de la régularisation.",
     "compute": "Calculer la répartition",
-    "total": "Total des charges"
+    "total": "Total des charges",
+    "readings": "Relevés d’eau",
+    "readingsHint": "Consommation par lot pour la période — répartit la part « consommation » des factures d’eau.",
+    "period": "Période",
+    "consumption": "Consommation",
+    "saveReadings": "Enregistrer les relevés",
+    "readingsSaved": "Relevés enregistrés.",
+    "pay": "Payer le solde"
   },
   "reg": {
     "title": "Régularisation annuelle",
@@ -68,6 +75,17 @@
     "carry": "Report à nouveau",
     "carryHint": "Soldes impayés reportés vers l’exercice suivant. La clôture ne touche aucune ligne bancaire.",
     "payHint": "Un paiement est lettré automatiquement sur les créances ouvertes du payeur, du plus ancien au plus récent."
+  },
+  "budget": {
+    "title": "Budget prévisionnel",
+    "add": "Ajouter une ligne",
+    "empty": "Aucune ligne de budget.",
+    "total": "Total budget",
+    "vote": "Voter le budget",
+    "voted": "Voté",
+    "key": "Clé",
+    "keyGeneral": "Général (tantièmes)",
+    "keyWater": "Eau (consommation)"
   },
   "bank": {
     "title": "Rapprochement bancaire",

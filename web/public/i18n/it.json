@@ -32,7 +32,14 @@
     "charges": "Spese ripartite per unità",
     "chargesHint": "Ripartizione delle spese reali dell’esercizio — base del conguaglio.",
     "compute": "Calcola la ripartizione",
-    "total": "Totale spese"
+    "total": "Totale spese",
+    "readings": "Letture dell’acqua",
+    "readingsHint": "Consumo per unità nel periodo — ripartisce la quota di «consumo» delle bollette dell’acqua.",
+    "period": "Periodo",
+    "consumption": "Consumo",
+    "saveReadings": "Salva le letture",
+    "readingsSaved": "Letture salvate.",
+    "pay": "Salda il dovuto"
   },
   "reg": {
     "title": "Conguaglio annuale",
@@ -68,6 +75,17 @@
     "carry": "Riporto a nuovo",
     "carryHint": "Saldi non pagati riportati all’esercizio successivo. La chiusura non tocca alcuna riga bancaria.",
     "payHint": "Un pagamento viene applicato automaticamente ai crediti aperti del pagatore, dal più vecchio."
+  },
+  "budget": {
+    "title": "Bilancio preventivo",
+    "add": "Aggiungi una voce",
+    "empty": "Nessuna voce di bilancio.",
+    "total": "Totale bilancio",
+    "vote": "Vota il bilancio",
+    "voted": "Votato",
+    "key": "Chiave",
+    "keyGeneral": "Generale (millesimi)",
+    "keyWater": "Acqua (consumo)"
   },
   "bank": {
     "title": "Riconciliazione bancaria",

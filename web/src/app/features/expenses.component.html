@@ -121,6 +121,7 @@
                   <th class="num">{{ t('th.amount') }}</th>
                   <th class="num">{{ t('th.paid') }}</th>
                   <th>{{ t('th.status') }}</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -132,6 +133,11 @@
                     <td class="num">{{ num(inv.amount) | number: '1.2-2' }}</td>
                     <td class="num">{{ num(inv.paidAmount) | number: '1.2-2' }}</td>
                     <td><span class="pill" [class.good]="inv.status === 'PAID'" [class.neutral]="inv.status !== 'PAID'">{{ inv.status }}</span></td>
+                    <td style="text-align:right; white-space:nowrap;">
+                      @if (inv.status !== 'PAID') {
+                        <button class="btn sm" type="button" [disabled]="saving()" (click)="payInvoice(inv)">{{ t('expenses.pay') }}</button>
+                      }
+                    </td>
                   </tr>
                 }
               </tbody>
@@ -174,6 +180,50 @@
                 </tr>
               </tfoot>
             </table>
+          </div>
+        }
+      </div>
+
+      <!-- Relevés d'eau -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>{{ t('expenses.readings') }} · {{ selectedExercise()?.label }}</h2>
+            <div class="hint">{{ t('expenses.readingsHint') }}</div>
+          </div>
+          <button class="btn" type="button" (click)="showReadings.set(!showReadings())">{{ t('expenses.readings') }}</button>
+        </div>
+        @if (showReadings()) {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>{{ t('th.lot') }}</th>
+                  <th>{{ t('th.owner') }}</th>
+                  <th class="num">{{ t('expenses.consumption') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (lot of lots(); track lot.id) {
+                  <tr>
+                    <td>{{ lot.lotNumber }}</td>
+                    <td>{{ lot.ownerLabel || '—' }}</td>
+                    <td class="num">
+                      <input
+                        type="number" min="0" step="0.01"
+                        [value]="readings()[lot.id] ?? ''"
+                        (input)="setReading(lot.id, $any($event.target).value)"
+                        style="width:100px; text-align:right;"
+                      />
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="button" [disabled]="saving()" (click)="saveReadings()">{{ t('expenses.saveReadings') }}</button>
+            @if (readingsSaved()) { <span class="pill good">{{ t('expenses.readingsSaved') }}</span> }
           </div>
         }
       </div>

@@ -32,7 +32,14 @@
     "charges": "Gastos repartidos por finca",
     "chargesHint": "Reparto de los gastos reales del ejercicio — base de la regularización.",
     "compute": "Calcular el reparto",
-    "total": "Total de gastos"
+    "total": "Total de gastos",
+    "readings": "Lecturas de agua",
+    "readingsHint": "Consumo por finca para el período — reparte la parte de «consumo» de las facturas de agua.",
+    "period": "Período",
+    "consumption": "Consumo",
+    "saveReadings": "Guardar lecturas",
+    "readingsSaved": "Lecturas guardadas.",
+    "pay": "Pagar el saldo"
   },
   "reg": {
     "title": "Regularización anual",
@@ -68,6 +75,17 @@
     "carry": "Saldo a nuevo",
     "carryHint": "Saldos pendientes trasladados al ejercicio siguiente. El cierre no toca ninguna línea bancaria.",
     "payHint": "El pago se aplica automáticamente a las deudas abiertas del pagador, de la más antigua a la más reciente."
+  },
+  "budget": {
+    "title": "Presupuesto previsto",
+    "add": "Añadir una línea",
+    "empty": "Aún no hay líneas de presupuesto.",
+    "total": "Total presupuesto",
+    "vote": "Votar el presupuesto",
+    "voted": "Votado",
+    "key": "Clave",
+    "keyGeneral": "General (coeficientes)",
+    "keyWater": "Agua (consumo)"
   },
   "bank": {
     "title": "Conciliación bancaria",

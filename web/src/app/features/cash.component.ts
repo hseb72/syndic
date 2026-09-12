@@ -3,7 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoModule } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
-import { ApiService, type Exercise, type FundCall, type ReceivableRow } from '../core/api.service';
+import { ApiService, type BudgetResult, type Exercise, type FundCall, type ReceivableRow } from '../core/api.service';
 
 interface CarryForwardRow {
   id: string;
@@ -29,9 +29,17 @@ export class CashComponent implements OnInit {
   readonly fundCalls = signal<FundCall[]>([]);
   readonly receivables = signal<ReceivableRow[]>([]);
   readonly carryForward = signal<CarryForwardRow[]>([]);
+  readonly budget = signal<BudgetResult | null>(null);
   readonly loading = signal(true);
   readonly saving = signal(false);
   readonly showCallForm = signal(false);
+  readonly showBudget = signal(false);
+
+  readonly budgetForm = new FormGroup({
+    category: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    keyCode: new FormControl<'GENERAL' | 'EAU'>('GENERAL', { nonNullable: true }),
+    plannedAmount: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
+  });
 
   readonly selectedExercise = computed(() => this.exercises().find((e) => e.id === this.selectedExId()) ?? null);
 
@@ -88,6 +96,39 @@ export class CashComponent implements OnInit {
     this.api.listFundCalls(cop, ex).subscribe({ next: (c) => this.fundCalls.set(c) });
     this.api.listReceivables(cop, ex).subscribe({ next: (r) => this.receivables.set(r) });
     this.api.listCarryForward(cop, ex).subscribe({ next: (cf) => this.carryForward.set(cf) });
+    this.api.getBudget(cop, ex).subscribe({ next: (b) => this.budget.set(b) });
+  }
+
+  submitBudgetLine(): void {
+    const cop = this.copId();
+    const ex = this.selectedExId();
+    if (!cop || !ex || this.budgetForm.invalid) return;
+    this.saving.set(true);
+    const v = this.budgetForm.getRawValue();
+    this.api
+      .addBudgetLine(cop, ex, { category: v.category, keyCode: v.keyCode, plannedAmount: Number(v.plannedAmount) })
+      .subscribe({
+        next: (b) => {
+          this.budget.set(b);
+          this.budgetForm.reset({ category: '', keyCode: 'GENERAL', plannedAmount: null });
+          this.saving.set(false);
+        },
+        error: () => this.saving.set(false),
+      });
+  }
+
+  voteBudget(): void {
+    const cop = this.copId();
+    const ex = this.selectedExId();
+    if (!cop || !ex) return;
+    this.saving.set(true);
+    this.api.voteBudget(cop, ex).subscribe({
+      next: (b) => {
+        this.budget.set(b);
+        this.saving.set(false);
+      },
+      error: () => this.saving.set(false),
+    });
   }
 
   private updateExercise(updated: Exercise): void {

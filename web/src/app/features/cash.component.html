@@ -4,6 +4,82 @@
   } @else if (exercises().length === 0) {
     <div class="card"><div class="empty">{{ t('expenses.noExercise') }}</div></div>
   } @else {
+    <!-- Budget prévisionnel -->
+    <div class="card">
+      <div class="card-head">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <h2>{{ t('budget.title') }}</h2>
+          @if (budget(); as b) {
+            @if (b.budget.status === 'VOTED') { <span class="pill good">{{ t('budget.voted') }}</span> }
+          }
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          @if (budget()?.budget?.status !== 'VOTED' && (budget()?.lines?.length ?? 0) > 0) {
+            <button class="btn sm" type="button" [disabled]="saving()" (click)="voteBudget()">{{ t('budget.vote') }}</button>
+          }
+          <button class="btn" type="button" (click)="showBudget.set(!showBudget())">{{ t('budget.add') }}</button>
+        </div>
+      </div>
+
+      @if (showBudget()) {
+        <form class="panel" [formGroup]="budgetForm" (ngSubmit)="submitBudgetLine()">
+          <div class="form-grid">
+            <div class="field">
+              <label for="b-cat">{{ t('field.category') }}</label>
+              <input id="b-cat" type="text" formControlName="category" placeholder="Assurances" />
+            </div>
+            <div class="field">
+              <label for="b-key">{{ t('budget.key') }}</label>
+              <select id="b-key" formControlName="keyCode">
+                <option value="GENERAL">{{ t('budget.keyGeneral') }}</option>
+                <option value="EAU">{{ t('budget.keyWater') }}</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="b-amount">{{ t('field.amount') }}</label>
+              <input id="b-amount" type="number" step="0.01" min="0" formControlName="plannedAmount" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit" [disabled]="budgetForm.invalid || saving()">{{ t('btn.add') }}</button>
+          </div>
+        </form>
+      }
+
+      @if (budget(); as b) {
+        @if (b.lines.length === 0) {
+          <div class="empty">{{ t('budget.empty') }}</div>
+        } @else {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>{{ t('th.category') }}</th>
+                  <th>{{ t('budget.key') }}</th>
+                  <th class="num">{{ t('th.amount') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (line of b.lines; track line.id) {
+                  <tr>
+                    <td>{{ line.category }}</td>
+                    <td>{{ line.keyName }}</td>
+                    <td class="num">{{ num(line.plannedAmount) | number: '1.2-2' }}</td>
+                  </tr>
+                }
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="2" style="font-weight:700;">{{ t('budget.total') }}</td>
+                  <td class="num" style="font-weight:700;">{{ b.total | number: '1.2-2' }} €</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        }
+      }
+    </div>
+
     <!-- Appels de provisions -->
     <div class="card">
       <div class="card-head">

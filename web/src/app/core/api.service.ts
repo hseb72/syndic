@@ -134,6 +134,20 @@ export interface BankImportRow {
   externalId?: string | null;
 }
 
+export interface BudgetLine {
+  id: string;
+  category: string;
+  plannedAmount: string;
+  keyCode: string;
+  keyName: string;
+}
+
+export interface BudgetResult {
+  budget: { id: string; status: string; voted_at: string | null };
+  lines: BudgetLine[];
+  total: number;
+}
+
 export interface FundCall {
   id: string;
   label: string;
@@ -235,6 +249,31 @@ export class ApiService {
     return this.http.get<ChargesResult>(`/api/coproperties/${copId}/exercises/${exerciseId}/charges`);
   }
 
+  getWaterReadings(
+    copId: string,
+    period: string,
+  ): Observable<{ periodLabel: string; readings: { lotId: string; consumption: string }[] }> {
+    return this.http.get<{ periodLabel: string; readings: { lotId: string; consumption: string }[] }>(
+      `/api/coproperties/${copId}/water-readings/${period}`,
+    );
+  }
+
+  setWaterReadings(
+    copId: string,
+    periodLabel: string,
+    readings: { lotId: string; consumption: number }[],
+  ): Observable<unknown> {
+    return this.http.put(`/api/coproperties/${copId}/water-readings`, { periodLabel, readings });
+  }
+
+  recordInvoicePayment(
+    copId: string,
+    invoiceId: string,
+    input: { paymentDate: string; amount: number },
+  ): Observable<unknown> {
+    return this.http.post(`/api/coproperties/${copId}/invoices/${invoiceId}/payments`, input);
+  }
+
   computeRegularisation(
     copId: string,
     input: { exerciseN1Id: string; provisionsNextTotal: number; workFundNextTotal: number },
@@ -257,6 +296,22 @@ export class ApiService {
       `/api/coproperties/${copId}/regularisation/generate`,
       input,
     );
+  }
+
+  getBudget(copId: string, exerciseId: string): Observable<BudgetResult> {
+    return this.http.get<BudgetResult>(`/api/coproperties/${copId}/exercises/${exerciseId}/budget`);
+  }
+
+  addBudgetLine(
+    copId: string,
+    exerciseId: string,
+    input: { category: string; keyCode: 'GENERAL' | 'EAU'; plannedAmount: number },
+  ): Observable<BudgetResult> {
+    return this.http.post<BudgetResult>(`/api/coproperties/${copId}/exercises/${exerciseId}/budget/lines`, input);
+  }
+
+  voteBudget(copId: string, exerciseId: string): Observable<BudgetResult> {
+    return this.http.post<BudgetResult>(`/api/coproperties/${copId}/exercises/${exerciseId}/budget/vote`, {});
   }
 
   listFundCalls(copId: string, exerciseId: string): Observable<FundCall[]> {

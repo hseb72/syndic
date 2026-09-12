@@ -32,7 +32,14 @@
     "charges": "Kosten je Einheit verteilt",
     "chargesHint": "Verteilung der tatsächlichen Jahreskosten — Grundlage der Abrechnung.",
     "compute": "Verteilung berechnen",
-    "total": "Kosten gesamt"
+    "total": "Kosten gesamt",
+    "readings": "Wasserzählerstände",
+    "readingsHint": "Verbrauch je Einheit für die Periode — verteilt den Verbrauchsanteil der Wasserrechnungen.",
+    "period": "Periode",
+    "consumption": "Verbrauch",
+    "saveReadings": "Zählerstände speichern",
+    "readingsSaved": "Zählerstände gespeichert.",
+    "pay": "Saldo zahlen"
   },
   "reg": {
     "title": "Jahresabrechnung",
@@ -68,6 +75,17 @@
     "carry": "Saldovortrag",
     "carryHint": "Offene Salden werden ins nächste Jahr vorgetragen. Der Abschluss berührt keine Bankzeile.",
     "payHint": "Eine Zahlung wird automatisch den offenen Forderungen des Zahlers zugeordnet, älteste zuerst."
+  },
+  "budget": {
+    "title": "Wirtschaftsplan",
+    "add": "Zeile hinzufügen",
+    "empty": "Noch keine Budgetzeile.",
+    "total": "Budget gesamt",
+    "vote": "Budget beschließen",
+    "voted": "Beschlossen",
+    "key": "Schlüssel",
+    "keyGeneral": "Allgemein (Anteile)",
+    "keyWater": "Wasser (Verbrauch)"
   },
   "bank": {
     "title": "Bankabgleich",

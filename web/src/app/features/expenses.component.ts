@@ -8,6 +8,7 @@ import {
   type ChargesResult,
   type Exercise,
   type InvoiceRow,
+  type LotOverviewRow,
   type Supplier,
 } from '../core/api.service';
 
@@ -28,6 +29,11 @@ export class ExpensesComponent implements OnInit {
   readonly suppliers = signal<Supplier[]>([]);
   readonly invoices = signal<InvoiceRow[]>([]);
   readonly charges = signal<ChargesResult | null>(null);
+
+  readonly lots = signal<LotOverviewRow[]>([]);
+  readonly readings = signal<Record<string, number | null>>({});
+  readonly readingsSaved = signal(false);
+  readonly showReadings = signal(false);
 
   readonly loading = signal(true);
   readonly saving = signal(false);
@@ -82,17 +88,78 @@ export class ExpensesComponent implements OnInit {
       error: () => this.loading.set(false),
     });
     this.api.listSuppliers(cop).subscribe({ next: (s) => this.suppliers.set(s) });
+    this.api.getOverview(cop).subscribe({ next: (o) => this.lots.set(o.lots) });
   }
 
   selectExercise(id: string): void {
     this.selectedExId.set(id);
     this.charges.set(null);
+    this.readingsSaved.set(false);
     try {
       localStorage.setItem(EX_STORAGE_KEY, id);
     } catch {
       /* ignore */
     }
     this.loadInvoices();
+    this.loadReadings();
+  }
+
+  private readingsPeriod(): string {
+    return this.selectedExercise()?.label ?? '';
+  }
+
+  private loadReadings(): void {
+    const cop = this.copId();
+    const period = this.readingsPeriod();
+    if (!cop || !period) return;
+    this.api.getWaterReadings(cop, period).subscribe({
+      next: (res) => {
+        const map: Record<string, number | null> = {};
+        for (const r of res.readings) map[r.lotId] = Number(r.consumption);
+        this.readings.set(map);
+      },
+    });
+  }
+
+  setReading(lotId: string, value: string): void {
+    const n = value === '' ? null : Number(value);
+    this.readings.update((m) => ({ ...m, [lotId]: Number.isFinite(n as number) ? (n as number) : null }));
+    this.readingsSaved.set(false);
+  }
+
+  saveReadings(): void {
+    const cop = this.copId();
+    const period = this.readingsPeriod();
+    if (!cop || !period) return;
+    this.saving.set(true);
+    const map = this.readings();
+    const rows = this.lots()
+      .map((l) => ({ lotId: l.id, consumption: map[l.id] ?? 0 }))
+      .filter((r) => r.consumption > 0);
+    this.api.setWaterReadings(cop, period, rows).subscribe({
+      next: () => {
+        this.readingsSaved.set(true);
+        this.saving.set(false);
+      },
+      error: () => this.saving.set(false),
+    });
+  }
+
+  payInvoice(inv: InvoiceRow): void {
+    const cop = this.copId();
+    if (!cop) return;
+    const remaining = Math.round((Number(inv.amount) - Number(inv.paidAmount)) * 100) / 100;
+    if (remaining <= 0) return;
+    this.saving.set(true);
+    this.api
+      .recordInvoicePayment(cop, inv.id, { paymentDate: new Date().toISOString().slice(0, 10), amount: remaining })
+      .subscribe({
+        next: () => {
+          this.loadInvoices();
+          this.saving.set(false);
+        },
+        error: () => this.saving.set(false),
+      });
   }
 
   private loadInvoices(): void {
