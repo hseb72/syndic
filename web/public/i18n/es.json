@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Comunidad de propietarios" },
   "mode": { "bureau": "Área de la junta", "coprop": "Área de propietarios" },
-  "tab": { "dashboard": "Panel", "coprop": "Comunidad", "expenses": "Gastos" },
+  "tab": { "dashboard": "Panel", "coprop": "Comunidad", "expenses": "Gastos", "reg": "Regularización" },
   "health": { "label": "Estado de la API", "ok": "conectada", "down": "no disponible", "checking": "comprobando…" },
   "dashboard": { "title": "Panel", "socleNote": "Base lista: API, base de datos e interfaz se comunican. Las funciones llegan en los siguientes pasos." },
   "coprop": {
@@ -33,6 +33,21 @@
     "chargesHint": "Reparto de los gastos reales del ejercicio — base de la regularización.",
     "compute": "Calcular el reparto",
     "total": "Total de gastos"
+  },
+  "reg": {
+    "title": "Regularización anual",
+    "hint": "Ejercicio N-1 a regularizar. La derrama incluye la regularización N-1 y las provisiones del año N.",
+    "provNext": "Provisiones de gastos N (€)",
+    "fondsNext": "Fondo de obras N (€)",
+    "compute": "Calcular la regularización",
+    "formula": "Derrama = gastos N-1 + impagos N-1 − provisiones N-1 + provisiones N + fondo N",
+    "colDepenses": "Gastos N-1",
+    "colProvN1": "Prov. N-1",
+    "colImpayes": "Impagos",
+    "colProvN": "Prov. N",
+    "colFondsN": "Fondo N",
+    "colAppel": "Derrama",
+    "total": "Total girado"
   },
   "th": { "lot": "Finca", "owner": "Propietario", "tantiemes": "Coeficiente", "quotePart": "Cuota %", "actions": "", "supplier": "Proveedor", "date": "Fecha", "category": "Categoría", "amount": "Importe", "paid": "Pagado", "status": "Estado", "charge": "Gasto" },
   "field": { "name": "Nombre", "address": "Dirección", "postalCode": "Código postal", "city": "Ciudad", "lotNumber": "Número", "tantiemes": "Coeficiente", "owner": "Propietario", "supplier": "Proveedor", "exerciseLabel": "Etiqueta (ej. 2024)", "startDate": "Inicio", "endDate": "Fin", "invoiceDate": "Fecha", "amount": "Importe (€)", "category": "Categoría", "subscriptionAmount": "Abono (€)", "consumptionAmount": "Consumo (€)" },

@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Copropriété" },
   "mode": { "bureau": "Espace bureau", "coprop": "Espace copropriétaires" },
-  "tab": { "dashboard": "Tableau de bord", "coprop": "Copropriété", "expenses": "Dépenses" },
+  "tab": { "dashboard": "Tableau de bord", "coprop": "Copropriété", "expenses": "Dépenses", "reg": "Régularisation" },
   "health": { "label": "État de l’API", "ok": "connectée", "down": "injoignable", "checking": "vérification…" },
   "dashboard": { "title": "Tableau de bord", "socleNote": "Socle en place : API, base de données et interface communiquent. Les fonctionnalités arrivent aux étapes suivantes." },
   "coprop": {
@@ -33,6 +33,21 @@
     "chargesHint": "Répartition des dépenses réelles de l’exercice — base de la régularisation.",
     "compute": "Calculer la répartition",
     "total": "Total des charges"
+  },
+  "reg": {
+    "title": "Régularisation annuelle",
+    "hint": "Exercice N-1 à régulariser. L’appel intègre la régularisation N-1 et les provisions de l’année N.",
+    "provNext": "Provisions sur charges N (€)",
+    "fondsNext": "Fonds travaux N (€)",
+    "compute": "Calculer la régularisation",
+    "formula": "Appel = dépenses N-1 + impayés N-1 − provisions N-1 + provisions N + fonds N",
+    "colDepenses": "Dépenses N-1",
+    "colProvN1": "Prov. N-1",
+    "colImpayes": "Impayés",
+    "colProvN": "Prov. N",
+    "colFondsN": "Fonds N",
+    "colAppel": "Appel",
+    "total": "Total appelé"
   },
   "th": { "lot": "Lot", "owner": "Propriétaire", "tantiemes": "Tantièmes", "quotePart": "Quote-part", "actions": "", "supplier": "Fournisseur", "date": "Date", "category": "Catégorie", "amount": "Montant", "paid": "Payé", "status": "Statut", "charge": "Charge" },
   "field": { "name": "Nom", "address": "Adresse", "postalCode": "Code postal", "city": "Ville", "lotNumber": "Numéro", "tantiemes": "Tantièmes", "owner": "Propriétaire", "supplier": "Fournisseur", "exerciseLabel": "Libellé (ex. 2024)", "startDate": "Début", "endDate": "Fin", "invoiceDate": "Date", "amount": "Montant (€)", "category": "Catégorie", "subscriptionAmount": "Abonnement (€)", "consumptionAmount": "Consommation (€)" },

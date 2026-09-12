@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Eigentümergemeinschaft" },
   "mode": { "bureau": "Verwaltungsbereich", "coprop": "Eigentümerbereich" },
-  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben" },
+  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben", "reg": "Abrechnung" },
   "health": { "label": "API-Status", "ok": "verbunden", "down": "nicht erreichbar", "checking": "wird geprüft…" },
   "dashboard": { "title": "Übersicht", "socleNote": "Grundgerüst steht: API, Datenbank und Oberfläche kommunizieren. Funktionen folgen in den nächsten Schritten." },
   "coprop": {
@@ -33,6 +33,21 @@
     "chargesHint": "Verteilung der tatsächlichen Jahreskosten — Grundlage der Abrechnung.",
     "compute": "Verteilung berechnen",
     "total": "Kosten gesamt"
+  },
+  "reg": {
+    "title": "Jahresabrechnung",
+    "hint": "Abzurechnendes Jahr N-1. Die Abrechnung umfasst die N-1-Abrechnung und die Vorschüsse für Jahr N.",
+    "provNext": "Kostenvorschüsse N (€)",
+    "fondsNext": "Instandhaltungsrücklage N (€)",
+    "compute": "Abrechnung berechnen",
+    "formula": "Abruf = Kosten N-1 + Rückstände N-1 − Vorschüsse N-1 + Vorschüsse N + Rücklage N",
+    "colDepenses": "Kosten N-1",
+    "colProvN1": "Vor. N-1",
+    "colImpayes": "Rückstände",
+    "colProvN": "Vor. N",
+    "colFondsN": "Rücklage N",
+    "colAppel": "Abruf",
+    "total": "Gesamt abgerufen"
   },
   "th": { "lot": "Einheit", "owner": "Eigentümer", "tantiemes": "Anteile", "quotePart": "Anteil %", "actions": "", "supplier": "Lieferant", "date": "Datum", "category": "Kategorie", "amount": "Betrag", "paid": "Bezahlt", "status": "Status", "charge": "Kosten" },
   "field": { "name": "Name", "address": "Adresse", "postalCode": "PLZ", "city": "Ort", "lotNumber": "Nummer", "tantiemes": "Anteile", "owner": "Eigentümer", "supplier": "Lieferant", "exerciseLabel": "Bezeichnung (z. B. 2024)", "startDate": "Beginn", "endDate": "Ende", "invoiceDate": "Datum", "amount": "Betrag (€)", "category": "Kategorie", "subscriptionAmount": "Grundgebühr (€)", "consumptionAmount": "Verbrauch (€)" },

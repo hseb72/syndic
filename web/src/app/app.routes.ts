@@ -14,5 +14,9 @@ export const routes: Routes = [
     path: 'depenses',
     loadComponent: () => import('./features/expenses.component').then((m) => m.ExpensesComponent),
   },
+  {
+    path: 'regularisation',
+    loadComponent: () => import('./features/regularisation.component').then((m) => m.RegularisationComponent),
+  },
   { path: '**', redirectTo: 'tableau-de-bord' },
 ];

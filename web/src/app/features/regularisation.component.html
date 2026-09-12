@@ -1,0 +1,83 @@
+<ng-container *transloco="let t">
+  @if (!copId()) {
+    <div class="card"><div class="empty">{{ t('coprop.none') }}</div></div>
+  } @else {
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>{{ t('reg.title') }}</h2>
+          <div class="hint">{{ t('reg.hint') }}</div>
+        </div>
+      </div>
+
+      <form class="panel" [formGroup]="form" (ngSubmit)="compute()">
+        <div class="form-grid">
+          <div class="field">
+            <label for="reg-ex">{{ t('expenses.exercise') }} (N-1)</label>
+            <select id="reg-ex" formControlName="exerciseN1Id">
+              @for (e of exercises(); track e.id) {
+                <option [value]="e.id">{{ e.label || (e.start_date + ' → ' + e.end_date) }}</option>
+              }
+            </select>
+          </div>
+          <div class="field">
+            <label for="reg-prov">{{ t('reg.provNext') }}</label>
+            <input id="reg-prov" type="number" step="0.01" min="0" formControlName="provisionsNextTotal" />
+          </div>
+          <div class="field">
+            <label for="reg-fonds">{{ t('reg.fondsNext') }}</label>
+            <input id="reg-fonds" type="number" step="0.01" min="0" formControlName="workFundNextTotal" />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn primary" type="submit" [disabled]="form.invalid || computing()">{{ t('reg.compute') }}</button>
+        </div>
+        <div class="disclaimer" style="margin-top:10px;">{{ t('reg.formula') }}</div>
+      </form>
+
+      @if (result(); as r) {
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ t('th.lot') }}</th>
+                <th>{{ t('th.owner') }}</th>
+                <th class="num">{{ t('reg.colDepenses') }}</th>
+                <th class="num">{{ t('reg.colProvN1') }}</th>
+                <th class="num">{{ t('reg.colImpayes') }}</th>
+                <th class="num">{{ t('reg.colProvN') }}</th>
+                <th class="num">{{ t('reg.colFondsN') }}</th>
+                <th class="num">{{ t('reg.colAppel') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of r.byLot; track row.lotId) {
+                <tr>
+                  <td>{{ row.lotNumber }}</td>
+                  <td>{{ row.ownerLabel || '—' }}</td>
+                  <td class="num">{{ row.depenses | number: '1.2-2' }}</td>
+                  <td class="num">{{ row.provisionsN1 | number: '1.2-2' }}</td>
+                  <td class="num">{{ row.impayes | number: '1.2-2' }}</td>
+                  <td class="num">{{ row.provisionsNext | number: '1.2-2' }}</td>
+                  <td class="num">{{ row.workFundNext | number: '1.2-2' }}</td>
+                  <td class="num" style="font-weight:700;">{{ row.amount | number: '1.2-2' }}</td>
+                </tr>
+              }
+            </tbody>
+            <tfoot>
+              <tr style="border-top:2px solid var(--line-strong);">
+                <td colspan="2" style="font-weight:700;">{{ t('reg.total') }}</td>
+                <td class="num">{{ r.totals.depenses | number: '1.2-2' }}</td>
+                <td class="num">{{ r.totals.provisionsN1 | number: '1.2-2' }}</td>
+                <td class="num">{{ r.totals.impayes | number: '1.2-2' }}</td>
+                <td class="num">{{ r.totals.provisionsNext | number: '1.2-2' }}</td>
+                <td class="num">{{ r.totals.workFundNext | number: '1.2-2' }}</td>
+                <td class="num" style="font-weight:700;">{{ r.totals.amount | number: '1.2-2' }} €</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      }
+    </div>
+  }
+</ng-container>

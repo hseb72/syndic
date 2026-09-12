@@ -98,6 +98,31 @@ export interface ChargesResult {
   byLot: { lotId: string; lotNumber: string; amount: number }[];
 }
 
+export interface RegularisationLot {
+  lotId: string;
+  lotNumber: string;
+  ownerLabel: string;
+  depenses: number;
+  provisionsN1: number;
+  impayes: number;
+  provisionsNext: number;
+  workFundNext: number;
+  amount: number;
+}
+
+export interface RegularisationResult {
+  exerciseN1Id: string;
+  totals: {
+    depenses: number;
+    provisionsN1: number;
+    impayes: number;
+    provisionsNext: number;
+    workFundNext: number;
+    amount: number;
+  };
+  byLot: RegularisationLot[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private http = inject(HttpClient);
@@ -160,5 +185,12 @@ export class ApiService {
 
   getCharges(copId: string, exerciseId: string): Observable<ChargesResult> {
     return this.http.get<ChargesResult>(`/api/coproperties/${copId}/exercises/${exerciseId}/charges`);
+  }
+
+  computeRegularisation(
+    copId: string,
+    input: { exerciseN1Id: string; provisionsNextTotal: number; workFundNextTotal: number },
+  ): Observable<RegularisationResult> {
+    return this.http.post<RegularisationResult>(`/api/coproperties/${copId}/regularisation/compute`, input);
   }
 }
