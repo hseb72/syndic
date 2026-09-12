@@ -147,6 +147,30 @@ export interface BankImportRow {
   externalId?: string | null;
 }
 
+export interface BalanceRow {
+  number: string;
+  name: string;
+  debit: number;
+  credit: number;
+  balance: number;
+}
+
+export interface BalanceResult {
+  rows: BalanceRow[];
+  totalDebit: number;
+  totalCredit: number;
+  balanced: boolean;
+}
+
+export interface JournalLine {
+  entryId: string;
+  entryDate: string;
+  description: string;
+  account: string;
+  debit: number;
+  credit: number;
+}
+
 export interface BudgetLine {
   id: string;
   category: string;
@@ -209,6 +233,21 @@ export class ApiService {
   getDashboard(copId: string, exerciseId?: string): Observable<DashboardSummary> {
     const q = exerciseId ? `?exerciseId=${exerciseId}` : '';
     return this.http.get<DashboardSummary>(`/api/coproperties/${copId}/dashboard${q}`);
+  }
+
+  generateAccounting(copId: string, exerciseId: string): Observable<BalanceResult & { entries: number }> {
+    return this.http.post<BalanceResult & { entries: number }>(
+      `/api/coproperties/${copId}/exercises/${exerciseId}/accounting/generate`,
+      {},
+    );
+  }
+
+  getBalance(copId: string, exerciseId: string): Observable<BalanceResult> {
+    return this.http.get<BalanceResult>(`/api/coproperties/${copId}/exercises/${exerciseId}/accounting/balance`);
+  }
+
+  getJournal(copId: string, exerciseId: string): Observable<JournalLine[]> {
+    return this.http.get<JournalLine[]>(`/api/coproperties/${copId}/exercises/${exerciseId}/accounting/journal`);
   }
 
   listCoproperties(): Observable<Coproperty[]> {

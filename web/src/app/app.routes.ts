@@ -37,5 +37,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/regularisation.component').then((m) => m.RegularisationComponent),
   },
+  {
+    path: 'comptabilite',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/accounting.component').then((m) => m.AccountingComponent),
+  },
   { path: '**', redirectTo: 'tableau-de-bord' },
 ];

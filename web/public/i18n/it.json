@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Condominio" },
   "mode": { "bureau": "Area del consiglio", "coprop": "Area condomini" },
-  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio", "expenses": "Spese", "cash": "Tesoreria", "bank": "Banca", "reg": "Conguaglio" },
+  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio", "expenses": "Spese", "cash": "Tesoreria", "bank": "Banca", "reg": "Conguaglio", "acc": "Contabilità" },
   "health": { "label": "Stato API", "ok": "connessa", "down": "non raggiungibile", "checking": "verifica…" },
   "dashboard": { "title": "Cruscotto", "cash": "Saldo di cassa", "unpaid": "Insoluti", "worklist": "Da riconciliare", "lots": "Unità", "budgetTitle": "Bilancio {{ y }}", "budgetVoted": "Bilancio votato", "expensesReal": "Spese reali", "consumed": "consumato", "noData": "Seleziona un condominio (scheda Condominio) per vedere il cruscotto.", "lines": "voci di bilancio" },
   "coprop": {
@@ -58,6 +58,21 @@
     "generate": "Genera la richiesta di conguaglio",
     "generated": "Richiesta generata: {{ n }} credito/i creato/i.",
     "genHint": "Crea la richiesta reale e i crediti per proprietario (gli importi a credito diventano un credito, senza addebito)."
+  },
+  "acc": {
+    "title": "Contabilità",
+    "hint": "Le scritture derivano automaticamente dai fatti: richieste, pagamenti, fatture. Partita doppia, ogni scrittura in pareggio.",
+    "generate": "Genera le scritture",
+    "balanced": "In pareggio ✓",
+    "unbalanced": "Non in pareggio",
+    "balance": "Bilancio di verifica",
+    "journal": "Libro giornale",
+    "account": "Conto",
+    "debit": "Dare",
+    "credit": "Avere",
+    "solde": "Saldo",
+    "total": "Totale",
+    "empty": "Nessuna scrittura. Clicca su «Genera le scritture»."
   },
   "cash": {
     "calls": "Richieste di acconti",

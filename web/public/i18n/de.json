@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Eigentümergemeinschaft" },
   "mode": { "bureau": "Verwaltungsbereich", "coprop": "Eigentümerbereich" },
-  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben", "cash": "Finanzen", "bank": "Bank", "reg": "Abrechnung" },
+  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben", "cash": "Finanzen", "bank": "Bank", "reg": "Abrechnung", "acc": "Buchhaltung" },
   "health": { "label": "API-Status", "ok": "verbunden", "down": "nicht erreichbar", "checking": "wird geprüft…" },
   "dashboard": { "title": "Übersicht", "cash": "Kontostand", "unpaid": "Offen", "worklist": "Abzugleichen", "lots": "Einheiten", "budgetTitle": "Budget {{ y }}", "budgetVoted": "Beschlossenes Budget", "expensesReal": "Tatsächliche Kosten", "consumed": "verbraucht", "noData": "Wählen Sie eine Gemeinschaft (Reiter Gemeinschaft), um die Übersicht zu sehen.", "lines": "Budgetposten" },
   "coprop": {
@@ -58,6 +58,21 @@
     "generate": "Abrechnungsabruf erzeugen",
     "generated": "Abruf erzeugt: {{ n }} Forderung(en) erstellt.",
     "genHint": "Erzeugt den echten Abruf und die Forderungen je Eigentümer (Guthabenbeträge werden ein Guthaben, ohne Forderung)."
+  },
+  "acc": {
+    "title": "Buchhaltung",
+    "hint": "Buchungen werden automatisch aus den Vorgängen abgeleitet: Abrufe, Zahlungen, Rechnungen. Doppelte Buchführung, jede Buchung ausgeglichen.",
+    "generate": "Buchungen erzeugen",
+    "balanced": "Ausgeglichen ✓",
+    "unbalanced": "Nicht ausgeglichen",
+    "balance": "Saldenbilanz",
+    "journal": "Journal",
+    "account": "Konto",
+    "debit": "Soll",
+    "credit": "Haben",
+    "solde": "Saldo",
+    "total": "Summe",
+    "empty": "Keine Buchungen. Klicken Sie auf „Buchungen erzeugen“."
   },
   "cash": {
     "calls": "Vorschussabrufe",

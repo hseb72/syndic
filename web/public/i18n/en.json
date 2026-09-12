@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Condominium" },
   "mode": { "bureau": "Board area", "coprop": "Co-owner area" },
-  "tab": { "dashboard": "Dashboard", "coprop": "Condominium", "expenses": "Expenses", "cash": "Finances", "bank": "Bank", "reg": "Adjustment" },
+  "tab": { "dashboard": "Dashboard", "coprop": "Condominium", "expenses": "Expenses", "cash": "Finances", "bank": "Bank", "reg": "Adjustment", "acc": "Accounting" },
   "health": { "label": "API status", "ok": "connected", "down": "unreachable", "checking": "checking…" },
   "dashboard": { "title": "Dashboard", "cash": "Cash balance", "unpaid": "Unpaid", "worklist": "To reconcile", "lots": "Units", "budgetTitle": "Budget for {{ y }}", "budgetVoted": "Voted budget", "expensesReal": "Actual expenses", "consumed": "used", "noData": "Select a condominium (Condominium tab) to see the dashboard.", "lines": "budget lines" },
   "coprop": {
@@ -58,6 +58,21 @@
     "generate": "Generate the adjustment call",
     "generated": "Call generated: {{ n }} receivable(s) created.",
     "genHint": "Creates the real call and per-owner receivables (credit amounts become a credit, with no receivable)."
+  },
+  "acc": {
+    "title": "Accounting",
+    "hint": "Entries are derived automatically from the facts: calls, payments, invoices. Double-entry, each entry balanced.",
+    "generate": "Generate entries",
+    "balanced": "Balanced ✓",
+    "unbalanced": "Not balanced",
+    "balance": "Trial balance",
+    "journal": "Journal",
+    "account": "Account",
+    "debit": "Debit",
+    "credit": "Credit",
+    "solde": "Balance",
+    "total": "Total",
+    "empty": "No entries. Click 'Generate entries'."
   },
   "cash": {
     "calls": "Provision calls",

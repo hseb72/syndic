@@ -284,6 +284,41 @@ export interface AppUserTable {
   created_at: Generated<Timestamp>;
 }
 
+export interface AccountingAccountTable {
+  id: string;
+  coproperty_id: string;
+  number: string;
+  name: string;
+  created_at: Generated<Timestamp>;
+}
+
+export interface JournalTable {
+  id: string;
+  coproperty_id: string;
+  code: string;
+  name: string;
+}
+
+export interface JournalEntryTable {
+  id: string;
+  journal_id: string;
+  exercise_id: string;
+  entry_date: DateString;
+  description: string;
+  source_type: string | null;
+  source_id: string | null;
+  created_at: Generated<Timestamp>;
+}
+
+export interface JournalEntryLineTable {
+  id: string;
+  journal_entry_id: string;
+  accounting_account_id: string;
+  debit: Numeric;
+  credit: Numeric;
+  description: Generated<string | null>;
+}
+
 export interface Database {
   schema_migrations: SchemaMigrationsTable;
   app_user: AppUserTable;
@@ -311,4 +346,8 @@ export interface Database {
   bank_account: BankAccountTable;
   bank_transaction: BankTransactionTable;
   bank_reconciliation: BankReconciliationTable;
+  accounting_account: AccountingAccountTable;
+  journal: JournalTable;
+  journal_entry: JournalEntryTable;
+  journal_entry_line: JournalEntryLineTable;
 }

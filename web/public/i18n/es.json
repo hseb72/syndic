@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Comunidad de propietarios" },
   "mode": { "bureau": "Área de la junta", "coprop": "Área de propietarios" },
-  "tab": { "dashboard": "Panel", "coprop": "Comunidad", "expenses": "Gastos", "cash": "Tesorería", "bank": "Banco", "reg": "Regularización" },
+  "tab": { "dashboard": "Panel", "coprop": "Comunidad", "expenses": "Gastos", "cash": "Tesorería", "bank": "Banco", "reg": "Regularización", "acc": "Contabilidad" },
   "health": { "label": "Estado de la API", "ok": "conectada", "down": "no disponible", "checking": "comprobando…" },
   "dashboard": { "title": "Panel", "cash": "Saldo de tesorería", "unpaid": "Impagados", "worklist": "Por conciliar", "lots": "Fincas", "budgetTitle": "Presupuesto {{ y }}", "budgetVoted": "Presupuesto votado", "expensesReal": "Gastos reales", "consumed": "consumido", "noData": "Seleccione una comunidad (pestaña Comunidad) para ver el panel.", "lines": "líneas de presupuesto" },
   "coprop": {
@@ -58,6 +58,21 @@
     "generate": "Generar la derrama de regularización",
     "generated": "Derrama generada: {{ n }} deuda(s) creada(s).",
     "genHint": "Crea la derrama real y las deudas por propietario (los importes a favor se convierten en crédito, sin deuda)."
+  },
+  "acc": {
+    "title": "Contabilidad",
+    "hint": "Los asientos se derivan automáticamente de los hechos: derramas, pagos, facturas. Partida doble, cada asiento cuadrado.",
+    "generate": "Generar los asientos",
+    "balanced": "Cuadrado ✓",
+    "unbalanced": "Descuadrado",
+    "balance": "Balance de sumas y saldos",
+    "journal": "Diario",
+    "account": "Cuenta",
+    "debit": "Debe",
+    "credit": "Haber",
+    "solde": "Saldo",
+    "total": "Total",
+    "empty": "No hay asientos. Haga clic en «Generar los asientos»."
   },
   "cash": {
     "calls": "Derramas de provisiones",

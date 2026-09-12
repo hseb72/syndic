@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Copropriété" },
   "mode": { "bureau": "Espace bureau", "coprop": "Espace copropriétaires" },
-  "tab": { "dashboard": "Tableau de bord", "coprop": "Copropriété", "expenses": "Dépenses", "cash": "Trésorerie", "bank": "Banque", "reg": "Régularisation" },
+  "tab": { "dashboard": "Tableau de bord", "coprop": "Copropriété", "expenses": "Dépenses", "cash": "Trésorerie", "bank": "Banque", "reg": "Régularisation", "acc": "Comptabilité" },
   "health": { "label": "État de l’API", "ok": "connectée", "down": "injoignable", "checking": "vérification…" },
   "dashboard": { "title": "Tableau de bord", "cash": "Solde de trésorerie", "unpaid": "Impayés", "worklist": "À rapprocher", "lots": "Lots", "budgetTitle": "Budget de l’exercice {{ y }}", "budgetVoted": "Budget voté", "expensesReal": "Dépenses réelles", "consumed": "consommé", "noData": "Sélectionnez une copropriété (onglet Copropriété) pour voir le tableau de bord.", "lines": "postes budgétaires" },
   "coprop": {
@@ -58,6 +58,21 @@
     "generate": "Générer l’appel de régularisation",
     "generated": "Appel généré : {{ n }} créance(s) créée(s).",
     "genHint": "Crée l’appel réel et les créances par copropriétaire (les montants créditeurs deviennent un crédit, sans créance)."
+  },
+  "acc": {
+    "title": "Comptabilité",
+    "hint": "Les écritures sont dérivées automatiquement des faits : appels, paiements, factures. Partie double, chaque écriture équilibrée.",
+    "generate": "Générer les écritures",
+    "balanced": "Équilibré ✓",
+    "unbalanced": "Déséquilibré",
+    "balance": "Balance",
+    "journal": "Journal",
+    "account": "Compte",
+    "debit": "Débit",
+    "credit": "Crédit",
+    "solde": "Solde",
+    "total": "Total",
+    "empty": "Aucune écriture. Cliquez sur « Générer les écritures »."
   },
   "cash": {
     "calls": "Appels de provisions",
