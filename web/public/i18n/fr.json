@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Copropriété" },
   "mode": { "bureau": "Espace bureau", "coprop": "Espace copropriétaires" },
-  "tab": { "dashboard": "Tableau de bord", "coprop": "Copropriété", "expenses": "Dépenses", "reg": "Régularisation" },
+  "tab": { "dashboard": "Tableau de bord", "coprop": "Copropriété", "expenses": "Dépenses", "cash": "Trésorerie", "reg": "Régularisation" },
   "health": { "label": "État de l’API", "ok": "connectée", "down": "injoignable", "checking": "vérification…" },
   "dashboard": { "title": "Tableau de bord", "socleNote": "Socle en place : API, base de données et interface communiquent. Les fonctionnalités arrivent aux étapes suivantes." },
   "coprop": {
@@ -48,6 +48,17 @@
     "colFondsN": "Fonds N",
     "colAppel": "Appel",
     "total": "Total appelé"
+  },
+  "cash": {
+    "calls": "Appels de provisions",
+    "add": "Nouvel appel",
+    "callsEmpty": "Aucun appel pour cet exercice.",
+    "amount": "Montant total (€)",
+    "receivables": "Créances & soldes",
+    "recEmpty": "Aucune créance pour cet exercice.",
+    "remaining": "Reste dû",
+    "payRemaining": "Payer le reste",
+    "payHint": "Un paiement est lettré automatiquement sur les créances ouvertes du payeur, du plus ancien au plus récent."
   },
   "th": { "lot": "Lot", "owner": "Propriétaire", "tantiemes": "Tantièmes", "quotePart": "Quote-part", "actions": "", "supplier": "Fournisseur", "date": "Date", "category": "Catégorie", "amount": "Montant", "paid": "Payé", "status": "Statut", "charge": "Charge" },
   "field": { "name": "Nom", "address": "Adresse", "postalCode": "Code postal", "city": "Ville", "lotNumber": "Numéro", "tantiemes": "Tantièmes", "owner": "Propriétaire", "supplier": "Fournisseur", "exerciseLabel": "Libellé (ex. 2024)", "startDate": "Début", "endDate": "Fin", "invoiceDate": "Date", "amount": "Montant (€)", "category": "Catégorie", "subscriptionAmount": "Abonnement (€)", "consumptionAmount": "Consommation (€)" },

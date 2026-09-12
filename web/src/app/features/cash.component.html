@@ -1,0 +1,123 @@
+<ng-container *transloco="let t">
+  @if (!copId()) {
+    <div class="card"><div class="empty">{{ t('coprop.none') }}</div></div>
+  } @else if (exercises().length === 0) {
+    <div class="card"><div class="empty">{{ t('expenses.noExercise') }}</div></div>
+  } @else {
+    <!-- Appels de provisions -->
+    <div class="card">
+      <div class="card-head">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <h2>{{ t('cash.calls') }}</h2>
+          <select class="lang-select" [value]="selectedExId()" (change)="selectExercise($any($event.target).value)" style="min-width:140px;">
+            @for (e of exercises(); track e.id) {
+              <option [value]="e.id" [selected]="e.id === selectedExId()">{{ e.label || (e.start_date + ' → ' + e.end_date) }}</option>
+            }
+          </select>
+        </div>
+        <button class="btn primary" type="button" (click)="showCallForm.set(!showCallForm())">{{ t('cash.add') }}</button>
+      </div>
+
+      @if (showCallForm()) {
+        <form class="panel" [formGroup]="callForm" (ngSubmit)="submitCall()">
+          <div class="form-grid">
+            <div class="field">
+              <label for="c-label">{{ t('field.name') }}</label>
+              <input id="c-label" type="text" formControlName="label" placeholder="Provisions T1" />
+            </div>
+            <div class="field">
+              <label for="c-issue">{{ t('field.invoiceDate') }}</label>
+              <input id="c-issue" type="date" formControlName="issueDate" />
+            </div>
+            <div class="field">
+              <label for="c-due">{{ t('field.endDate') }}</label>
+              <input id="c-due" type="date" formControlName="dueDate" />
+            </div>
+            <div class="field">
+              <label for="c-amount">{{ t('cash.amount') }}</label>
+              <input id="c-amount" type="number" step="0.01" min="0" formControlName="totalAmount" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit" [disabled]="callForm.invalid || saving()">{{ t('btn.create') }}</button>
+            <button class="btn ghost" type="button" (click)="showCallForm.set(false)">{{ t('btn.cancel') }}</button>
+          </div>
+        </form>
+      }
+
+      @if (fundCalls().length === 0) {
+        <div class="empty">{{ t('cash.callsEmpty') }}</div>
+      } @else {
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ t('th.date') }}</th>
+                <th>{{ t('field.name') }}</th>
+                <th class="num">{{ t('th.amount') }}</th>
+                <th>{{ t('th.status') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (fc of fundCalls(); track fc.id) {
+                <tr>
+                  <td>{{ fc.issue_date }}</td>
+                  <td>{{ fc.label }}</td>
+                  <td class="num">{{ num(fc.total_amount) | number: '1.2-2' }}</td>
+                  <td><span class="pill neutral">{{ fc.call_type }}</span></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+
+    <!-- Créances & soldes -->
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>{{ t('cash.receivables') }}</h2>
+          <div class="hint">{{ t('cash.payHint') }}</div>
+        </div>
+      </div>
+
+      @if (receivables().length === 0) {
+        <div class="empty">{{ t('cash.recEmpty') }}</div>
+      } @else {
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ t('th.lot') }}</th>
+                <th>{{ t('th.owner') }}</th>
+                <th class="num">{{ t('th.amount') }}</th>
+                <th class="num">{{ t('th.paid') }}</th>
+                <th class="num">{{ t('cash.remaining') }}</th>
+                <th>{{ t('th.status') }}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of receivables(); track r.id) {
+                <tr>
+                  <td>{{ r.lotNumber }}</td>
+                  <td>{{ r.personName }}</td>
+                  <td class="num">{{ num(r.amount) | number: '1.2-2' }}</td>
+                  <td class="num">{{ num(r.allocated) | number: '1.2-2' }}</td>
+                  <td class="num" style="font-weight:600;">{{ r.remaining | number: '1.2-2' }}</td>
+                  <td><span class="pill" [class.good]="r.status === 'PAID'" [class.warning]="r.status !== 'PAID'">{{ r.status }}</span></td>
+                  <td style="text-align:right; white-space:nowrap;">
+                    @if (r.remaining > 0) {
+                      <button class="btn sm" type="button" [disabled]="saving()" (click)="payRemaining(r)">{{ t('cash.payRemaining') }}</button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+</ng-container>

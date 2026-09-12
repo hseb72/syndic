@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Condominio" },
   "mode": { "bureau": "Area del consiglio", "coprop": "Area condomini" },
-  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio", "expenses": "Spese", "reg": "Conguaglio" },
+  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio", "expenses": "Spese", "cash": "Tesoreria", "reg": "Conguaglio" },
   "health": { "label": "Stato API", "ok": "connessa", "down": "non raggiungibile", "checking": "verifica…" },
   "dashboard": { "title": "Cruscotto", "socleNote": "Base pronta: API, database e interfaccia comunicano. Le funzionalità arrivano nei passi successivi." },
   "coprop": {
@@ -48,6 +48,17 @@
     "colFondsN": "Fondo N",
     "colAppel": "Richiesta",
     "total": "Totale richiesto"
+  },
+  "cash": {
+    "calls": "Richieste di acconti",
+    "add": "Nuova richiesta",
+    "callsEmpty": "Nessuna richiesta per questo esercizio.",
+    "amount": "Importo totale (€)",
+    "receivables": "Crediti e saldi",
+    "recEmpty": "Nessun credito per questo esercizio.",
+    "remaining": "Saldo dovuto",
+    "payRemaining": "Salda il dovuto",
+    "payHint": "Un pagamento viene applicato automaticamente ai crediti aperti del pagatore, dal più vecchio."
   },
   "th": { "lot": "Unità", "owner": "Proprietario", "tantiemes": "Millesimi", "quotePart": "Quota %", "actions": "", "supplier": "Fornitore", "date": "Data", "category": "Categoria", "amount": "Importo", "paid": "Pagato", "status": "Stato", "charge": "Spesa" },
   "field": { "name": "Nome", "address": "Indirizzo", "postalCode": "CAP", "city": "Città", "lotNumber": "Numero", "tantiemes": "Millesimi", "owner": "Proprietario", "supplier": "Fornitore", "exerciseLabel": "Etichetta (es. 2024)", "startDate": "Inizio", "endDate": "Fine", "invoiceDate": "Data", "amount": "Importo (€)", "category": "Categoria", "subscriptionAmount": "Abbonamento (€)", "consumptionAmount": "Consumo (€)" },

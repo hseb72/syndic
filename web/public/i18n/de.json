@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Eigentümergemeinschaft" },
   "mode": { "bureau": "Verwaltungsbereich", "coprop": "Eigentümerbereich" },
-  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben", "reg": "Abrechnung" },
+  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben", "cash": "Finanzen", "reg": "Abrechnung" },
   "health": { "label": "API-Status", "ok": "verbunden", "down": "nicht erreichbar", "checking": "wird geprüft…" },
   "dashboard": { "title": "Übersicht", "socleNote": "Grundgerüst steht: API, Datenbank und Oberfläche kommunizieren. Funktionen folgen in den nächsten Schritten." },
   "coprop": {
@@ -48,6 +48,17 @@
     "colFondsN": "Rücklage N",
     "colAppel": "Abruf",
     "total": "Gesamt abgerufen"
+  },
+  "cash": {
+    "calls": "Vorschussabrufe",
+    "add": "Neuer Abruf",
+    "callsEmpty": "Keine Abrufe für dieses Jahr.",
+    "amount": "Gesamtbetrag (€)",
+    "receivables": "Forderungen & Salden",
+    "recEmpty": "Keine Forderungen für dieses Jahr.",
+    "remaining": "Offener Saldo",
+    "payRemaining": "Saldo zahlen",
+    "payHint": "Eine Zahlung wird automatisch den offenen Forderungen des Zahlers zugeordnet, älteste zuerst."
   },
   "th": { "lot": "Einheit", "owner": "Eigentümer", "tantiemes": "Anteile", "quotePart": "Anteil %", "actions": "", "supplier": "Lieferant", "date": "Datum", "category": "Kategorie", "amount": "Betrag", "paid": "Bezahlt", "status": "Status", "charge": "Kosten" },
   "field": { "name": "Name", "address": "Adresse", "postalCode": "PLZ", "city": "Ort", "lotNumber": "Nummer", "tantiemes": "Anteile", "owner": "Eigentümer", "supplier": "Lieferant", "exerciseLabel": "Bezeichnung (z. B. 2024)", "startDate": "Beginn", "endDate": "Ende", "invoiceDate": "Datum", "amount": "Betrag (€)", "category": "Kategorie", "subscriptionAmount": "Grundgebühr (€)", "consumptionAmount": "Verbrauch (€)" },

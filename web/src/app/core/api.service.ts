@@ -110,6 +110,30 @@ export interface RegularisationLot {
   amount: number;
 }
 
+export interface FundCall {
+  id: string;
+  label: string;
+  call_type: string;
+  issue_date: string;
+  due_date: string;
+  total_amount: string;
+  status: string;
+  exercise_id: string;
+}
+
+export interface ReceivableRow {
+  id: string;
+  lotId: string;
+  lotNumber: string;
+  personId: string;
+  personName: string;
+  amount: string;
+  allocated: string;
+  remaining: number;
+  dueDate: string;
+  status: string;
+}
+
 export interface RegularisationResult {
   exerciseN1Id: string;
   totals: {
@@ -192,5 +216,27 @@ export class ApiService {
     input: { exerciseN1Id: string; provisionsNextTotal: number; workFundNextTotal: number },
   ): Observable<RegularisationResult> {
     return this.http.post<RegularisationResult>(`/api/coproperties/${copId}/regularisation/compute`, input);
+  }
+
+  listFundCalls(copId: string, exerciseId: string): Observable<FundCall[]> {
+    return this.http.get<FundCall[]>(`/api/coproperties/${copId}/fund-calls?exerciseId=${exerciseId}`);
+  }
+
+  createProvisionCall(
+    copId: string,
+    input: { exerciseId: string; label: string; issueDate: string; dueDate: string; totalAmount: number },
+  ): Observable<FundCall> {
+    return this.http.post<FundCall>(`/api/coproperties/${copId}/fund-calls`, input);
+  }
+
+  listReceivables(copId: string, exerciseId: string): Observable<ReceivableRow[]> {
+    return this.http.get<ReceivableRow[]>(`/api/coproperties/${copId}/receivables?exerciseId=${exerciseId}`);
+  }
+
+  createPayment(
+    copId: string,
+    input: { personId: string; paymentDate: string; amount: number; autoAllocate: boolean },
+  ): Observable<unknown> {
+    return this.http.post(`/api/coproperties/${copId}/payments`, input);
   }
 }
