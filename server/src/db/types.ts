@@ -233,6 +233,36 @@ export interface PaymentAllocationTable {
   created_at: Generated<Timestamp>;
 }
 
+export interface BankAccountTable {
+  id: string;
+  coproperty_id: string;
+  name: string;
+  iban: string | null;
+  initial_balance: Numeric;
+  initial_date: DateString | null;
+  created_at: Generated<Timestamp>;
+}
+
+export interface BankTransactionTable {
+  id: string;
+  bank_account_id: string;
+  transaction_date: DateString;
+  value_date: DateString | null;
+  amount: Numeric;
+  label: string | null;
+  external_id: string | null;
+  created_at: Generated<Timestamp>;
+}
+
+export interface BankReconciliationTable {
+  id: string;
+  bank_transaction_id: string;
+  target_type: string; // OWNER_PAYMENT | SUPPLIER_PAYMENT
+  target_id: string;
+  amount: Numeric;
+  created_at: Generated<Timestamp>;
+}
+
 export interface Database {
   schema_migrations: SchemaMigrationsTable;
   coproperty: CopropertyTable;
@@ -255,4 +285,7 @@ export interface Database {
   receivable: ReceivableTable;
   owner_payment: OwnerPaymentTable;
   payment_allocation: PaymentAllocationTable;
+  bank_account: BankAccountTable;
+  bank_transaction: BankTransactionTable;
+  bank_reconciliation: BankReconciliationTable;
 }
