@@ -1,8 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
-import { ApiService, type MySummary } from '../core/api.service';
+import { ApiService, type Coproperty, type MySummary } from '../core/api.service';
 
+const COP_STORAGE_KEY = 'syndic.copId';
 const EX_STORAGE_KEY = 'syndic.exId';
 
 @Component({
@@ -10,6 +11,21 @@ const EX_STORAGE_KEY = 'syndic.exId';
   imports: [TranslocoModule, DecimalPipe],
   template: `
     <ng-container *transloco="let t">
+      @if (coproperties().length > 1) {
+        <div class="card">
+          <div class="card-head">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <h2>{{ t('coprop.select') }}</h2>
+              <select class="lang-select" [value]="copId()" (change)="selectCop($any($event.target).value)" style="min-width:200px;">
+                @for (c of coproperties(); track c.id) {
+                  <option [value]="c.id" [selected]="c.id === copId()">{{ c.name }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </div>
+      }
+
       @if (data(); as d) {
         @if (!d.linked) {
           <div class="card"><div class="banner tip">{{ t('mine.notLinked') }}</div></div>
@@ -71,6 +87,8 @@ const EX_STORAGE_KEY = 'syndic.exId';
             }
           </div>
         }
+      } @else if (coproperties().length === 0) {
+        <div class="card"><div class="banner tip">{{ t('mine.notLinked') }}</div></div>
       }
     </ng-container>
   `,
@@ -78,15 +96,38 @@ const EX_STORAGE_KEY = 'syndic.exId';
 export class MyChargesComponent implements OnInit {
   private api = inject(ApiService);
   readonly data = signal<MySummary | null>(null);
+  readonly coproperties = signal<Coproperty[]>([]);
+  readonly copId = signal<string | null>(null);
 
   ngOnInit(): void {
-    let ex: string | null = null;
+    this.api.listCoproperties().subscribe({
+      next: (rows) => {
+        this.coproperties.set(rows);
+        const stored = this.read(COP_STORAGE_KEY);
+        const initial = rows.find((c) => c.id === stored) ?? rows[0];
+        if (initial) this.selectCop(initial.id);
+      },
+    });
+  }
+
+  selectCop(id: string): void {
+    this.copId.set(id);
     try {
-      ex = localStorage.getItem(EX_STORAGE_KEY);
+      localStorage.setItem(COP_STORAGE_KEY, id);
     } catch {
       /* ignore */
     }
-    this.api.getMySummary(ex ?? undefined).subscribe({ next: (d) => this.data.set(d) });
+    const ex = this.read(EX_STORAGE_KEY);
+    this.data.set(null);
+    this.api.getMySummary(id, ex ?? undefined).subscribe({ next: (d) => this.data.set(d) });
+  }
+
+  private read(key: string): string | null {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
   }
 
   lotsLabel(d: MySummary): string {

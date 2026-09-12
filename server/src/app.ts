@@ -5,6 +5,7 @@ import { ZodError } from 'zod';
 import { config } from './config.js';
 import { pool } from './db/index.js';
 import { countUsers } from './modules/auth/service.js';
+import { canAccessCoproperty } from './modules/auth/access.js';
 import { authRoutes } from './modules/auth/routes.js';
 
 declare module '@fastify/jwt' {
@@ -61,6 +62,17 @@ export async function buildApp(): Promise<FastifyInstance> {
     const isWrite = request.method !== 'GET' && request.method !== 'HEAD' && request.method !== 'OPTIONS';
     if (isWrite && request.user.role !== 'BUREAU') {
       return reply.code(403).send({ error: 'Forbidden', message: 'Action réservée au bureau.' });
+    }
+
+    // Cloisonnement par copropriété : un copropriétaire ne peut consulter que
+    // les copropriétés où il possède un lot. Le bureau accède à tout. Toutes
+    // les routes métier sont préfixées /api/coproperties/{copId}/… : on borne
+    // ici l'accès en amont, de façon uniforme, quel que soit l'endpoint.
+    if (request.user.role !== 'BUREAU') {
+      const m = url.match(/^\/api\/coproperties\/([0-9a-fA-F-]{36})(?:\/|$)/);
+      if (m?.[1] && !(await canAccessCoproperty(request.user, m[1]))) {
+        return reply.code(403).send({ error: 'Forbidden', message: 'Accès non autorisé à cette copropriété.' });
+      }
     }
   });
 

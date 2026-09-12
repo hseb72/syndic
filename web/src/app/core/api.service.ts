@@ -262,9 +262,9 @@ export class ApiService {
     return this.http.get<DashboardSummary>(`/api/coproperties/${copId}/dashboard${q}`);
   }
 
-  getMySummary(exerciseId?: string): Observable<MySummary> {
-    const q = exerciseId ? `?exerciseId=${exerciseId}` : '';
-    return this.http.get<MySummary>(`/api/me/summary${q}`);
+  getMySummary(copId: string, exerciseId?: string): Observable<MySummary> {
+    const ex = exerciseId ? `&exerciseId=${exerciseId}` : '';
+    return this.http.get<MySummary>(`/api/me/summary?copId=${copId}${ex}`);
   }
 
   getRegularisationReport(copId: string, exerciseId: string): Observable<RegularisationReport> {

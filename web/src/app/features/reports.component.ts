@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
-import { ApiService, type BudgetResult, type Exercise, type RegularisationReport } from '../core/api.service';
+import { ApiService, type BudgetResult, type Coproperty, type Exercise, type RegularisationReport } from '../core/api.service';
 
 const COP_STORAGE_KEY = 'syndic.copId';
 const EX_STORAGE_KEY = 'syndic.exId';
@@ -18,6 +18,13 @@ const EX_STORAGE_KEY = 'syndic.exId';
           <div class="card-head">
             <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
               <h2>{{ t('reports.title') }}</h2>
+              @if (coproperties().length > 1) {
+                <select class="lang-select" [value]="copId()" (change)="selectCop($any($event.target).value)" style="min-width:180px;">
+                  @for (c of coproperties(); track c.id) {
+                    <option [value]="c.id" [selected]="c.id === copId()">{{ c.name }}</option>
+                  }
+                </select>
+              }
               @if (exercises().length > 0) {
                 <select class="lang-select" [value]="exId()" (change)="selectExercise($any($event.target).value)" style="min-width:140px;">
                   @for (e of exercises(); track e.id) {
@@ -79,6 +86,7 @@ const EX_STORAGE_KEY = 'syndic.exId';
 export class ReportsComponent implements OnInit {
   private api = inject(ApiService);
 
+  readonly coproperties = signal<Coproperty[]>([]);
   readonly copId = signal<string | null>(null);
   readonly exId = signal<string | null>(null);
   readonly exercises = signal<Exercise[]>([]);
@@ -86,23 +94,42 @@ export class ReportsComponent implements OnInit {
   readonly report = signal<RegularisationReport | null>(null);
 
   ngOnInit(): void {
-    let cop: string | null = null;
-    let ex: string | null = null;
+    this.api.listCoproperties().subscribe({
+      next: (rows) => {
+        this.coproperties.set(rows);
+        const stored = this.read(COP_STORAGE_KEY);
+        const initial = rows.find((c) => c.id === stored) ?? rows[0];
+        if (initial) this.selectCop(initial.id);
+      },
+    });
+  }
+
+  selectCop(id: string): void {
+    this.copId.set(id);
     try {
-      cop = localStorage.getItem(COP_STORAGE_KEY);
-      ex = localStorage.getItem(EX_STORAGE_KEY);
+      localStorage.setItem(COP_STORAGE_KEY, id);
     } catch {
       /* ignore */
     }
-    this.copId.set(cop);
-    if (!cop) return;
-    this.api.listExercises(cop).subscribe({
+    this.exercises.set([]);
+    this.budget.set(null);
+    this.report.set(null);
+    const ex = this.read(EX_STORAGE_KEY);
+    this.api.listExercises(id).subscribe({
       next: (rows) => {
         this.exercises.set(rows);
         const initial = rows.find((e) => e.id === ex) ?? rows[0];
         if (initial) this.selectExercise(initial.id);
       },
     });
+  }
+
+  private read(key: string): string | null {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
   }
 
   selectExercise(id: string): void {

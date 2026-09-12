@@ -21,8 +21,13 @@ export interface MySummary {
   totals: { due: number; paid: number; remaining: number };
 }
 
-/** Résumé personnel du copropriétaire connecté : ses lots et ses créances. */
-export async function getMySummary(userId: string, exerciseId?: string): Promise<MySummary> {
+/**
+ * Résumé personnel du copropriétaire connecté : ses lots et ses créances,
+ * bornés à la copropriété consultée (`copId`). Une personne pouvant posséder
+ * des lots dans plusieurs copropriétés, l'espace s'adapte à celle qu'elle
+ * consulte : seuls les lots et créances de cette copropriété sont renvoyés.
+ */
+export async function getMySummary(userId: string, copId: string, exerciseId?: string): Promise<MySummary> {
   const user = await getUserById(userId);
   const empty: MySummary = { linked: false, personName: null, lots: [], receivables: [], totals: { due: 0, paid: 0, remaining: 0 } };
   if (!user?.person_id) return empty;
@@ -40,6 +45,7 @@ export async function getMySummary(userId: string, exerciseId?: string): Promise
   const lots = await db
     .selectFrom('ownership as o')
     .innerJoin('lot as l', 'l.id', 'o.lot_id')
+    .innerJoin('building as b', 'b.id', 'l.building_id')
     .leftJoin('lot_distribution_share as s', (join) =>
       join.onRef('s.lot_id', '=', 'l.id'),
     )
@@ -49,6 +55,7 @@ export async function getMySummary(userId: string, exerciseId?: string): Promise
     .select(['l.lot_number as lotNumber', 's.share as tantiemes'])
     .where('o.person_id', '=', personId)
     .where('o.valid_to', 'is', null)
+    .where('b.coproperty_id', '=', copId)
     .where((eb) => eb.or([eb('k.code', '=', 'GENERAL'), eb('k.code', 'is', null)]))
     .execute();
 
@@ -66,8 +73,10 @@ export async function getMySummary(userId: string, exerciseId?: string): Promise
            coalesce((select sum(pa.amount) from payment_allocation pa where pa.receivable_id = r.id), 0) as paid
     from receivable r
     join lot l on l.id = r.lot_id
+    join building b on b.id = l.building_id
     join accounting_exercise ex on ex.id = r.exercise_id
     where r.person_id = ${personId}
+      and b.coproperty_id = ${copId}
       ${exerciseId ? sql`and r.exercise_id = ${exerciseId}` : sql``}
     order by r.due_date
   `.execute(db);

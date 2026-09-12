@@ -9,12 +9,16 @@ export interface CreateCopropertyInput {
   country?: string;
 }
 
-export async function listCoproperties() {
-  return db
-    .selectFrom('coproperty')
-    .selectAll()
-    .orderBy('created_at', 'asc')
-    .execute();
+/**
+ * Liste les copropriétés. Si `restrictTo` est fourni (copropriétaire), la
+ * liste est bornée à ces identifiants ; `null`/`undefined` = aucune borne
+ * (bureau).
+ */
+export async function listCoproperties(restrictTo?: string[] | null) {
+  if (restrictTo && restrictTo.length === 0) return [];
+  let q = db.selectFrom('coproperty').selectAll().orderBy('created_at', 'asc');
+  if (restrictTo) q = q.where('id', 'in', restrictTo);
+  return q.execute();
 }
 
 export async function createCoproperty(input: CreateCopropertyInput) {

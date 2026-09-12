@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { createCoproperty, listCoproperties } from './service.js';
+import { accessibleCopropertyIds } from '../auth/access.js';
 
 const createSchema = z.object({
   name: z.string().min(1, 'Le nom est obligatoire.'),
@@ -11,8 +12,10 @@ const createSchema = z.object({
 });
 
 export async function copropertyRoutes(app: FastifyInstance): Promise<void> {
-  app.get('/coproperties', async () => {
-    return listCoproperties();
+  app.get('/coproperties', async (request) => {
+    // Bureau : toutes. Copropriétaire : seulement celles où il possède un lot.
+    const restrict = request.user.role === 'BUREAU' ? null : await accessibleCopropertyIds(request.user);
+    return listCoproperties(restrict);
   });
 
   app.post('/coproperties', async (request, reply) => {
