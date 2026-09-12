@@ -96,7 +96,9 @@ export async function getOverview(copropertyId: string): Promise<CopropertyOverv
       tantiemes: share,
       quotePart: base > 0 ? (Number(share) / base) * 100 : null,
       owners: lotOwners,
-      ownerLabel: lotOwners.map((o) => o.name).join(' / '),
+      // Étiquette « propriétaire » = seulement les vrais copropriétaires
+      // (quote-part > 0) ; les accès délégués (0 %) n'y figurent pas.
+      ownerLabel: lotOwners.filter((o) => o.sharePct > 0).map((o) => o.name).join(' / '),
     };
   });
 
@@ -275,12 +277,32 @@ export async function removeLotOwner(copropertyId: string, lotId: string, person
   return getOverview(copropertyId);
 }
 
-/** % (1..100) -> fraction (0..1] bornée, contrainte par le CHECK ownership_share. */
+/**
+ * % (0..100) -> fraction (0..1) bornée, contrainte par le CHECK ownership_share.
+ * Une valeur absente vaut 0 : une personne ajoutée est d'abord un simple accès
+ * (délégation), pas un copropriétaire — on la promeut ensuite si besoin.
+ */
 function pctToShare(pct?: number | null): number {
-  if (pct == null || !Number.isFinite(pct)) return 1;
-  const share = pct / 100;
-  if (share <= 0) return 1;
-  return Math.min(1, share);
+  if (pct == null || !Number.isFinite(pct) || pct <= 0) return 0;
+  return Math.min(1, pct / 100);
+}
+
+/** Répartit la pleine propriété (100 %) à parts égales entre les personnes rattachées. */
+export async function equalizeOwners(copropertyId: string, lotId: string): Promise<CopropertyOverview> {
+  const owners = await db
+    .selectFrom('ownership')
+    .select('id')
+    .where('lot_id', '=', lotId)
+    .where('valid_to', 'is', null)
+    .execute();
+  if (owners.length === 0) return getOverview(copropertyId);
+  const share = Math.round((1 / owners.length) * 100000) / 100000; // numeric(8,5)
+  await db.transaction().execute(async (tx) => {
+    for (const o of owners) {
+      await tx.updateTable('ownership').set({ ownership_share: share }).where('id', '=', o.id).execute();
+    }
+  });
+  return getOverview(copropertyId);
 }
 
 export { coproIdForLot };

@@ -134,17 +134,7 @@
                   } @else {
                     <tr>
                       <td>{{ lot.lotNumber }}</td>
-                      <td>
-                        @if (lot.owners.length === 0) {
-                          —
-                        } @else if (lot.owners.length === 1) {
-                          {{ lot.owners[0].name }}
-                        } @else {
-                          @for (o of lot.owners; track o.personId) {
-                            <span class="pill neutral" style="margin:1px 3px 1px 0;">{{ o.name }} · {{ o.sharePct | number: '1.0-2' }}%</span>
-                          }
-                        }
-                      </td>
+                      <td>{{ lot.ownerLabel || '—' }}</td>
                       <td class="num">{{ fmt(lot.tantiemes) }}</td>
                       <td class="num">{{ lot.quotePart !== null ? (lot.quotePart | number: '1.2-2') + ' %' : '—' }}</td>
                       <td style="white-space:nowrap; text-align:right;">
@@ -161,7 +151,12 @@
                       <tr>
                         <td colspan="5">
                           <div class="panel" style="margin:0;">
-                            <h3 style="margin:0 0 4px;">{{ t('owners.title') }} — {{ t('th.lot') }} {{ lot.lotNumber }}</h3>
+                            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                              <h3 style="margin:0 0 4px;">{{ t('owners.title') }} — {{ t('th.lot') }} {{ lot.lotNumber }}</h3>
+                              @if (lot.owners.length > 1) {
+                                <button class="btn sm ghost" type="button" [disabled]="saving()" (click)="equalizeOwners(lot)">{{ t('owners.equal') }}</button>
+                              }
+                            </div>
                             <div class="hint" style="margin-bottom:10px;">{{ t('owners.hint') }}</div>
 
                             @if (lot.owners.length === 0) {
@@ -179,7 +174,12 @@
                                   <tbody>
                                     @for (o of lot.owners; track o.personId) {
                                       <tr>
-                                        <td>{{ o.name }}</td>
+                                        <td>
+                                          {{ o.name }}
+                                          @if (o.sharePct === 0) {
+                                            <span class="pill neutral" style="margin-left:6px;">{{ t('owners.delegate') }}</span>
+                                          }
+                                        </td>
                                         <td class="num" style="white-space:nowrap;">
                                           <input
                                             type="text"

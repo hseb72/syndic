@@ -338,6 +338,10 @@ export class ApiService {
     return this.http.delete<CopropertyOverview>(`/api/coproperties/${copId}/lots/${lotId}/owners/${personId}`);
   }
 
+  equalizeOwners(copId: string, lotId: string): Observable<CopropertyOverview> {
+    return this.http.post<CopropertyOverview>(`/api/coproperties/${copId}/lots/${lotId}/owners/equalize`, {});
+  }
+
   deleteLot(copId: string, lotId: string): Observable<CopropertyOverview> {
     return this.http.delete<CopropertyOverview>(`/api/coproperties/${copId}/lots/${lotId}`);
   }

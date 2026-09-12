@@ -253,7 +253,7 @@ export class CopropertyPageComponent implements OnInit {
     let sharePct: number | undefined;
     if (v.sharePct.trim()) {
       const p = parseDecimal(v.sharePct);
-      if (p === null || p <= 0 || p > 100) {
+      if (p === null || p < 0 || p > 100) {
         this.ownerError.set(this.transloco.translate('owners.errShare'));
         return;
       }
@@ -278,7 +278,7 @@ export class CopropertyPageComponent implements OnInit {
     this.ownerError.set(null);
     if (!cop) return;
     const p = parseDecimal(raw);
-    if (p === null || p <= 0 || p > 100) {
+    if (p === null || p < 0 || p > 100) {
       this.ownerError.set(this.transloco.translate('owners.errShare'));
       return;
     }
@@ -306,6 +306,23 @@ export class CopropertyPageComponent implements OnInit {
         this.saving.set(false);
       },
       error: () => this.saving.set(false),
+    });
+  }
+
+  equalizeOwners(lot: LotOverviewRow): void {
+    const cop = this.selectedId();
+    this.ownerError.set(null);
+    if (!cop) return;
+    this.saving.set(true);
+    this.api.equalizeOwners(cop, lot.id).subscribe({
+      next: (ov) => {
+        this.overview.set(ov);
+        this.saving.set(false);
+      },
+      error: (err) => {
+        this.saving.set(false);
+        this.ownerError.set(apiErrorMessage(err, this.transloco.translate('lots.errGeneric')));
+      },
     });
   }
 

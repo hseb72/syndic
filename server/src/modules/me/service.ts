@@ -75,8 +75,11 @@ export async function getMySummary(userId: string, copId: string, exerciseId?: s
     join lot l on l.id = r.lot_id
     join building b on b.id = l.building_id
     join accounting_exercise ex on ex.id = r.exercise_id
-    where r.person_id = ${personId}
-      and b.coproperty_id = ${copId}
+    -- Charges des lots auxquels la personne est rattachée (propriétaire OU
+    -- délégué) : elle « pilote » le bien, elle en voit donc les charges,
+    -- même si sa quote-part est nulle.
+    join ownership o on o.lot_id = r.lot_id and o.person_id = ${personId} and o.valid_to is null
+    where b.coproperty_id = ${copId}
       ${exerciseId ? sql`and r.exercise_id = ${exerciseId}` : sql``}
     order by r.due_date
   `.execute(db);
