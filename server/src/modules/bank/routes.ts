@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import {
+  categorizeRows,
   createAccount,
   ensureDefaultAccount,
   importTransactions,
@@ -8,6 +9,7 @@ import {
   listTransactions,
   recordOwnerPaymentFromLine,
   suggestPayers,
+  updateTransaction,
 } from './service.js';
 
 const copParams = z.object({ copId: z.string().uuid() });
@@ -30,9 +32,28 @@ const importSchema = z.object({
         amount: z.number(),
         label: z.string().nullish(),
         externalId: z.string().nullish(),
+        category: z.string().nullish(),
+        comment: z.string().nullish(),
       }),
     )
     .min(1),
+});
+
+const previewSchema = z.object({
+  rows: z
+    .array(
+      z.object({
+        transactionDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+        amount: z.number(),
+        label: z.string().nullish(),
+      }),
+    )
+    .min(1),
+});
+
+const updateTxSchema = z.object({
+  category: z.string().max(40).nullish(),
+  comment: z.string().max(2000).nullish(),
 });
 
 const recordSchema = z.object({ personId: z.string().uuid() });
@@ -61,6 +82,20 @@ export async function bankRoutes(app: FastifyInstance): Promise<void> {
     const { rows } = importSchema.parse(request.body);
     const accountId = await ensureDefaultAccount(copId);
     return reply.code(201).send(await importTransactions(accountId, rows));
+  });
+
+  // Aperçu : pré-catégorise des lignes analysées (PDF), sans rien écrire.
+  app.post('/coproperties/:copId/bank-transactions/preview', async (request) => {
+    copParams.parse(request.params);
+    const { rows } = previewSchema.parse(request.body);
+    return { rows: categorizeRows(rows) };
+  });
+
+  // Modifier la catégorie / le commentaire d'une ligne.
+  app.patch('/coproperties/:copId/bank-transactions/:txId', async (request) => {
+    const { copId, txId } = txParams.parse(request.params);
+    const input = updateTxSchema.parse(request.body);
+    return updateTransaction(copId, txId, input);
   });
 
   app.get('/coproperties/:copId/bank-transactions/:txId/suggest', async (request) => {

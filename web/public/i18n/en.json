@@ -153,7 +153,19 @@
     "reconcile": "Reconcile",
     "isPaymentFrom": "This is a payment from:",
     "noSuggestion": "No suggestion from the label.",
-    "ledgerNote": "The statement is a continuous ledger: an unreconciled line stays available even after a year-end close."
+    "ledgerNote": "The statement is a continuous ledger: an unreconciled line stays available even after a year-end close.",
+    "or": "or",
+    "pdfBtn": "Import a PDF statement",
+    "pdfBusy": "Reading PDF…",
+    "pdfNone": "No line detected in this PDF. Check the file or enter the lines manually.",
+    "pdfError": "Could not read this PDF.",
+    "reviewTitle": "Review the lines before import",
+    "reviewHint": "Fix the date, amount (negative = expense), category and comment if needed, then import.",
+    "lines": "line(s)",
+    "category": "Category",
+    "comment": "Comment",
+    "commentPlaceholder": "Note…",
+    "confirmImport": "Import these lines"
   },
   "th": {
     "lot": "Unit",
@@ -259,5 +271,19 @@
     "errName": "Name is required.",
     "errShare": "Invalid share (between 0 and 100).",
     "confirmRemove": "Remove {{ name }} from this unit?"
+  },
+  "bankcat": {
+    "EAU": "Water",
+    "ELECTRICITE": "Electricity",
+    "ASSURANCE": "Insurance",
+    "ENTRETIEN": "Maintenance",
+    "ASCENSEUR": "Elevator",
+    "ESPACES_VERTS": "Green spaces",
+    "TRAVAUX": "Works",
+    "HONORAIRES": "Fees",
+    "BANQUE": "Bank fees",
+    "IMPOTS": "Taxes",
+    "APPEL_FONDS": "Fund call",
+    "AUTRE": "Other"
   }
 }

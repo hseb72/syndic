@@ -161,6 +161,8 @@ export interface BankTx {
   transactionDate: string;
   amount: string;
   label: string | null;
+  category: string | null;
+  comment: string | null;
   reconciled: string;
   remaining: number;
   status: string;
@@ -178,6 +180,8 @@ export interface BankImportRow {
   amount: number;
   label?: string | null;
   externalId?: string | null;
+  category?: string | null;
+  comment?: string | null;
 }
 
 export interface BalanceRow {
@@ -488,6 +492,21 @@ export class ApiService {
       `/api/coproperties/${copId}/bank-transactions/import`,
       { rows },
     );
+  }
+
+  previewBankRows(
+    copId: string,
+    rows: { transactionDate: string; amount: number; label?: string | null }[],
+  ): Observable<{ rows: BankImportRow[] }> {
+    return this.http.post<{ rows: BankImportRow[] }>(`/api/coproperties/${copId}/bank-transactions/preview`, { rows });
+  }
+
+  updateBankTransaction(
+    copId: string,
+    txId: string,
+    input: { category?: string | null; comment?: string | null },
+  ): Observable<{ updated: boolean }> {
+    return this.http.patch<{ updated: boolean }>(`/api/coproperties/${copId}/bank-transactions/${txId}`, input);
   }
 
   suggestPayers(copId: string, txId: string): Observable<PayerSuggestion[]> {

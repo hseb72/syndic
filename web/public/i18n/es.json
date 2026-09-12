@@ -153,7 +153,19 @@
     "reconcile": "Conciliar",
     "isPaymentFrom": "Es un pago de:",
     "noSuggestion": "Sin sugerencia desde el concepto.",
-    "ledgerNote": "El extracto es un libro continuo: una línea sin conciliar sigue disponible incluso tras un cierre de ejercicio."
+    "ledgerNote": "El extracto es un libro continuo: una línea sin conciliar sigue disponible incluso tras un cierre de ejercicio.",
+    "or": "o",
+    "pdfBtn": "Importar un extracto PDF",
+    "pdfBusy": "Leyendo PDF…",
+    "pdfNone": "No se detectó ninguna línea en este PDF. Compruebe el archivo o introduzca las líneas manualmente.",
+    "pdfError": "No se pudo leer este PDF.",
+    "reviewTitle": "Revisar las líneas antes de importar",
+    "reviewHint": "Corrija si es necesario la fecha, el importe (negativo = gasto), la categoría y el comentario, luego importe.",
+    "lines": "línea(s)",
+    "category": "Categoría",
+    "comment": "Comentario",
+    "commentPlaceholder": "Nota…",
+    "confirmImport": "Importar estas líneas"
   },
   "th": {
     "lot": "Finca",
@@ -259,5 +271,19 @@
     "errName": "El nombre es obligatorio.",
     "errShare": "Cuota no válida (entre 0 y 100).",
     "confirmRemove": "¿Quitar a {{ name }} de esta finca?"
+  },
+  "bankcat": {
+    "EAU": "Agua",
+    "ELECTRICITE": "Electricidad",
+    "ASSURANCE": "Seguro",
+    "ENTRETIEN": "Mantenimiento",
+    "ASCENSEUR": "Ascensor",
+    "ESPACES_VERTS": "Zonas verdes",
+    "TRAVAUX": "Obras",
+    "HONORAIRES": "Honorarios",
+    "BANQUE": "Gastos bancarios",
+    "IMPOTS": "Impuestos",
+    "APPEL_FONDS": "Derrama",
+    "AUTRE": "Otro"
   }
 }

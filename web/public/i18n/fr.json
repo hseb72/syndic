@@ -153,7 +153,19 @@
     "reconcile": "Rapprocher",
     "isPaymentFrom": "C’est un paiement de :",
     "noSuggestion": "Aucune suggestion depuis le libellé.",
-    "ledgerNote": "Le relevé est un flux continu : une ligne non rapprochée le reste, même après une clôture d’exercice."
+    "ledgerNote": "Le relevé est un flux continu : une ligne non rapprochée le reste, même après une clôture d’exercice.",
+    "or": "ou",
+    "pdfBtn": "Importer un relevé PDF",
+    "pdfBusy": "Analyse du PDF…",
+    "pdfNone": "Aucune ligne détectée dans ce PDF. Vérifiez le fichier ou saisissez les lignes manuellement.",
+    "pdfError": "Impossible de lire ce PDF.",
+    "reviewTitle": "Vérifier les lignes avant import",
+    "reviewHint": "Corrigez si besoin la date, le montant (négatif = dépense), la catégorie et le commentaire, puis importez.",
+    "lines": "ligne(s)",
+    "category": "Catégorie",
+    "comment": "Commentaire",
+    "commentPlaceholder": "Note…",
+    "confirmImport": "Importer ces lignes"
   },
   "th": {
     "lot": "Lot",
@@ -259,5 +271,19 @@
     "errName": "Nom obligatoire.",
     "errShare": "Quote-part invalide (entre 0 et 100).",
     "confirmRemove": "Retirer {{ name }} de ce lot ?"
+  },
+  "bankcat": {
+    "EAU": "Eau",
+    "ELECTRICITE": "Électricité",
+    "ASSURANCE": "Assurance",
+    "ENTRETIEN": "Entretien",
+    "ASCENSEUR": "Ascenseur",
+    "ESPACES_VERTS": "Espaces verts",
+    "TRAVAUX": "Travaux",
+    "HONORAIRES": "Honoraires",
+    "BANQUE": "Frais bancaires",
+    "IMPOTS": "Impôts & taxes",
+    "APPEL_FONDS": "Appel de fonds",
+    "AUTRE": "Autre"
   }
 }

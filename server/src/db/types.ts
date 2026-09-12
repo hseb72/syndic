@@ -264,6 +264,8 @@ export interface BankTransactionTable {
   amount: Numeric;
   label: string | null;
   external_id: string | null;
+  category: string | null;
+  comment: string | null;
   created_at: Generated<Timestamp>;
 }
 

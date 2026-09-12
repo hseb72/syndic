@@ -1,11 +1,36 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TranslocoModule } from '@jsverse/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
 import { ApiService, type BankImportRow, type BankTx, type PayerSuggestion } from '../core/api.service';
+import { extractPdfLines, parseStatementLines } from '../core/statement-import';
 
 const COP_STORAGE_KEY = 'syndic.copId';
+
+/** Catégories de dépense/recette (codes miroir du serveur, libellés i18n bankcat.*). */
+export const BANK_CATEGORIES = [
+  'EAU',
+  'ELECTRICITE',
+  'ASSURANCE',
+  'ENTRETIEN',
+  'ASCENSEUR',
+  'ESPACES_VERTS',
+  'TRAVAUX',
+  'HONORAIRES',
+  'BANQUE',
+  'IMPOTS',
+  'APPEL_FONDS',
+  'AUTRE',
+] as const;
+
+interface ReviewRow {
+  transactionDate: string;
+  amount: number;
+  label: string;
+  category: string;
+  comment: string;
+}
 
 @Component({
   selector: 'app-bank',
@@ -14,7 +39,9 @@ const COP_STORAGE_KEY = 'syndic.copId';
 })
 export class BankComponent implements OnInit {
   private api = inject(ApiService);
+  private transloco = inject(TranslocoService);
 
+  readonly categories = BANK_CATEGORIES;
   readonly copId = signal<string | null>(null);
   readonly transactions = signal<BankTx[]>([]);
   readonly showAll = signal(false);
@@ -25,6 +52,12 @@ export class BankComponent implements OnInit {
   readonly activeTxId = signal<string | null>(null);
   readonly suggestions = signal<PayerSuggestion[]>([]);
   readonly loadingSuggest = signal(false);
+
+  // Import PDF : analyse côté navigateur puis revue avant import.
+  readonly pdfBusy = signal(false);
+  readonly pdfError = signal<string | null>(null);
+  readonly pdfName = signal<string | null>(null);
+  readonly reviewRows = signal<ReviewRow[]>([]);
 
   ngOnInit(): void {
     let cop: string | null = null;
@@ -94,6 +127,94 @@ export class BankComponent implements OnInit {
         this.load();
       },
       error: () => this.saving.set(false),
+    });
+  }
+
+  // --- Import PDF (analyse locale + revue) ---
+  async onPdfSelected(event: Event): Promise<void> {
+    const cop = this.copId();
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = ''; // permet de re-sélectionner le même fichier
+    if (!cop || !file) return;
+    this.pdfError.set(null);
+    this.pdfBusy.set(true);
+    this.pdfName.set(file.name);
+    this.reviewRows.set([]);
+    try {
+      const lines = await extractPdfLines(file);
+      const parsed = parseStatementLines(lines);
+      if (parsed.length === 0) {
+        this.pdfError.set(this.transloco.translate('bank.pdfNone'));
+        return;
+      }
+      const res = await firstValueFrom(
+        this.api.previewBankRows(cop, parsed.map((r) => ({ transactionDate: r.transactionDate, amount: r.amount, label: r.label }))),
+      );
+      this.reviewRows.set(
+        res.rows.map((r) => ({
+          transactionDate: r.transactionDate,
+          amount: r.amount,
+          label: r.label ?? '',
+          category: r.category ?? 'AUTRE',
+          comment: r.comment ?? '',
+        })),
+      );
+    } catch {
+      this.pdfError.set(this.transloco.translate('bank.pdfError'));
+    } finally {
+      this.pdfBusy.set(false);
+    }
+  }
+
+  removeReviewRow(i: number): void {
+    this.reviewRows.update((rows) => rows.filter((_, idx) => idx !== i));
+  }
+
+  cancelReview(): void {
+    this.reviewRows.set([]);
+    this.pdfName.set(null);
+    this.pdfError.set(null);
+  }
+
+  confirmImport(): void {
+    const cop = this.copId();
+    const rows = this.reviewRows();
+    if (!cop || rows.length === 0) return;
+    this.saving.set(true);
+    const payload: BankImportRow[] = rows.map((r) => ({
+      transactionDate: r.transactionDate,
+      amount: r.amount,
+      label: r.label || null,
+      category: r.category,
+      comment: r.comment || null,
+      externalId: `${r.transactionDate}~${r.amount}~${r.label}`,
+    }));
+    this.api.importBankTransactions(cop, payload).subscribe({
+      next: (res) => {
+        this.importResult.set(res);
+        this.saving.set(false);
+        this.cancelReview();
+        this.load();
+      },
+      error: () => this.saving.set(false),
+    });
+  }
+
+  // --- Édition en ligne : catégorie / commentaire ---
+  saveCategory(tx: BankTx, category: string): void {
+    const cop = this.copId();
+    if (!cop) return;
+    this.api.updateBankTransaction(cop, tx.id, { category }).subscribe({
+      next: () => this.transactions.update((list) => list.map((t) => (t.id === tx.id ? { ...t, category } : t))),
+    });
+  }
+
+  saveComment(tx: BankTx, comment: string): void {
+    const cop = this.copId();
+    if (!cop || (tx.comment ?? '') === comment) return;
+    this.api.updateBankTransaction(cop, tx.id, { comment: comment || null }).subscribe({
+      next: () => this.transactions.update((list) => list.map((t) => (t.id === tx.id ? { ...t, comment: comment || null } : t))),
     });
   }
 

@@ -153,7 +153,19 @@
     "reconcile": "Abgleichen",
     "isPaymentFrom": "Das ist eine Zahlung von:",
     "noSuggestion": "Kein Vorschlag aus dem Text.",
-    "ledgerNote": "Der Auszug ist ein fortlaufendes Kontobuch: eine nicht abgeglichene Zeile bleibt auch nach einem Jahresabschluss verfügbar."
+    "ledgerNote": "Der Auszug ist ein fortlaufendes Kontobuch: eine nicht abgeglichene Zeile bleibt auch nach einem Jahresabschluss verfügbar.",
+    "or": "oder",
+    "pdfBtn": "PDF-Auszug importieren",
+    "pdfBusy": "PDF wird gelesen…",
+    "pdfNone": "Keine Zeile in diesem PDF erkannt. Prüfen Sie die Datei oder geben Sie die Zeilen manuell ein.",
+    "pdfError": "PDF konnte nicht gelesen werden.",
+    "reviewTitle": "Zeilen vor dem Import prüfen",
+    "reviewHint": "Korrigieren Sie bei Bedarf Datum, Betrag (negativ = Ausgabe), Kategorie und Kommentar, dann importieren.",
+    "lines": "Zeile(n)",
+    "category": "Kategorie",
+    "comment": "Kommentar",
+    "commentPlaceholder": "Notiz…",
+    "confirmImport": "Diese Zeilen importieren"
   },
   "th": {
     "lot": "Einheit",
@@ -259,5 +271,19 @@
     "errName": "Name erforderlich.",
     "errShare": "Ungültiger Anteil (zwischen 0 und 100).",
     "confirmRemove": "{{ name }} von dieser Einheit entfernen?"
+  },
+  "bankcat": {
+    "EAU": "Wasser",
+    "ELECTRICITE": "Strom",
+    "ASSURANCE": "Versicherung",
+    "ENTRETIEN": "Instandhaltung",
+    "ASCENSEUR": "Aufzug",
+    "ESPACES_VERTS": "Grünflächen",
+    "TRAVAUX": "Arbeiten",
+    "HONORAIRES": "Honorare",
+    "BANQUE": "Bankgebühren",
+    "IMPOTS": "Steuern",
+    "APPEL_FONDS": "Mittelabruf",
+    "AUTRE": "Sonstige"
   }
 }

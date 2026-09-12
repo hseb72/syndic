@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { sql } from 'kysely';
 import { db } from '../../db/index.js';
 import { createPayment } from '../payment/service.js';
+import { categorize } from './categorize.js';
 
 const CENT = 0.01;
 
@@ -54,12 +55,16 @@ export interface ImportRow {
   amount: number;
   label?: string | null;
   externalId?: string | null;
+  category?: string | null;
+  comment?: string | null;
 }
 
 /** Importe des lignes de relevé. Dédup par external_id (grand livre continu). */
 export async function importTransactions(bankAccountId: string, rows: ImportRow[]) {
   let inserted = 0;
   for (const r of rows) {
+    // Catégorie fournie (revue par l'utilisateur) ou évaluée automatiquement.
+    const category = r.category ?? categorize(r.label, r.amount);
     const res = await db
       .insertInto('bank_transaction')
       .values({
@@ -70,6 +75,8 @@ export async function importTransactions(bankAccountId: string, rows: ImportRow[
         amount: r.amount,
         label: r.label ?? null,
         external_id: r.externalId ?? null,
+        category,
+        comment: r.comment ?? null,
       })
       .onConflict((oc) => oc.columns(['bank_account_id', 'external_id']).doNothing())
       .executeTakeFirst();
@@ -78,11 +85,48 @@ export async function importTransactions(bankAccountId: string, rows: ImportRow[
   return { inserted, received: rows.length };
 }
 
+/** Pré-catégorise des lignes analysées (aperçu avant import), sans rien écrire. */
+export function categorizeRows(rows: { transactionDate: string; amount: number; label?: string | null }[]) {
+  return rows.map((r) => ({
+    transactionDate: r.transactionDate,
+    amount: r.amount,
+    label: r.label ?? null,
+    category: categorize(r.label, r.amount),
+    comment: '',
+  }));
+}
+
+/** Met à jour la catégorie et/ou le commentaire d'une ligne bancaire. */
+export async function updateTransaction(
+  copropertyId: string,
+  bankTransactionId: string,
+  input: { category?: string | null; comment?: string | null },
+) {
+  // Vérifie que la ligne appartient bien à une copropriété donnée.
+  const owned = await db
+    .selectFrom('bank_transaction as bt')
+    .innerJoin('bank_account as ba', 'ba.id', 'bt.bank_account_id')
+    .select('bt.id')
+    .where('bt.id', '=', bankTransactionId)
+    .where('ba.coproperty_id', '=', copropertyId)
+    .executeTakeFirst();
+  if (!owned) throw Object.assign(new Error('Ligne introuvable.'), { statusCode: 404 });
+
+  const set: Record<string, unknown> = {};
+  if (input.category !== undefined) set['category'] = input.category;
+  if (input.comment !== undefined) set['comment'] = input.comment;
+  if (Object.keys(set).length === 0) return { updated: false };
+  await db.updateTable('bank_transaction').set(set).where('id', '=', bankTransactionId).execute();
+  return { updated: true };
+}
+
 interface TxRaw {
   id: string;
   transactionDate: string;
   amount: string;
   label: string | null;
+  category: string | null;
+  comment: string | null;
   reconciled: string;
 }
 
@@ -96,6 +140,8 @@ function mapTx(r: TxRaw) {
     transactionDate: r.transactionDate,
     amount: r.amount,
     label: r.label,
+    category: r.category,
+    comment: r.comment,
     reconciled: String(reconciled),
     remaining,
     status,
@@ -109,6 +155,8 @@ export async function listTransactions(copropertyId: string, onlyUnreconciled = 
            bt.transaction_date as "transactionDate",
            bt.amount,
            bt.label,
+           bt.category,
+           bt.comment,
            coalesce((select sum(br.amount) from bank_reconciliation br where br.bank_transaction_id = bt.id), 0) as reconciled
     from bank_transaction bt
     join bank_account ba on ba.id = bt.bank_account_id

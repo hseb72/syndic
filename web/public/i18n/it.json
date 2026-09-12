@@ -153,7 +153,19 @@
     "reconcile": "Riconcilia",
     "isPaymentFrom": "È un pagamento di:",
     "noSuggestion": "Nessun suggerimento dalla causale.",
-    "ledgerNote": "L'estratto è un libro continuo: una riga non riconciliata resta disponibile anche dopo una chiusura d'esercizio."
+    "ledgerNote": "L'estratto è un libro continuo: una riga non riconciliata resta disponibile anche dopo una chiusura d'esercizio.",
+    "or": "oppure",
+    "pdfBtn": "Importa un estratto PDF",
+    "pdfBusy": "Lettura del PDF…",
+    "pdfNone": "Nessuna riga rilevata in questo PDF. Controlla il file o inserisci le righe manualmente.",
+    "pdfError": "Impossibile leggere questo PDF.",
+    "reviewTitle": "Verifica le righe prima dell'import",
+    "reviewHint": "Correggi se necessario data, importo (negativo = spesa), categoria e commento, poi importa.",
+    "lines": "riga/e",
+    "category": "Categoria",
+    "comment": "Commento",
+    "commentPlaceholder": "Nota…",
+    "confirmImport": "Importa queste righe"
   },
   "th": {
     "lot": "Unità",
@@ -259,5 +271,19 @@
     "errName": "Nome obbligatorio.",
     "errShare": "Quota non valida (tra 0 e 100).",
     "confirmRemove": "Rimuovere {{ name }} da questa unità?"
+  },
+  "bankcat": {
+    "EAU": "Acqua",
+    "ELECTRICITE": "Elettricità",
+    "ASSURANCE": "Assicurazione",
+    "ENTRETIEN": "Manutenzione",
+    "ASCENSEUR": "Ascensore",
+    "ESPACES_VERTS": "Aree verdi",
+    "TRAVAUX": "Lavori",
+    "HONORAIRES": "Onorari",
+    "BANQUE": "Spese bancarie",
+    "IMPOTS": "Imposte",
+    "APPEL_FONDS": "Chiamata fondi",
+    "AUTRE": "Altro"
   }
 }
