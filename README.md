@@ -65,6 +65,25 @@ npm start                    # http://localhost:4200
 Le front proxie `/api` et `/health` vers l'API (voir `web/proxy.conf.json`), pas
 de souci de CORS en dev.
 
+### 4. Premier compte
+
+Au premier lancement, l'application n'a aucun utilisateur. Sur l'écran de
+connexion, cliquez sur **« Première utilisation ? Créer le compte bureau »** :
+ce tout premier compte est créé avec le rôle **BUREAU** (accès complet). Les
+comptes suivants (copropriétaires, lecture seule) se créent ensuite via un
+compte bureau. Définissez `JWT_SECRET` en production.
+
+## Fonctionnalités
+
+- **Copropriété** : lots, copropriétaires, tantièmes (N clés : générale + eau), ownership temporel
+- **Trésorerie** : budget voté, appels de provisions, créances, paiements (lettrage auto), **clôture d'exercice réversible + report à nouveau**
+- **Dépenses** : fournisseurs, factures (ventilation eau abonnement/consommation), relevés d'eau, charges réparties par lot
+- **Banque** : import de relevé, grand livre continu, worklist « à rapprocher », **lettrage assisté par le libellé**
+- **Régularisation** : formule annuelle (dépenses N-1 + impayés − provisions N-1 + provisions N + fonds N), détail par lot, génération de l'appel
+- **Comptabilité** : journal en partie double (écritures dérivées des faits), balance équilibrée
+- **Tableau de bord** : solde de trésorerie, impayés, à rapprocher, budget consommé
+- **Transverse** : multilingue (fr/en/de/es/it), thème clair/sombre, authentification (rôles bureau/copropriétaire)
+
 ## Migrations
 
 Les migrations sont des fichiers SQL numérotés dans `db/migrations/`
@@ -74,10 +93,17 @@ dans une transaction, et trace l'état dans `schema_migrations`.
 
 ## Feuille de route (MVP)
 
-- [x] **Étape 1 — Socle** : base, API, front, i18n, thème (état actuel)
-- [ ] **Étape 2 — Copropriété** : lots, copropriétaires, tantièmes, clés de répartition, ownership
-- [ ] **Étape 3 — Appels de fonds** : budget voté, provisions + régularisation, créances
-- [ ] **Étape 4 — Paiements** : encaissements, affectation, soldes
-- [ ] **Étape 5 — Dépenses** : fournisseurs, factures (ventilation eau), paiements
-- [ ] **Étape 6 — Comptabilité** : branchement automatique des faits métier
-- [ ] **Étape 7 — Vue syndic** : tableau de bord (impayés, banque, dépenses…)
+- [x] **Étape 1 — Socle** : base, API, front, i18n, thème
+- [x] **Étape 2 — Copropriété** : lots, copropriétaires, tantièmes, clés de répartition, ownership
+- [x] **Étape 3 — Appels de fonds** : budget voté, provisions + régularisation, créances
+- [x] **Étape 4 — Paiements** : encaissements, affectation, soldes
+- [x] **Étape 5 — Dépenses** : fournisseurs, factures (ventilation eau), paiements
+- [x] **Étape 6 — Comptabilité** : journal en partie double, balance
+- [x] **Étape 7 — Vue syndic** : tableau de bord (impayés, banque, dépenses…)
+- [x] **Rapprochement bancaire** ; **clôture / report à nouveau** ; **authentification (rôles)**
+
+## Reste à faire (déploiement)
+
+- Dockerfiles applicatifs + manifests Kubernetes
+- Sauvegardes PostgreSQL automatiques
+- Cookie httpOnly pour le jeton (durcissement au lieu du localStorage)
