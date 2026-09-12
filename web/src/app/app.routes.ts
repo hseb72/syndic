@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth.guard';
+import { bureauGuard } from './core/bureau.guard';
 
 export const routes: Routes = [
   {
@@ -19,27 +20,27 @@ export const routes: Routes = [
   },
   {
     path: 'depenses',
-    canActivate: [authGuard],
+    canActivate: [bureauGuard],
     loadComponent: () => import('./features/expenses.component').then((m) => m.ExpensesComponent),
   },
   {
     path: 'tresorerie',
-    canActivate: [authGuard],
+    canActivate: [bureauGuard],
     loadComponent: () => import('./features/cash.component').then((m) => m.CashComponent),
   },
   {
     path: 'banque',
-    canActivate: [authGuard],
+    canActivate: [bureauGuard],
     loadComponent: () => import('./features/bank.component').then((m) => m.BankComponent),
   },
   {
     path: 'regularisation',
-    canActivate: [authGuard],
+    canActivate: [bureauGuard],
     loadComponent: () => import('./features/regularisation.component').then((m) => m.RegularisationComponent),
   },
   {
     path: 'comptabilite',
-    canActivate: [authGuard],
+    canActivate: [bureauGuard],
     loadComponent: () => import('./features/accounting.component').then((m) => m.AccountingComponent),
   },
   { path: '**', redirectTo: 'tableau-de-bord' },

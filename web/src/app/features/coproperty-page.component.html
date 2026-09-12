@@ -17,9 +17,11 @@
           </select>
         }
       </div>
-      <button class="btn" type="button" (click)="showCopForm.set(!showCopForm())">
-        {{ t('coprop.add') }}
-      </button>
+      @if (auth.isBureau()) {
+        <button class="btn" type="button" (click)="showCopForm.set(!showCopForm())">
+          {{ t('coprop.add') }}
+        </button>
+      }
     </div>
 
     @if (showCopForm()) {
@@ -64,7 +66,9 @@
             </div>
           }
         </div>
-        <button class="btn primary" type="button" (click)="showLotForm.set(!showLotForm())">{{ t('lots.add') }}</button>
+        @if (auth.isBureau()) {
+          <button class="btn primary" type="button" (click)="showLotForm.set(!showLotForm())">{{ t('lots.add') }}</button>
+        }
       </div>
 
       @if (showLotForm()) {
@@ -128,8 +132,10 @@
                       <td class="num">{{ fmt(lot.tantiemes) }}</td>
                       <td class="num">{{ lot.quotePart !== null ? (lot.quotePart | number: '1.2-2') + ' %' : '—' }}</td>
                       <td style="white-space:nowrap; text-align:right;">
-                        <button class="btn sm ghost" type="button" (click)="startEdit(lot)">{{ t('btn.edit') }}</button>
-                        <button class="btn sm ghost danger" type="button" [disabled]="saving()" (click)="removeLot(lot)">{{ t('btn.delete') }}</button>
+                        @if (auth.isBureau()) {
+                          <button class="btn sm ghost" type="button" (click)="startEdit(lot)">{{ t('btn.edit') }}</button>
+                          <button class="btn sm ghost danger" type="button" [disabled]="saving()" (click)="removeLot(lot)">{{ t('btn.delete') }}</button>
+                        }
                       </td>
                     </tr>
                   }

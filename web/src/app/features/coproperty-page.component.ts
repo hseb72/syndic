@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
 import { ApiService, type Coproperty, type CopropertyOverview, type LotOverviewRow } from '../core/api.service';
+import { AuthService } from '../core/auth.service';
 
 const COP_STORAGE_KEY = 'syndic.copId';
 
@@ -15,6 +16,7 @@ const COP_STORAGE_KEY = 'syndic.copId';
 export class CopropertyPageComponent implements OnInit {
   private api = inject(ApiService);
   private transloco = inject(TranslocoService);
+  readonly auth = inject(AuthService);
 
   readonly coproperties = signal<Coproperty[]>([]);
   readonly selectedId = signal<string | null>(null);
