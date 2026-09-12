@@ -4,6 +4,9 @@ import { ZodError } from 'zod';
 import { config } from './config.js';
 import { pool } from './db/index.js';
 import { copropertyRoutes } from './modules/coproperty/routes.js';
+import { personRoutes } from './modules/person/routes.js';
+import { buildingRoutes } from './modules/building/routes.js';
+import { lotRoutes } from './modules/lot/routes.js';
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -40,6 +43,9 @@ export async function buildApp(): Promise<FastifyInstance> {
   });
 
   await app.register(copropertyRoutes, { prefix: '/api' });
+  await app.register(personRoutes, { prefix: '/api' });
+  await app.register(buildingRoutes, { prefix: '/api' });
+  await app.register(lotRoutes, { prefix: '/api' });
 
   return app;
 }
