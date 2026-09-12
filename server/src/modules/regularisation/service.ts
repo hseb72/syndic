@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { db } from '../../db/index.js';
 import { getOverview } from '../lot/service.js';
 import { computeChargesByLot } from '../charges/service.js';
@@ -104,4 +105,94 @@ export async function computeRegularisation(
     },
     byLot,
   };
+}
+
+export interface GenerateRegularisationInput extends RegularisationInput {
+  label: string;
+  issueDate: string;
+  dueDate: string;
+}
+
+/**
+ * Génère l'appel de régularisation réel : un fund_call (call_type
+ * REGULARISATION) + une créance par propriétaire pour les montants positifs.
+ * Les montants négatifs (régul créditrice) ne créent pas de créance : c'est un
+ * crédit en faveur du copropriétaire.
+ */
+export async function generateRegularisation(copropertyId: string, input: GenerateRegularisationInput) {
+  const result = await computeRegularisation(copropertyId, input);
+
+  const lotIds = result.byLot.map((l) => l.lotId);
+  const ownerRows =
+    lotIds.length === 0
+      ? []
+      : await db
+          .selectFrom('ownership')
+          .select(['lot_id as lotId', 'person_id as personId', 'ownership_share as share'])
+          .where('lot_id', 'in', lotIds)
+          .where('valid_to', 'is', null)
+          .execute();
+  const ownersByLot = new Map<string, { personId: string; share: number }[]>();
+  for (const o of ownerRows) {
+    const list = ownersByLot.get(o.lotId) ?? [];
+    list.push({ personId: o.personId, share: Number(o.share) });
+    ownersByLot.set(o.lotId, list);
+  }
+
+  const fundCallId = randomUUID();
+  let credits = 0;
+  let receivablesCreated = 0;
+  await db.transaction().execute(async (tx) => {
+    await tx
+      .insertInto('fund_call')
+      .values({
+        id: fundCallId,
+        coproperty_id: copropertyId,
+        exercise_id: input.exerciseN1Id,
+        call_type: 'REGULARISATION',
+        label: input.label,
+        issue_date: input.issueDate,
+        due_date: input.dueDate,
+        total_amount: result.totals.amount,
+      })
+      .execute();
+
+    for (const lot of result.byLot) {
+      const itemId = randomUUID();
+      await tx
+        .insertInto('fund_call_item')
+        .values({ id: itemId, fund_call_id: fundCallId, lot_id: lot.lotId, distribution_key_id: null, amount: lot.amount })
+        .execute();
+
+      if (lot.amount < 0) {
+        credits++;
+        continue; // crédit en faveur du copropriétaire, pas de créance
+      }
+      const owners = ownersByLot.get(lot.lotId) ?? [];
+      if (owners.length === 0 || lot.amount === 0) continue;
+      const shares = distribute(lot.amount, owners.map((o) => o.share));
+      for (let j = 0; j < owners.length; j++) {
+        const amt = shares[j]!;
+        if (amt <= 0) continue;
+        await tx
+          .insertInto('receivable')
+          .values({
+            id: randomUUID(),
+            coproperty_id: copropertyId,
+            lot_id: lot.lotId,
+            person_id: owners[j]!.personId,
+            exercise_id: input.exerciseN1Id,
+            source_type: 'FUND_CALL_ITEM',
+            source_id: itemId,
+            amount: amt,
+            due_date: input.dueDate,
+          })
+          .execute();
+        receivablesCreated++;
+      }
+    }
+  });
+
+  const fundCall = await db.selectFrom('fund_call').selectAll().where('id', '=', fundCallId).executeTakeFirstOrThrow();
+  return { fundCall, total: result.totals.amount, receivablesCreated, credits };
 }

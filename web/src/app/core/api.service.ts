@@ -242,6 +242,23 @@ export class ApiService {
     return this.http.post<RegularisationResult>(`/api/coproperties/${copId}/regularisation/compute`, input);
   }
 
+  generateRegularisation(
+    copId: string,
+    input: {
+      exerciseN1Id: string;
+      provisionsNextTotal: number;
+      workFundNextTotal: number;
+      label: string;
+      issueDate: string;
+      dueDate: string;
+    },
+  ): Observable<{ total: number; receivablesCreated: number; credits: number }> {
+    return this.http.post<{ total: number; receivablesCreated: number; credits: number }>(
+      `/api/coproperties/${copId}/regularisation/generate`,
+      input,
+    );
+  }
+
   listFundCalls(copId: string, exerciseId: string): Observable<FundCall[]> {
     return this.http.get<FundCall[]>(`/api/coproperties/${copId}/fund-calls?exerciseId=${exerciseId}`);
   }

@@ -47,7 +47,10 @@
     "colProvN": "Prov. N",
     "colFondsN": "Fund N",
     "colAppel": "Call",
-    "total": "Total called"
+    "total": "Total called",
+    "generate": "Generate the adjustment call",
+    "generated": "Call generated: {{ n }} receivable(s) created.",
+    "genHint": "Creates the real call and per-owner receivables (credit amounts become a credit, with no receivable)."
   },
   "cash": {
     "calls": "Provision calls",

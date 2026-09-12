@@ -47,7 +47,10 @@
     "colProvN": "Acc. N",
     "colFondsN": "Fondo N",
     "colAppel": "Richiesta",
-    "total": "Totale richiesto"
+    "total": "Totale richiesto",
+    "generate": "Genera la richiesta di conguaglio",
+    "generated": "Richiesta generata: {{ n }} credito/i creato/i.",
+    "genHint": "Crea la richiesta reale e i crediti per proprietario (gli importi a credito diventano un credito, senza addebito)."
   },
   "cash": {
     "calls": "Richieste di acconti",

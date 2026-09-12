@@ -19,11 +19,19 @@ export class RegularisationComponent implements OnInit {
   readonly result = signal<RegularisationResult | null>(null);
   readonly loading = signal(true);
   readonly computing = signal(false);
+  readonly generating = signal(false);
+  readonly genResult = signal<{ receivablesCreated: number } | null>(null);
 
   readonly form = new FormGroup({
     exerciseN1Id: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     provisionsNextTotal: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
     workFundNextTotal: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
+  });
+
+  readonly genForm = new FormGroup({
+    label: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    issueDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    dueDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
 
   ngOnInit(): void {
@@ -62,9 +70,34 @@ export class RegularisationComponent implements OnInit {
       .subscribe({
         next: (r) => {
           this.result.set(r);
+          this.genResult.set(null);
           this.computing.set(false);
         },
         error: () => this.computing.set(false),
+      });
+  }
+
+  generate(): void {
+    const cop = this.copId();
+    if (!cop || this.form.invalid || this.genForm.invalid) return;
+    this.generating.set(true);
+    const v = this.form.getRawValue();
+    const g = this.genForm.getRawValue();
+    this.api
+      .generateRegularisation(cop, {
+        exerciseN1Id: v.exerciseN1Id,
+        provisionsNextTotal: Number(v.provisionsNextTotal),
+        workFundNextTotal: Number(v.workFundNextTotal),
+        label: g.label,
+        issueDate: g.issueDate,
+        dueDate: g.dueDate,
+      })
+      .subscribe({
+        next: (res) => {
+          this.genResult.set({ receivablesCreated: res.receivablesCreated });
+          this.generating.set(false);
+        },
+        error: () => this.generating.set(false),
       });
   }
 }

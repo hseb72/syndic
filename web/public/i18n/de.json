@@ -47,7 +47,10 @@
     "colProvN": "Vor. N",
     "colFondsN": "Rücklage N",
     "colAppel": "Abruf",
-    "total": "Gesamt abgerufen"
+    "total": "Gesamt abgerufen",
+    "generate": "Abrechnungsabruf erzeugen",
+    "generated": "Abruf erzeugt: {{ n }} Forderung(en) erstellt.",
+    "genHint": "Erzeugt den echten Abruf und die Forderungen je Eigentümer (Guthabenbeträge werden ein Guthaben, ohne Forderung)."
   },
   "cash": {
     "calls": "Vorschussabrufe",

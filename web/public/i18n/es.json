@@ -47,7 +47,10 @@
     "colProvN": "Prov. N",
     "colFondsN": "Fondo N",
     "colAppel": "Derrama",
-    "total": "Total girado"
+    "total": "Total girado",
+    "generate": "Generar la derrama de regularización",
+    "generated": "Derrama generada: {{ n }} deuda(s) creada(s).",
+    "genHint": "Crea la derrama real y las deudas por propietario (los importes a favor se convierten en crédito, sin deuda)."
   },
   "cash": {
     "calls": "Derramas de provisiones",

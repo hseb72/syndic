@@ -47,7 +47,10 @@
     "colProvN": "Prov. N",
     "colFondsN": "Fonds N",
     "colAppel": "Appel",
-    "total": "Total appelé"
+    "total": "Total appelé",
+    "generate": "Générer l’appel de régularisation",
+    "generated": "Appel généré : {{ n }} créance(s) créée(s).",
+    "genHint": "Crée l’appel réel et les créances par copropriétaire (les montants créditeurs deviennent un crédit, sans créance)."
   },
   "cash": {
     "calls": "Appels de provisions",

@@ -77,6 +77,31 @@
             </tfoot>
           </table>
         </div>
+
+        <!-- Génération de l'appel réel -->
+        <form class="panel" [formGroup]="genForm" (ngSubmit)="generate()" style="margin-top:16px;">
+          <div class="hint" style="margin-bottom:10px;">{{ t('reg.genHint') }}</div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="gen-label">{{ t('field.name') }}</label>
+              <input id="gen-label" type="text" formControlName="label" placeholder="Appel de régularisation" />
+            </div>
+            <div class="field">
+              <label for="gen-issue">{{ t('field.invoiceDate') }}</label>
+              <input id="gen-issue" type="date" formControlName="issueDate" />
+            </div>
+            <div class="field">
+              <label for="gen-due">{{ t('field.endDate') }}</label>
+              <input id="gen-due" type="date" formControlName="dueDate" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit" [disabled]="genForm.invalid || generating()">{{ t('reg.generate') }}</button>
+            @if (genResult(); as g) {
+              <span class="pill good">{{ t('reg.generated', { n: g.receivablesCreated }) }}</span>
+            }
+          </div>
+        </form>
       }
     </div>
   }
