@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
 import { ApiService, type BankImportRow, type BankTx, type PayerSuggestion } from '../core/api.service';
-import { extractPdfLines, parseStatementLines } from '../core/statement-import';
+import { extractPdfPages, parseStatement } from '../core/statement-import';
 
 const COP_STORAGE_KEY = 'syndic.copId';
 
@@ -142,8 +142,8 @@ export class BankComponent implements OnInit {
     this.pdfName.set(file.name);
     this.reviewRows.set([]);
     try {
-      const lines = await extractPdfLines(file);
-      const parsed = parseStatementLines(lines);
+      const pages = await extractPdfPages(file);
+      const parsed = parseStatement(pages);
       if (parsed.length === 0) {
         this.pdfError.set(this.transloco.translate('bank.pdfNone'));
         return;
