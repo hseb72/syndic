@@ -331,12 +331,13 @@ CREATE TABLE supplier (
 );
 
 -- exercise_id = exercice de la CHARGE (date de prestation), pas du paiement.
+-- La répartition de la charge aux lots passe par invoice_distribution
+-- (une charge peut se ventiler sur PLUSIEURS clés — cas de l'eau).
 CREATE TABLE supplier_invoice (
     id              uuid PRIMARY KEY,
     coproperty_id   uuid NOT NULL REFERENCES coproperty(id),
     supplier_id     uuid NOT NULL REFERENCES supplier(id),
     exercise_id     uuid NOT NULL REFERENCES accounting_exercise(id),
-    distribution_key_id uuid REFERENCES distribution_key(id),  -- clé de répartition de la charge
 
     invoice_number  text,
     invoice_date    date NOT NULL,
@@ -360,6 +361,24 @@ CREATE TABLE supplier_payment (
     created_at          timestamptz NOT NULL DEFAULT now(),
 
     CHECK (amount > 0)
+);
+
+-- Ventilation d'une facture en portions, chacune répartie par sa propre clé.
+--   Facture d'eau SUEZ = 2 portions :
+--     ('Abonnement',    clé GENERAL, montant abonnement)   -> aux tantièmes
+--     ('Consommation',  clé EAU,     montant consommation) -> aux relevés
+--   Facture simple (assurance, ...) = 1 seule portion.
+-- Invariant : SUM(invoice_distribution.amount) = supplier_invoice.amount.
+CREATE TABLE invoice_distribution (
+    id                  uuid PRIMARY KEY,
+    supplier_invoice_id uuid NOT NULL REFERENCES supplier_invoice(id),
+    distribution_key_id uuid NOT NULL REFERENCES distribution_key(id),
+    label               text,                      -- 'Abonnement', 'Consommation', ...
+    amount              numeric(14,2) NOT NULL,
+    period_label        text,                      -- période des relevés pour une clé CONSUMPTION
+    created_at          timestamptz NOT NULL DEFAULT now(),
+
+    CHECK (amount <> 0)
 );
 
 
@@ -471,6 +490,7 @@ CREATE TABLE journal_entry_line (
 --                               SUM(allocations) <= paiement.amount ;
 --                               créance non CANCELLED ;
 --                               allocation <= reste dû de la créance.
+--  Ventilation d'une facture  : SUM(invoice_distribution.amount) = supplier_invoice.amount
 --  Reste dû d'une créance     : amount - SUM(payment_allocation.amount effectives)
 --  Rapprochement bancaire     : SUM(bank_reconciliation.amount) par transaction
 --                               <= |bank_transaction.amount|

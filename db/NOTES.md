@@ -33,7 +33,19 @@ Règles retenues (encodées dans le schéma) :
 | 2 | Exercice | `OPEN/CLOSED`, archivage | `OPEN/CLOSING/CLOSED` réversible + `exercise_carry_forward`, banque jamais touchée |
 | 3 | Rapprochement | FK `owner_payment.bank_transaction_id` (copro seul) | table `bank_reconciliation` symétrique (copro + fournisseur), partiels, N:N |
 | 4 | Appels | `fund_call` générique | `budget`/`budget_line` votés + `fund_call.call_type` (PROVISION/REGULARISATION/EXCEPTIONNEL) |
-| 5 | Eau | absent | clé CONSUMPTION + `meter_reading` (répartition au compteur) |
+| 5 | Eau | absent | clé CONSUMPTION + `meter_reading` + `invoice_distribution` (facture ventilée en 2 portions) |
+
+## Eau : la règle exacte (importante pour l'AG)
+
+2 factures SUEZ / an. Chaque facture se **ventile en deux portions** :
+
+- **Abonnement** → réparti aux **tantièmes** (clé `GENERAL`)
+- **Consommation** → répartie au **prorata des relevés individuels** (clé `EAU`,
+  relevés annuels dans `meter_reading`)
+
+C'est pour ça que `supplier_invoice` n'a plus de clé unique : la ventilation
+passe par `invoice_distribution` (1 ligne Abonnement + 1 ligne Consommation).
+Invariant : `SUM(invoice_distribution.amount) = supplier_invoice.amount`.
 
 ## Décisions actées
 
