@@ -211,6 +211,28 @@ export interface ReceivableTable {
   created_at: Generated<Timestamp>;
 }
 
+export interface OwnerPaymentTable {
+  id: string;
+  coproperty_id: string;
+  person_id: string | null;
+  payment_date: DateString;
+  amount: Numeric;
+  reference: string | null;
+  status: Generated<string>;
+  reversed_at: Timestamp | null;
+  reversed_by: string | null;
+  reversal_reason: string | null;
+  created_at: Generated<Timestamp>;
+}
+
+export interface PaymentAllocationTable {
+  id: string;
+  owner_payment_id: string;
+  receivable_id: string;
+  amount: Numeric;
+  created_at: Generated<Timestamp>;
+}
+
 export interface Database {
   schema_migrations: SchemaMigrationsTable;
   coproperty: CopropertyTable;
@@ -231,4 +253,6 @@ export interface Database {
   fund_call: FundCallTable;
   fund_call_item: FundCallItemTable;
   receivable: ReceivableTable;
+  owner_payment: OwnerPaymentTable;
+  payment_allocation: PaymentAllocationTable;
 }
