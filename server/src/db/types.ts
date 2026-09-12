@@ -64,7 +64,9 @@ export interface OwnershipTable {
   id: string;
   lot_id: string;
   person_id: string;
-  ownership_share: Generated<Numeric>;
+  // Colonne à défaut SQL (1) mais typée en clair : Generated<Numeric> casse les
+  // insertions Kysely (cf. montants). On fournit donc toujours la valeur.
+  ownership_share: Numeric;
   valid_from: DateString;
   valid_to: DateString | null;
   created_at: Generated<Timestamp>;

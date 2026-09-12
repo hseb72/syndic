@@ -8,13 +8,19 @@ function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+export interface LotOwner {
+  personId: string;
+  name: string;
+  sharePct: number; // quote-part de propriété dans le lot, en % (indivision)
+}
+
 export interface LotOverviewRow {
   id: string;
   lotNumber: string;
   description: string | null;
   tantiemes: string;
   quotePart: number | null; // pourcentage (affichage uniquement)
-  owners: { personId: string; name: string }[];
+  owners: LotOwner[];
   ownerLabel: string;
 }
 
@@ -62,6 +68,7 @@ export async function getOverview(copropertyId: string): Promise<CopropertyOverv
           .innerJoin('person', 'person.id', 'ownership.person_id')
           .select([
             'ownership.lot_id as lotId',
+            'ownership.ownership_share as share',
             'person.id as personId',
             'person.first_name as firstName',
             'person.last_name as lastName',
@@ -69,12 +76,13 @@ export async function getOverview(copropertyId: string): Promise<CopropertyOverv
           ])
           .where('ownership.lot_id', 'in', lotIds)
           .where('ownership.valid_to', 'is', null)
+          .orderBy('ownership.created_at', 'asc')
           .execute();
-  const ownersByLot = new Map<string, { personId: string; name: string }[]>();
+  const ownersByLot = new Map<string, LotOwner[]>();
   for (const o of owners) {
     const name = displayName({ first_name: o.firstName, last_name: o.lastName, company_name: o.companyName });
     const list = ownersByLot.get(o.lotId) ?? [];
-    list.push({ personId: o.personId, name });
+    list.push({ personId: o.personId, name, sharePct: Math.round(Number(o.share) * 10000) / 100 });
     ownersByLot.set(o.lotId, list);
   }
 
@@ -131,7 +139,7 @@ export async function createLot(copropertyId: string, input: CreateLotInput): Pr
     if (ownerPersonId) {
       await tx
         .insertInto('ownership')
-        .values({ id: randomUUID(), lot_id: lotId, person_id: ownerPersonId, valid_from: today() })
+        .values({ id: randomUUID(), lot_id: lotId, person_id: ownerPersonId, ownership_share: 1, valid_from: today() })
         .execute();
     }
   });
@@ -198,10 +206,81 @@ export async function setLotOwner(copropertyId: string, lotId: string, input: Se
       .execute();
     await tx
       .insertInto('ownership')
-      .values({ id: randomUUID(), lot_id: lotId, person_id: personId, valid_from: from })
+      .values({ id: randomUUID(), lot_id: lotId, person_id: personId, ownership_share: 1, valid_from: from })
       .execute();
   });
   return getOverview(copropertyId);
+}
+
+export interface AddOwnerInput {
+  personId?: string | null;
+  name?: string | null;
+  sharePct?: number | null; // quote-part de propriété dans le lot (indivision), en %
+  validFrom?: string | null;
+}
+
+/**
+ * Ajoute un copropriétaire à un lot (indivision) SANS retirer les autres.
+ * Plusieurs personnes peuvent ainsi posséder le même lot, chacune avec sa
+ * quote-part ; chacune pourra disposer de son propre compte.
+ */
+export async function addLotOwner(copropertyId: string, lotId: string, input: AddOwnerInput): Promise<CopropertyOverview> {
+  let personId = input.personId ?? null;
+  if (!personId && input.name && input.name.trim()) {
+    const person = await createPerson({ lastName: input.name.trim() });
+    personId = person.id;
+  }
+  if (!personId) throw new Error('Aucun copropriétaire fourni (personId ou name requis).');
+
+  const share = pctToShare(input.sharePct);
+
+  // Ne pas dupliquer une propriété active pour la même personne sur ce lot.
+  const existing = await db
+    .selectFrom('ownership')
+    .select('id')
+    .where('lot_id', '=', lotId)
+    .where('person_id', '=', personId)
+    .where('valid_to', 'is', null)
+    .executeTakeFirst();
+  if (existing) throw new Error('Cette personne est déjà copropriétaire de ce lot.');
+
+  await db
+    .insertInto('ownership')
+    .values({ id: randomUUID(), lot_id: lotId, person_id: personId, ownership_share: share, valid_from: input.validFrom || today() })
+    .execute();
+  return getOverview(copropertyId);
+}
+
+/** Met à jour la quote-part de propriété (indivision) d'un copropriétaire. */
+export async function setOwnerShare(copropertyId: string, lotId: string, personId: string, sharePct: number): Promise<CopropertyOverview> {
+  const share = pctToShare(sharePct);
+  await db
+    .updateTable('ownership')
+    .set({ ownership_share: share })
+    .where('lot_id', '=', lotId)
+    .where('person_id', '=', personId)
+    .where('valid_to', 'is', null)
+    .execute();
+  return getOverview(copropertyId);
+}
+
+/** Retire un copropriétaire d'un lot (la personne et son compte subsistent). */
+export async function removeLotOwner(copropertyId: string, lotId: string, personId: string): Promise<CopropertyOverview> {
+  await db
+    .deleteFrom('ownership')
+    .where('lot_id', '=', lotId)
+    .where('person_id', '=', personId)
+    .where('valid_to', 'is', null)
+    .execute();
+  return getOverview(copropertyId);
+}
+
+/** % (1..100) -> fraction (0..1] bornée, contrainte par le CHECK ownership_share. */
+function pctToShare(pct?: number | null): number {
+  if (pct == null || !Number.isFinite(pct)) return 1;
+  const share = pct / 100;
+  if (share <= 0) return 1;
+  return Math.min(1, share);
 }
 
 export { coproIdForLot };

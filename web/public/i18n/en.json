@@ -1,9 +1,42 @@
 {
-  "app": { "name": "Syndic", "sub": "Condominium" },
-  "mode": { "bureau": "Board area", "coprop": "Co-owner area" },
-  "tab": { "dashboard": "Dashboard", "coprop": "Condominium", "expenses": "Expenses", "cash": "Finances", "bank": "Bank", "reg": "Adjustment", "acc": "Accounting", "mine": "My charges", "reports": "Reports" },
-  "health": { "label": "API status", "ok": "connected", "down": "unreachable", "checking": "checking…" },
-  "dashboard": { "title": "Dashboard", "cash": "Cash balance", "unpaid": "Unpaid", "worklist": "To reconcile", "lots": "Units", "budgetTitle": "Budget for {{ y }}", "budgetVoted": "Voted budget", "expensesReal": "Actual expenses", "consumed": "used", "noData": "Select a condominium (Condominium tab) to see the dashboard.", "lines": "budget lines" },
+  "app": {
+    "name": "Syndic",
+    "sub": "Condominium"
+  },
+  "mode": {
+    "bureau": "Board area",
+    "coprop": "Co-owner area"
+  },
+  "tab": {
+    "dashboard": "Dashboard",
+    "coprop": "Condominium",
+    "expenses": "Expenses",
+    "cash": "Finances",
+    "bank": "Bank",
+    "reg": "Adjustment",
+    "acc": "Accounting",
+    "mine": "My charges",
+    "reports": "Reports"
+  },
+  "health": {
+    "label": "API status",
+    "ok": "connected",
+    "down": "unreachable",
+    "checking": "checking…"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "cash": "Cash balance",
+    "unpaid": "Unpaid",
+    "worklist": "To reconcile",
+    "lots": "Units",
+    "budgetTitle": "Budget for {{ y }}",
+    "budgetVoted": "Voted budget",
+    "expensesReal": "Actual expenses",
+    "consumed": "used",
+    "noData": "Select a condominium (Condominium tab) to see the dashboard.",
+    "lines": "budget lines"
+  },
   "coprop": {
     "title": "Condominiums",
     "select": "Condominium",
@@ -19,7 +52,10 @@
     "empty": "No units yet. Add one to get started.",
     "total": "Total shares",
     "count": "{{ n }} unit(s)",
-    "confirmDelete": "Delete this unit?"
+    "confirmDelete": "Delete this unit?",
+    "errLotNumber": "Lot number is required.",
+    "errTantiemes": "Invalid share value: enter a positive number (e.g. 65 or 12.5).",
+    "errGeneric": "Save failed."
   },
   "expenses": {
     "title": "Invoices & expenses",
@@ -117,10 +153,52 @@
     "noSuggestion": "No suggestion from the label.",
     "ledgerNote": "The statement is a continuous ledger: an unreconciled line stays available even after a year-end close."
   },
-  "th": { "lot": "Unit", "owner": "Owner", "tantiemes": "Shares", "quotePart": "Share %", "actions": "", "supplier": "Supplier", "date": "Date", "category": "Category", "amount": "Amount", "paid": "Paid", "status": "Status", "charge": "Charge" },
-  "field": { "name": "Name", "address": "Address", "postalCode": "Postal code", "city": "City", "lotNumber": "Number", "tantiemes": "Shares", "owner": "Owner", "supplier": "Supplier", "exerciseLabel": "Label (e.g. 2024)", "startDate": "Start", "endDate": "End", "invoiceDate": "Date", "amount": "Amount (€)", "category": "Category", "subscriptionAmount": "Subscription (€)", "consumptionAmount": "Consumption (€)" },
-  "btn": { "save": "Save", "cancel": "Cancel", "add": "Add", "edit": "Edit", "delete": "Delete", "retry": "Retry", "create": "Create" },
-  "theme": { "toggle": "Theme", "light": "Light", "dark": "Dark" },
+  "th": {
+    "lot": "Unit",
+    "owner": "Owner",
+    "tantiemes": "Shares",
+    "quotePart": "Share %",
+    "actions": "",
+    "supplier": "Supplier",
+    "date": "Date",
+    "category": "Category",
+    "amount": "Amount",
+    "paid": "Paid",
+    "status": "Status",
+    "charge": "Charge"
+  },
+  "field": {
+    "name": "Name",
+    "address": "Address",
+    "postalCode": "Postal code",
+    "city": "City",
+    "lotNumber": "Number",
+    "tantiemes": "Shares",
+    "owner": "Owner",
+    "supplier": "Supplier",
+    "exerciseLabel": "Label (e.g. 2024)",
+    "startDate": "Start",
+    "endDate": "End",
+    "invoiceDate": "Date",
+    "amount": "Amount (€)",
+    "category": "Category",
+    "subscriptionAmount": "Subscription (€)",
+    "consumptionAmount": "Consumption (€)"
+  },
+  "btn": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "retry": "Retry",
+    "create": "Create"
+  },
+  "theme": {
+    "toggle": "Theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
   "auth": {
     "title": "Sign in",
     "email": "Email",
@@ -136,8 +214,45 @@
     "readOnly": "Read-only access — changes are reserved for the board.",
     "forbidden": "Action reserved for the board."
   },
-  "mine": { "title": "My charges", "lots": "My units", "notLinked": "Your account is not linked to any unit. Contact the board.", "due": "Total due", "paid": "Paid", "remaining": "Left to pay", "empty": "No receivables.", "exercise": "Year" },
-  "reports": { "title": "AGM reports", "hint": "Documents shared at the general meeting.", "budget": "Planned budget", "regularisation": "Adjustment allocation", "none": "No adjustment generated for this year." },
-  "access": { "create": "Create access", "title": "Co-owner access", "email": "Email", "password": "Password (8+ chars)", "created": "Access created." },
-  "footer": "Volunteer condo management — internal tool for the board and co-owners."
+  "mine": {
+    "title": "My charges",
+    "lots": "My units",
+    "notLinked": "Your account is not linked to any unit. Contact the board.",
+    "due": "Total due",
+    "paid": "Paid",
+    "remaining": "Left to pay",
+    "empty": "No receivables.",
+    "exercise": "Year"
+  },
+  "reports": {
+    "title": "AGM reports",
+    "hint": "Documents shared at the general meeting.",
+    "budget": "Planned budget",
+    "regularisation": "Adjustment allocation",
+    "none": "No adjustment generated for this year."
+  },
+  "access": {
+    "create": "Create access",
+    "title": "Co-owner access",
+    "email": "Email",
+    "password": "Password (8+ chars)",
+    "created": "Access created.",
+    "errForm": "A valid email and a password of at least 8 characters are required.",
+    "errGeneric": "Access creation failed."
+  },
+  "footer": "Volunteer condo management — internal tool for the board and co-owners.",
+  "owners": {
+    "title": "Unit co-owners",
+    "hint": "A unit can be owned by several people (joint ownership). Costs are split by each owner's share; each co-owner can have their own login.",
+    "manage": "Co-owners",
+    "share": "Share",
+    "remove": "Remove",
+    "empty": "No co-owner for this unit.",
+    "addName": "Co-owner name",
+    "shareOpt": "Share % (optional)",
+    "add": "Add",
+    "errName": "Name is required.",
+    "errShare": "Invalid share (between 0 and 100).",
+    "confirmRemove": "Remove {{ name }} from this unit?"
+  }
 }

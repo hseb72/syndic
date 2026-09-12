@@ -1,9 +1,19 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { createLot, deleteLot, getOverview, patchLot, setLotOwner } from './service.js';
+import { addLotOwner, createLot, deleteLot, getOverview, patchLot, removeLotOwner, setLotOwner, setOwnerShare } from './service.js';
 
 const copParams = z.object({ copId: z.string().uuid() });
 const lotParams = z.object({ copId: z.string().uuid(), lotId: z.string().uuid() });
+const ownerParams = z.object({ copId: z.string().uuid(), lotId: z.string().uuid(), personId: z.string().uuid() });
+
+const addOwnerSchema = z.object({
+  personId: z.string().uuid().nullish(),
+  name: z.string().nullish(),
+  sharePct: z.number().positive().max(100).nullish(),
+  validFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
+});
+
+const shareSchema = z.object({ sharePct: z.number().positive().max(100) });
 
 const createLotSchema = z.object({
   lotNumber: z.string().min(1),
@@ -82,5 +92,24 @@ export async function lotRoutes(app: FastifyInstance): Promise<void> {
     const { copId, lotId } = lotParams.parse(request.params);
     const input = ownerSchema.parse(request.body);
     return setLotOwner(copId, lotId, input);
+  });
+
+  // Indivision : gérer plusieurs copropriétaires sur un même lot.
+  app.post('/coproperties/:copId/lots/:lotId/owners', async (request, reply) => {
+    const { copId, lotId } = lotParams.parse(request.params);
+    const input = addOwnerSchema.parse(request.body);
+    const overview = await addLotOwner(copId, lotId, input);
+    return reply.code(201).send(overview);
+  });
+
+  app.patch('/coproperties/:copId/lots/:lotId/owners/:personId', async (request) => {
+    const { copId, lotId, personId } = ownerParams.parse(request.params);
+    const { sharePct } = shareSchema.parse(request.body);
+    return setOwnerShare(copId, lotId, personId, sharePct);
+  });
+
+  app.delete('/coproperties/:copId/lots/:lotId/owners/:personId', async (request) => {
+    const { copId, lotId, personId } = ownerParams.parse(request.params);
+    return removeLotOwner(copId, lotId, personId);
   });
 }

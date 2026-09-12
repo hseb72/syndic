@@ -1,9 +1,42 @@
 {
-  "app": { "name": "Syndic", "sub": "Comunidad de propietarios" },
-  "mode": { "bureau": "Área de la junta", "coprop": "Área de propietarios" },
-  "tab": { "dashboard": "Panel", "coprop": "Comunidad", "expenses": "Gastos", "cash": "Tesorería", "bank": "Banco", "reg": "Regularización", "acc": "Contabilidad", "mine": "Mis cuotas", "reports": "Informes" },
-  "health": { "label": "Estado de la API", "ok": "conectada", "down": "no disponible", "checking": "comprobando…" },
-  "dashboard": { "title": "Panel", "cash": "Saldo de tesorería", "unpaid": "Impagados", "worklist": "Por conciliar", "lots": "Fincas", "budgetTitle": "Presupuesto {{ y }}", "budgetVoted": "Presupuesto votado", "expensesReal": "Gastos reales", "consumed": "consumido", "noData": "Seleccione una comunidad (pestaña Comunidad) para ver el panel.", "lines": "líneas de presupuesto" },
+  "app": {
+    "name": "Syndic",
+    "sub": "Comunidad de propietarios"
+  },
+  "mode": {
+    "bureau": "Área de la junta",
+    "coprop": "Área de propietarios"
+  },
+  "tab": {
+    "dashboard": "Panel",
+    "coprop": "Comunidad",
+    "expenses": "Gastos",
+    "cash": "Tesorería",
+    "bank": "Banco",
+    "reg": "Regularización",
+    "acc": "Contabilidad",
+    "mine": "Mis cuotas",
+    "reports": "Informes"
+  },
+  "health": {
+    "label": "Estado de la API",
+    "ok": "conectada",
+    "down": "no disponible",
+    "checking": "comprobando…"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "cash": "Saldo de tesorería",
+    "unpaid": "Impagados",
+    "worklist": "Por conciliar",
+    "lots": "Fincas",
+    "budgetTitle": "Presupuesto {{ y }}",
+    "budgetVoted": "Presupuesto votado",
+    "expensesReal": "Gastos reales",
+    "consumed": "consumido",
+    "noData": "Seleccione una comunidad (pestaña Comunidad) para ver el panel.",
+    "lines": "líneas de presupuesto"
+  },
   "coprop": {
     "title": "Comunidades",
     "select": "Comunidad",
@@ -19,7 +52,10 @@
     "empty": "Aún no hay fincas. Añada una para empezar.",
     "total": "Total coeficientes",
     "count": "{{ n }} finca(s)",
-    "confirmDelete": "¿Eliminar esta finca?"
+    "confirmDelete": "¿Eliminar esta finca?",
+    "errLotNumber": "El número de finca es obligatorio.",
+    "errTantiemes": "Coeficiente no válido: introduzca un número positivo (p. ej. 65 o 12,5).",
+    "errGeneric": "Error al guardar."
   },
   "expenses": {
     "title": "Facturas y gastos",
@@ -117,10 +153,52 @@
     "noSuggestion": "Sin sugerencia desde el concepto.",
     "ledgerNote": "El extracto es un libro continuo: una línea sin conciliar sigue disponible incluso tras un cierre de ejercicio."
   },
-  "th": { "lot": "Finca", "owner": "Propietario", "tantiemes": "Coeficiente", "quotePart": "Cuota %", "actions": "", "supplier": "Proveedor", "date": "Fecha", "category": "Categoría", "amount": "Importe", "paid": "Pagado", "status": "Estado", "charge": "Gasto" },
-  "field": { "name": "Nombre", "address": "Dirección", "postalCode": "Código postal", "city": "Ciudad", "lotNumber": "Número", "tantiemes": "Coeficiente", "owner": "Propietario", "supplier": "Proveedor", "exerciseLabel": "Etiqueta (ej. 2024)", "startDate": "Inicio", "endDate": "Fin", "invoiceDate": "Fecha", "amount": "Importe (€)", "category": "Categoría", "subscriptionAmount": "Abono (€)", "consumptionAmount": "Consumo (€)" },
-  "btn": { "save": "Guardar", "cancel": "Cancelar", "add": "Añadir", "edit": "Editar", "delete": "Eliminar", "retry": "Reintentar", "create": "Crear" },
-  "theme": { "toggle": "Tema", "light": "Claro", "dark": "Oscuro" },
+  "th": {
+    "lot": "Finca",
+    "owner": "Propietario",
+    "tantiemes": "Coeficiente",
+    "quotePart": "Cuota %",
+    "actions": "",
+    "supplier": "Proveedor",
+    "date": "Fecha",
+    "category": "Categoría",
+    "amount": "Importe",
+    "paid": "Pagado",
+    "status": "Estado",
+    "charge": "Gasto"
+  },
+  "field": {
+    "name": "Nombre",
+    "address": "Dirección",
+    "postalCode": "Código postal",
+    "city": "Ciudad",
+    "lotNumber": "Número",
+    "tantiemes": "Coeficiente",
+    "owner": "Propietario",
+    "supplier": "Proveedor",
+    "exerciseLabel": "Etiqueta (ej. 2024)",
+    "startDate": "Inicio",
+    "endDate": "Fin",
+    "invoiceDate": "Fecha",
+    "amount": "Importe (€)",
+    "category": "Categoría",
+    "subscriptionAmount": "Abono (€)",
+    "consumptionAmount": "Consumo (€)"
+  },
+  "btn": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "add": "Añadir",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "retry": "Reintentar",
+    "create": "Crear"
+  },
+  "theme": {
+    "toggle": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro"
+  },
   "auth": {
     "title": "Iniciar sesión",
     "email": "Correo electrónico",
@@ -136,8 +214,45 @@
     "readOnly": "Acceso de solo lectura — los cambios están reservados a la junta.",
     "forbidden": "Acción reservada a la junta."
   },
-  "mine": { "title": "Mis cuotas", "lots": "Mis fincas", "notLinked": "Su cuenta no está vinculada a ninguna finca. Contacte con la junta.", "due": "Total adeudado", "paid": "Pagado", "remaining": "Pendiente de pago", "empty": "No hay deudas.", "exercise": "Ejercicio" },
-  "reports": { "title": "Informes de la junta", "hint": "Documentos compartidos en la junta.", "budget": "Presupuesto previsto", "regularisation": "Reparto de la regularización", "none": "No se ha generado ninguna regularización para este ejercicio." },
-  "access": { "create": "Crear acceso", "title": "Acceso de propietario", "email": "Correo electrónico", "password": "Contraseña (8+ car.)", "created": "Acceso creado." },
-  "footer": "Gestión voluntaria de la comunidad — herramienta interna para la junta y los propietarios."
+  "mine": {
+    "title": "Mis cuotas",
+    "lots": "Mis fincas",
+    "notLinked": "Su cuenta no está vinculada a ninguna finca. Contacte con la junta.",
+    "due": "Total adeudado",
+    "paid": "Pagado",
+    "remaining": "Pendiente de pago",
+    "empty": "No hay deudas.",
+    "exercise": "Ejercicio"
+  },
+  "reports": {
+    "title": "Informes de la junta",
+    "hint": "Documentos compartidos en la junta.",
+    "budget": "Presupuesto previsto",
+    "regularisation": "Reparto de la regularización",
+    "none": "No se ha generado ninguna regularización para este ejercicio."
+  },
+  "access": {
+    "create": "Crear acceso",
+    "title": "Acceso de propietario",
+    "email": "Correo electrónico",
+    "password": "Contraseña (8+ car.)",
+    "created": "Acceso creado.",
+    "errForm": "Se requiere un correo válido y una contraseña de al menos 8 caracteres.",
+    "errGeneric": "No se pudo crear el acceso."
+  },
+  "footer": "Gestión voluntaria de la comunidad — herramienta interna para la junta y los propietarios.",
+  "owners": {
+    "title": "Copropietarios de la finca",
+    "hint": "Una finca puede pertenecer a varias personas (proindiviso). Los gastos se reparten según la cuota de cada uno; cada copropietario puede tener su propio acceso.",
+    "manage": "Copropietarios",
+    "share": "Cuota",
+    "remove": "Quitar",
+    "empty": "Ningún copropietario para esta finca.",
+    "addName": "Nombre del copropietario",
+    "shareOpt": "Cuota % (opcional)",
+    "add": "Añadir",
+    "errName": "El nombre es obligatorio.",
+    "errShare": "Cuota no válida (entre 0 y 100).",
+    "confirmRemove": "¿Quitar a {{ name }} de esta finca?"
+  }
 }

@@ -1,9 +1,42 @@
 {
-  "app": { "name": "Syndic", "sub": "Copropriété" },
-  "mode": { "bureau": "Espace bureau", "coprop": "Espace copropriétaires" },
-  "tab": { "dashboard": "Tableau de bord", "coprop": "Copropriété", "expenses": "Dépenses", "cash": "Trésorerie", "bank": "Banque", "reg": "Régularisation", "acc": "Comptabilité", "mine": "Mes charges", "reports": "Rapports" },
-  "health": { "label": "État de l’API", "ok": "connectée", "down": "injoignable", "checking": "vérification…" },
-  "dashboard": { "title": "Tableau de bord", "cash": "Solde de trésorerie", "unpaid": "Impayés", "worklist": "À rapprocher", "lots": "Lots", "budgetTitle": "Budget de l’exercice {{ y }}", "budgetVoted": "Budget voté", "expensesReal": "Dépenses réelles", "consumed": "consommé", "noData": "Sélectionnez une copropriété (onglet Copropriété) pour voir le tableau de bord.", "lines": "postes budgétaires" },
+  "app": {
+    "name": "Syndic",
+    "sub": "Copropriété"
+  },
+  "mode": {
+    "bureau": "Espace bureau",
+    "coprop": "Espace copropriétaires"
+  },
+  "tab": {
+    "dashboard": "Tableau de bord",
+    "coprop": "Copropriété",
+    "expenses": "Dépenses",
+    "cash": "Trésorerie",
+    "bank": "Banque",
+    "reg": "Régularisation",
+    "acc": "Comptabilité",
+    "mine": "Mes charges",
+    "reports": "Rapports"
+  },
+  "health": {
+    "label": "État de l’API",
+    "ok": "connectée",
+    "down": "injoignable",
+    "checking": "vérification…"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "cash": "Solde de trésorerie",
+    "unpaid": "Impayés",
+    "worklist": "À rapprocher",
+    "lots": "Lots",
+    "budgetTitle": "Budget de l’exercice {{ y }}",
+    "budgetVoted": "Budget voté",
+    "expensesReal": "Dépenses réelles",
+    "consumed": "consommé",
+    "noData": "Sélectionnez une copropriété (onglet Copropriété) pour voir le tableau de bord.",
+    "lines": "postes budgétaires"
+  },
   "coprop": {
     "title": "Copropriétés",
     "select": "Copropriété",
@@ -19,7 +52,10 @@
     "empty": "Aucun lot pour l’instant. Ajoutez-en un pour commencer.",
     "total": "Total tantièmes",
     "count": "{{ n }} lot(s)",
-    "confirmDelete": "Supprimer ce lot ?"
+    "confirmDelete": "Supprimer ce lot ?",
+    "errLotNumber": "Numéro de lot obligatoire.",
+    "errTantiemes": "Tantièmes invalides : saisissez un nombre positif (ex. 65 ou 12,5).",
+    "errGeneric": "L’enregistrement a échoué."
   },
   "expenses": {
     "title": "Factures & dépenses",
@@ -117,10 +153,52 @@
     "noSuggestion": "Aucune suggestion depuis le libellé.",
     "ledgerNote": "Le relevé est un flux continu : une ligne non rapprochée le reste, même après une clôture d’exercice."
   },
-  "th": { "lot": "Lot", "owner": "Propriétaire", "tantiemes": "Tantièmes", "quotePart": "Quote-part", "actions": "", "supplier": "Fournisseur", "date": "Date", "category": "Catégorie", "amount": "Montant", "paid": "Payé", "status": "Statut", "charge": "Charge" },
-  "field": { "name": "Nom", "address": "Adresse", "postalCode": "Code postal", "city": "Ville", "lotNumber": "Numéro", "tantiemes": "Tantièmes", "owner": "Propriétaire", "supplier": "Fournisseur", "exerciseLabel": "Libellé (ex. 2024)", "startDate": "Début", "endDate": "Fin", "invoiceDate": "Date", "amount": "Montant (€)", "category": "Catégorie", "subscriptionAmount": "Abonnement (€)", "consumptionAmount": "Consommation (€)" },
-  "btn": { "save": "Enregistrer", "cancel": "Annuler", "add": "Ajouter", "edit": "Modifier", "delete": "Supprimer", "retry": "Réessayer", "create": "Créer" },
-  "theme": { "toggle": "Thème", "light": "Clair", "dark": "Sombre" },
+  "th": {
+    "lot": "Lot",
+    "owner": "Propriétaire",
+    "tantiemes": "Tantièmes",
+    "quotePart": "Quote-part",
+    "actions": "",
+    "supplier": "Fournisseur",
+    "date": "Date",
+    "category": "Catégorie",
+    "amount": "Montant",
+    "paid": "Payé",
+    "status": "Statut",
+    "charge": "Charge"
+  },
+  "field": {
+    "name": "Nom",
+    "address": "Adresse",
+    "postalCode": "Code postal",
+    "city": "Ville",
+    "lotNumber": "Numéro",
+    "tantiemes": "Tantièmes",
+    "owner": "Propriétaire",
+    "supplier": "Fournisseur",
+    "exerciseLabel": "Libellé (ex. 2024)",
+    "startDate": "Début",
+    "endDate": "Fin",
+    "invoiceDate": "Date",
+    "amount": "Montant (€)",
+    "category": "Catégorie",
+    "subscriptionAmount": "Abonnement (€)",
+    "consumptionAmount": "Consommation (€)"
+  },
+  "btn": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "add": "Ajouter",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "retry": "Réessayer",
+    "create": "Créer"
+  },
+  "theme": {
+    "toggle": "Thème",
+    "light": "Clair",
+    "dark": "Sombre"
+  },
   "auth": {
     "title": "Connexion",
     "email": "E-mail",
@@ -136,8 +214,45 @@
     "readOnly": "Accès en lecture seule — les modifications sont réservées au bureau.",
     "forbidden": "Action réservée au bureau."
   },
-  "mine": { "title": "Mes charges", "lots": "Mes lots", "notLinked": "Votre compte n’est rattaché à aucun lot. Contactez le bureau.", "due": "Total dû", "paid": "Payé", "remaining": "Reste à payer", "empty": "Aucune créance.", "exercise": "Exercice" },
-  "reports": { "title": "Rapports d’AG", "hint": "Documents partagés en assemblée générale.", "budget": "Budget prévisionnel", "regularisation": "Répartition de la régularisation", "none": "Aucune régularisation générée pour cet exercice." },
-  "access": { "create": "Créer un accès", "title": "Accès copropriétaire", "email": "E-mail", "password": "Mot de passe (8+ car.)", "created": "Accès créé." },
-  "footer": "Gestion bénévole de copropriété — outil interne, à usage du conseil syndical et des copropriétaires."
+  "mine": {
+    "title": "Mes charges",
+    "lots": "Mes lots",
+    "notLinked": "Votre compte n’est rattaché à aucun lot. Contactez le bureau.",
+    "due": "Total dû",
+    "paid": "Payé",
+    "remaining": "Reste à payer",
+    "empty": "Aucune créance.",
+    "exercise": "Exercice"
+  },
+  "reports": {
+    "title": "Rapports d’AG",
+    "hint": "Documents partagés en assemblée générale.",
+    "budget": "Budget prévisionnel",
+    "regularisation": "Répartition de la régularisation",
+    "none": "Aucune régularisation générée pour cet exercice."
+  },
+  "access": {
+    "create": "Créer un accès",
+    "title": "Accès copropriétaire",
+    "email": "E-mail",
+    "password": "Mot de passe (8+ car.)",
+    "created": "Accès créé.",
+    "errForm": "E-mail valide et mot de passe d’au moins 8 caractères requis.",
+    "errGeneric": "La création de l’accès a échoué."
+  },
+  "footer": "Gestion bénévole de copropriété — outil interne, à usage du conseil syndical et des copropriétaires.",
+  "owners": {
+    "title": "Copropriétaires du lot",
+    "hint": "Un lot peut appartenir à plusieurs personnes (indivision). Les charges sont réparties selon la quote-part de chacun ; chaque copropriétaire peut avoir son propre accès.",
+    "manage": "Copropriétaires",
+    "share": "Quote-part",
+    "remove": "Retirer",
+    "empty": "Aucun copropriétaire pour ce lot.",
+    "addName": "Nom du copropriétaire",
+    "shareOpt": "Quote-part % (option.)",
+    "add": "Ajouter",
+    "errName": "Nom obligatoire.",
+    "errShare": "Quote-part invalide (entre 0 et 100).",
+    "confirmRemove": "Retirer {{ name }} de ce lot ?"
+  }
 }

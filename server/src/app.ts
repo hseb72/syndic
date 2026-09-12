@@ -77,12 +77,12 @@ export async function buildApp(): Promise<FastifyInstance> {
   });
 
   // Erreurs de validation zod -> 400 lisible.
-  app.setErrorHandler((error: FastifyError, _request, reply) => {
+  app.setErrorHandler((error: FastifyError, request, reply) => {
     if (error instanceof ZodError) {
-      return reply.code(400).send({
-        error: 'ValidationError',
-        issues: error.issues.map((i) => ({ path: i.path.join('.'), message: i.message })),
-      });
+      const issues = error.issues.map((i) => ({ path: i.path.join('.'), message: i.message }));
+      // Tracer les erreurs de validation : sinon un 400 reste invisible côté serveur.
+      request.log.warn({ url: request.url, issues }, 'Requête rejetée (validation)');
+      return reply.code(400).send({ error: 'ValidationError', issues });
     }
     app.log.error(error);
     return reply.code(error.statusCode ?? 500).send({

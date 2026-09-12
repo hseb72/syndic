@@ -1,9 +1,42 @@
 {
-  "app": { "name": "Syndic", "sub": "Eigentümergemeinschaft" },
-  "mode": { "bureau": "Verwaltungsbereich", "coprop": "Eigentümerbereich" },
-  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben", "cash": "Finanzen", "bank": "Bank", "reg": "Abrechnung", "acc": "Buchhaltung", "mine": "Meine Kosten", "reports": "Berichte" },
-  "health": { "label": "API-Status", "ok": "verbunden", "down": "nicht erreichbar", "checking": "wird geprüft…" },
-  "dashboard": { "title": "Übersicht", "cash": "Kontostand", "unpaid": "Offen", "worklist": "Abzugleichen", "lots": "Einheiten", "budgetTitle": "Budget {{ y }}", "budgetVoted": "Beschlossenes Budget", "expensesReal": "Tatsächliche Kosten", "consumed": "verbraucht", "noData": "Wählen Sie eine Gemeinschaft (Reiter Gemeinschaft), um die Übersicht zu sehen.", "lines": "Budgetposten" },
+  "app": {
+    "name": "Syndic",
+    "sub": "Eigentümergemeinschaft"
+  },
+  "mode": {
+    "bureau": "Verwaltungsbereich",
+    "coprop": "Eigentümerbereich"
+  },
+  "tab": {
+    "dashboard": "Übersicht",
+    "coprop": "Gemeinschaft",
+    "expenses": "Ausgaben",
+    "cash": "Finanzen",
+    "bank": "Bank",
+    "reg": "Abrechnung",
+    "acc": "Buchhaltung",
+    "mine": "Meine Kosten",
+    "reports": "Berichte"
+  },
+  "health": {
+    "label": "API-Status",
+    "ok": "verbunden",
+    "down": "nicht erreichbar",
+    "checking": "wird geprüft…"
+  },
+  "dashboard": {
+    "title": "Übersicht",
+    "cash": "Kontostand",
+    "unpaid": "Offen",
+    "worklist": "Abzugleichen",
+    "lots": "Einheiten",
+    "budgetTitle": "Budget {{ y }}",
+    "budgetVoted": "Beschlossenes Budget",
+    "expensesReal": "Tatsächliche Kosten",
+    "consumed": "verbraucht",
+    "noData": "Wählen Sie eine Gemeinschaft (Reiter Gemeinschaft), um die Übersicht zu sehen.",
+    "lines": "Budgetposten"
+  },
   "coprop": {
     "title": "Eigentümergemeinschaften",
     "select": "Gemeinschaft",
@@ -19,7 +52,10 @@
     "empty": "Noch keine Einheiten. Fügen Sie eine hinzu, um zu beginnen.",
     "total": "Anteile gesamt",
     "count": "{{ n }} Einheit(en)",
-    "confirmDelete": "Diese Einheit löschen?"
+    "confirmDelete": "Diese Einheit löschen?",
+    "errLotNumber": "Einheitsnummer erforderlich.",
+    "errTantiemes": "Ungültiger Anteil: positive Zahl eingeben (z. B. 65 oder 12,5).",
+    "errGeneric": "Speichern fehlgeschlagen."
   },
   "expenses": {
     "title": "Rechnungen & Ausgaben",
@@ -117,10 +153,52 @@
     "noSuggestion": "Kein Vorschlag aus dem Text.",
     "ledgerNote": "Der Auszug ist ein fortlaufendes Kontobuch: eine nicht abgeglichene Zeile bleibt auch nach einem Jahresabschluss verfügbar."
   },
-  "th": { "lot": "Einheit", "owner": "Eigentümer", "tantiemes": "Anteile", "quotePart": "Anteil %", "actions": "", "supplier": "Lieferant", "date": "Datum", "category": "Kategorie", "amount": "Betrag", "paid": "Bezahlt", "status": "Status", "charge": "Kosten" },
-  "field": { "name": "Name", "address": "Adresse", "postalCode": "PLZ", "city": "Ort", "lotNumber": "Nummer", "tantiemes": "Anteile", "owner": "Eigentümer", "supplier": "Lieferant", "exerciseLabel": "Bezeichnung (z. B. 2024)", "startDate": "Beginn", "endDate": "Ende", "invoiceDate": "Datum", "amount": "Betrag (€)", "category": "Kategorie", "subscriptionAmount": "Grundgebühr (€)", "consumptionAmount": "Verbrauch (€)" },
-  "btn": { "save": "Speichern", "cancel": "Abbrechen", "add": "Hinzufügen", "edit": "Bearbeiten", "delete": "Löschen", "retry": "Erneut versuchen", "create": "Anlegen" },
-  "theme": { "toggle": "Design", "light": "Hell", "dark": "Dunkel" },
+  "th": {
+    "lot": "Einheit",
+    "owner": "Eigentümer",
+    "tantiemes": "Anteile",
+    "quotePart": "Anteil %",
+    "actions": "",
+    "supplier": "Lieferant",
+    "date": "Datum",
+    "category": "Kategorie",
+    "amount": "Betrag",
+    "paid": "Bezahlt",
+    "status": "Status",
+    "charge": "Kosten"
+  },
+  "field": {
+    "name": "Name",
+    "address": "Adresse",
+    "postalCode": "PLZ",
+    "city": "Ort",
+    "lotNumber": "Nummer",
+    "tantiemes": "Anteile",
+    "owner": "Eigentümer",
+    "supplier": "Lieferant",
+    "exerciseLabel": "Bezeichnung (z. B. 2024)",
+    "startDate": "Beginn",
+    "endDate": "Ende",
+    "invoiceDate": "Datum",
+    "amount": "Betrag (€)",
+    "category": "Kategorie",
+    "subscriptionAmount": "Grundgebühr (€)",
+    "consumptionAmount": "Verbrauch (€)"
+  },
+  "btn": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "add": "Hinzufügen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "retry": "Erneut versuchen",
+    "create": "Anlegen"
+  },
+  "theme": {
+    "toggle": "Design",
+    "light": "Hell",
+    "dark": "Dunkel"
+  },
   "auth": {
     "title": "Anmelden",
     "email": "E-Mail",
@@ -136,8 +214,45 @@
     "readOnly": "Nur-Lese-Zugriff — Änderungen sind der Verwaltung vorbehalten.",
     "forbidden": "Aktion der Verwaltung vorbehalten."
   },
-  "mine": { "title": "Meine Kosten", "lots": "Meine Einheiten", "notLinked": "Ihr Konto ist keiner Einheit zugeordnet. Wenden Sie sich an die Verwaltung.", "due": "Gesamt fällig", "paid": "Bezahlt", "remaining": "Noch zu zahlen", "empty": "Keine Forderungen.", "exercise": "Jahr" },
-  "reports": { "title": "Berichte der Versammlung", "hint": "In der Eigentümerversammlung geteilte Dokumente.", "budget": "Wirtschaftsplan", "regularisation": "Verteilung der Abrechnung", "none": "Keine Abrechnung für dieses Jahr erzeugt." },
-  "access": { "create": "Zugang anlegen", "title": "Eigentümerzugang", "email": "E-Mail", "password": "Passwort (8+ Zeichen)", "created": "Zugang angelegt." },
-  "footer": "Ehrenamtliche Hausverwaltung — internes Tool für den Verwaltungsbeirat und Eigentümer."
+  "mine": {
+    "title": "Meine Kosten",
+    "lots": "Meine Einheiten",
+    "notLinked": "Ihr Konto ist keiner Einheit zugeordnet. Wenden Sie sich an die Verwaltung.",
+    "due": "Gesamt fällig",
+    "paid": "Bezahlt",
+    "remaining": "Noch zu zahlen",
+    "empty": "Keine Forderungen.",
+    "exercise": "Jahr"
+  },
+  "reports": {
+    "title": "Berichte der Versammlung",
+    "hint": "In der Eigentümerversammlung geteilte Dokumente.",
+    "budget": "Wirtschaftsplan",
+    "regularisation": "Verteilung der Abrechnung",
+    "none": "Keine Abrechnung für dieses Jahr erzeugt."
+  },
+  "access": {
+    "create": "Zugang anlegen",
+    "title": "Eigentümerzugang",
+    "email": "E-Mail",
+    "password": "Passwort (8+ Zeichen)",
+    "created": "Zugang angelegt.",
+    "errForm": "Gültige E-Mail und Passwort mit mindestens 8 Zeichen erforderlich.",
+    "errGeneric": "Zugang konnte nicht erstellt werden."
+  },
+  "footer": "Ehrenamtliche Hausverwaltung — internes Tool für den Verwaltungsbeirat und Eigentümer.",
+  "owners": {
+    "title": "Miteigentümer der Einheit",
+    "hint": "Eine Einheit kann mehreren Personen gehören (Miteigentum). Die Kosten werden nach dem Anteil jedes Eigentümers verteilt; jeder Miteigentümer kann einen eigenen Zugang haben.",
+    "manage": "Miteigentümer",
+    "share": "Anteil",
+    "remove": "Entfernen",
+    "empty": "Kein Miteigentümer für diese Einheit.",
+    "addName": "Name des Miteigentümers",
+    "shareOpt": "Anteil % (optional)",
+    "add": "Hinzufügen",
+    "errName": "Name erforderlich.",
+    "errShare": "Ungültiger Anteil (zwischen 0 und 100).",
+    "confirmRemove": "{{ name }} von dieser Einheit entfernen?"
+  }
 }

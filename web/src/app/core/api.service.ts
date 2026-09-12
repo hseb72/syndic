@@ -26,13 +26,19 @@ export interface CreateCopropertyInput {
   country?: string;
 }
 
+export interface LotOwner {
+  personId: string;
+  name: string;
+  sharePct: number;
+}
+
 export interface LotOverviewRow {
   id: string;
   lotNumber: string;
   description: string | null;
   tantiemes: string;
   quotePart: number | null;
-  owners: { personId: string; name: string }[];
+  owners: LotOwner[];
   ownerLabel: string;
 }
 
@@ -314,6 +320,22 @@ export class ApiService {
 
   setLotOwner(copId: string, lotId: string, name: string): Observable<CopropertyOverview> {
     return this.http.post<CopropertyOverview>(`/api/coproperties/${copId}/lots/${lotId}/owner`, { name });
+  }
+
+  addLotOwner(
+    copId: string,
+    lotId: string,
+    input: { personId?: string; name?: string; sharePct?: number },
+  ): Observable<CopropertyOverview> {
+    return this.http.post<CopropertyOverview>(`/api/coproperties/${copId}/lots/${lotId}/owners`, input);
+  }
+
+  setOwnerShare(copId: string, lotId: string, personId: string, sharePct: number): Observable<CopropertyOverview> {
+    return this.http.patch<CopropertyOverview>(`/api/coproperties/${copId}/lots/${lotId}/owners/${personId}`, { sharePct });
+  }
+
+  removeLotOwner(copId: string, lotId: string, personId: string): Observable<CopropertyOverview> {
+    return this.http.delete<CopropertyOverview>(`/api/coproperties/${copId}/lots/${lotId}/owners/${personId}`);
   }
 
   deleteLot(copId: string, lotId: string): Observable<CopropertyOverview> {

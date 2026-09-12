@@ -1,9 +1,42 @@
 {
-  "app": { "name": "Syndic", "sub": "Condominio" },
-  "mode": { "bureau": "Area del consiglio", "coprop": "Area condomini" },
-  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio", "expenses": "Spese", "cash": "Tesoreria", "bank": "Banca", "reg": "Conguaglio", "acc": "Contabilità", "mine": "Le mie spese", "reports": "Report" },
-  "health": { "label": "Stato API", "ok": "connessa", "down": "non raggiungibile", "checking": "verifica…" },
-  "dashboard": { "title": "Cruscotto", "cash": "Saldo di cassa", "unpaid": "Insoluti", "worklist": "Da riconciliare", "lots": "Unità", "budgetTitle": "Bilancio {{ y }}", "budgetVoted": "Bilancio votato", "expensesReal": "Spese reali", "consumed": "consumato", "noData": "Seleziona un condominio (scheda Condominio) per vedere il cruscotto.", "lines": "voci di bilancio" },
+  "app": {
+    "name": "Syndic",
+    "sub": "Condominio"
+  },
+  "mode": {
+    "bureau": "Area del consiglio",
+    "coprop": "Area condomini"
+  },
+  "tab": {
+    "dashboard": "Cruscotto",
+    "coprop": "Condominio",
+    "expenses": "Spese",
+    "cash": "Tesoreria",
+    "bank": "Banca",
+    "reg": "Conguaglio",
+    "acc": "Contabilità",
+    "mine": "Le mie spese",
+    "reports": "Report"
+  },
+  "health": {
+    "label": "Stato API",
+    "ok": "connessa",
+    "down": "non raggiungibile",
+    "checking": "verifica…"
+  },
+  "dashboard": {
+    "title": "Cruscotto",
+    "cash": "Saldo di cassa",
+    "unpaid": "Insoluti",
+    "worklist": "Da riconciliare",
+    "lots": "Unità",
+    "budgetTitle": "Bilancio {{ y }}",
+    "budgetVoted": "Bilancio votato",
+    "expensesReal": "Spese reali",
+    "consumed": "consumato",
+    "noData": "Seleziona un condominio (scheda Condominio) per vedere il cruscotto.",
+    "lines": "voci di bilancio"
+  },
   "coprop": {
     "title": "Condomini",
     "select": "Condominio",
@@ -19,7 +52,10 @@
     "empty": "Nessuna unità per ora. Aggiungine una per iniziare.",
     "total": "Totale millesimi",
     "count": "{{ n }} unità",
-    "confirmDelete": "Eliminare questa unità?"
+    "confirmDelete": "Eliminare questa unità?",
+    "errLotNumber": "Numero unità obbligatorio.",
+    "errTantiemes": "Millesimi non validi: inserisci un numero positivo (es. 65 o 12,5).",
+    "errGeneric": "Salvataggio non riuscito."
   },
   "expenses": {
     "title": "Fatture e spese",
@@ -117,10 +153,52 @@
     "noSuggestion": "Nessun suggerimento dalla causale.",
     "ledgerNote": "L'estratto è un libro continuo: una riga non riconciliata resta disponibile anche dopo una chiusura d'esercizio."
   },
-  "th": { "lot": "Unità", "owner": "Proprietario", "tantiemes": "Millesimi", "quotePart": "Quota %", "actions": "", "supplier": "Fornitore", "date": "Data", "category": "Categoria", "amount": "Importo", "paid": "Pagato", "status": "Stato", "charge": "Spesa" },
-  "field": { "name": "Nome", "address": "Indirizzo", "postalCode": "CAP", "city": "Città", "lotNumber": "Numero", "tantiemes": "Millesimi", "owner": "Proprietario", "supplier": "Fornitore", "exerciseLabel": "Etichetta (es. 2024)", "startDate": "Inizio", "endDate": "Fine", "invoiceDate": "Data", "amount": "Importo (€)", "category": "Categoria", "subscriptionAmount": "Abbonamento (€)", "consumptionAmount": "Consumo (€)" },
-  "btn": { "save": "Salva", "cancel": "Annulla", "add": "Aggiungi", "edit": "Modifica", "delete": "Elimina", "retry": "Riprova", "create": "Crea" },
-  "theme": { "toggle": "Tema", "light": "Chiaro", "dark": "Scuro" },
+  "th": {
+    "lot": "Unità",
+    "owner": "Proprietario",
+    "tantiemes": "Millesimi",
+    "quotePart": "Quota %",
+    "actions": "",
+    "supplier": "Fornitore",
+    "date": "Data",
+    "category": "Categoria",
+    "amount": "Importo",
+    "paid": "Pagato",
+    "status": "Stato",
+    "charge": "Spesa"
+  },
+  "field": {
+    "name": "Nome",
+    "address": "Indirizzo",
+    "postalCode": "CAP",
+    "city": "Città",
+    "lotNumber": "Numero",
+    "tantiemes": "Millesimi",
+    "owner": "Proprietario",
+    "supplier": "Fornitore",
+    "exerciseLabel": "Etichetta (es. 2024)",
+    "startDate": "Inizio",
+    "endDate": "Fine",
+    "invoiceDate": "Data",
+    "amount": "Importo (€)",
+    "category": "Categoria",
+    "subscriptionAmount": "Abbonamento (€)",
+    "consumptionAmount": "Consumo (€)"
+  },
+  "btn": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "add": "Aggiungi",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "retry": "Riprova",
+    "create": "Crea"
+  },
+  "theme": {
+    "toggle": "Tema",
+    "light": "Chiaro",
+    "dark": "Scuro"
+  },
   "auth": {
     "title": "Accedi",
     "email": "E-mail",
@@ -136,8 +214,45 @@
     "readOnly": "Accesso in sola lettura — le modifiche sono riservate al consiglio.",
     "forbidden": "Azione riservata al consiglio."
   },
-  "mine": { "title": "Le mie spese", "lots": "Le mie unità", "notLinked": "Il tuo account non è collegato ad alcuna unità. Contatta il consiglio.", "due": "Totale dovuto", "paid": "Pagato", "remaining": "Da pagare", "empty": "Nessun credito.", "exercise": "Esercizio" },
-  "reports": { "title": "Report dell’assemblea", "hint": "Documenti condivisi in assemblea.", "budget": "Bilancio preventivo", "regularisation": "Ripartizione del conguaglio", "none": "Nessun conguaglio generato per questo esercizio." },
-  "access": { "create": "Crea accesso", "title": "Accesso condomino", "email": "E-mail", "password": "Password (8+ car.)", "created": "Accesso creato." },
-  "footer": "Gestione volontaria del condominio — strumento interno per il consiglio e i condomini."
+  "mine": {
+    "title": "Le mie spese",
+    "lots": "Le mie unità",
+    "notLinked": "Il tuo account non è collegato ad alcuna unità. Contatta il consiglio.",
+    "due": "Totale dovuto",
+    "paid": "Pagato",
+    "remaining": "Da pagare",
+    "empty": "Nessun credito.",
+    "exercise": "Esercizio"
+  },
+  "reports": {
+    "title": "Report dell’assemblea",
+    "hint": "Documenti condivisi in assemblea.",
+    "budget": "Bilancio preventivo",
+    "regularisation": "Ripartizione del conguaglio",
+    "none": "Nessun conguaglio generato per questo esercizio."
+  },
+  "access": {
+    "create": "Crea accesso",
+    "title": "Accesso condomino",
+    "email": "E-mail",
+    "password": "Password (8+ car.)",
+    "created": "Accesso creato.",
+    "errForm": "Sono richiesti un'e-mail valida e una password di almeno 8 caratteri.",
+    "errGeneric": "Creazione dell'accesso non riuscita."
+  },
+  "footer": "Gestione volontaria del condominio — strumento interno per il consiglio e i condomini.",
+  "owners": {
+    "title": "Comproprietari dell'unità",
+    "hint": "Un'unità può appartenere a più persone (comproprietà). Le spese sono ripartite in base alla quota di ciascuno; ogni comproprietario può avere il proprio accesso.",
+    "manage": "Comproprietari",
+    "share": "Quota",
+    "remove": "Rimuovi",
+    "empty": "Nessun comproprietario per questa unità.",
+    "addName": "Nome del comproprietario",
+    "shareOpt": "Quota % (opz.)",
+    "add": "Aggiungi",
+    "errName": "Nome obbligatorio.",
+    "errShare": "Quota non valida (tra 0 e 100).",
+    "confirmRemove": "Rimuovere {{ name }} da questa unità?"
+  }
 }
