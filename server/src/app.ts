@@ -7,6 +7,10 @@ import { copropertyRoutes } from './modules/coproperty/routes.js';
 import { personRoutes } from './modules/person/routes.js';
 import { buildingRoutes } from './modules/building/routes.js';
 import { lotRoutes } from './modules/lot/routes.js';
+import { exerciseRoutes } from './modules/exercise/routes.js';
+import { supplierRoutes } from './modules/supplier/routes.js';
+import { invoiceRoutes } from './modules/invoice/routes.js';
+import { chargesRoutes } from './modules/charges/routes.js';
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -46,6 +50,10 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(personRoutes, { prefix: '/api' });
   await app.register(buildingRoutes, { prefix: '/api' });
   await app.register(lotRoutes, { prefix: '/api' });
+  await app.register(exerciseRoutes, { prefix: '/api' });
+  await app.register(supplierRoutes, { prefix: '/api' });
+  await app.register(invoiceRoutes, { prefix: '/api' });
+  await app.register(chargesRoutes, { prefix: '/api' });
 
   return app;
 }

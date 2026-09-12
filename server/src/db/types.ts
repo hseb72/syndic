@@ -88,6 +88,73 @@ export interface LotDistributionShareTable {
   created_at: Generated<Timestamp>;
 }
 
+export interface MeterReadingTable {
+  id: string;
+  distribution_key_id: string;
+  lot_id: string;
+  period_label: string;
+  consumption: Numeric;
+  created_at: Generated<Timestamp>;
+}
+
+export interface AccountingExerciseTable {
+  id: string;
+  coproperty_id: string;
+  label: string | null;
+  start_date: DateString;
+  end_date: DateString;
+  status: Generated<string>;
+  closed_at: Timestamp | null;
+  approved_at: DateString | null;
+  created_at: Generated<Timestamp>;
+}
+
+export interface SupplierTable {
+  id: string;
+  coproperty_id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  address: string | null;
+  postal_code: string | null;
+  city: string | null;
+  registration_no: string | null;
+  created_at: Generated<Timestamp>;
+}
+
+export interface SupplierInvoiceTable {
+  id: string;
+  coproperty_id: string;
+  supplier_id: string;
+  exercise_id: string;
+  invoice_number: string | null;
+  invoice_date: DateString;
+  due_date: DateString | null;
+  amount: Numeric;
+  category: string | null;
+  status: Generated<string>;
+  created_at: Generated<Timestamp>;
+}
+
+export interface SupplierPaymentTable {
+  id: string;
+  supplier_invoice_id: string;
+  payment_date: DateString;
+  amount: Numeric;
+  reference: string | null;
+  created_at: Generated<Timestamp>;
+}
+
+export interface InvoiceDistributionTable {
+  id: string;
+  supplier_invoice_id: string;
+  distribution_key_id: string;
+  label: string | null;
+  amount: Numeric;
+  period_label: string | null;
+  created_at: Generated<Timestamp>;
+}
+
 export interface Database {
   schema_migrations: SchemaMigrationsTable;
   coproperty: CopropertyTable;
@@ -97,4 +164,10 @@ export interface Database {
   ownership: OwnershipTable;
   distribution_key: DistributionKeyTable;
   lot_distribution_share: LotDistributionShareTable;
+  meter_reading: MeterReadingTable;
+  accounting_exercise: AccountingExerciseTable;
+  supplier: SupplierTable;
+  supplier_invoice: SupplierInvoiceTable;
+  supplier_payment: SupplierPaymentTable;
+  invoice_distribution: InvoiceDistributionTable;
 }
