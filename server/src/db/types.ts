@@ -155,6 +155,62 @@ export interface InvoiceDistributionTable {
   created_at: Generated<Timestamp>;
 }
 
+export interface BudgetTable {
+  id: string;
+  coproperty_id: string;
+  exercise_id: string;
+  status: Generated<string>;
+  voted_at: DateString | null;
+  created_at: Generated<Timestamp>;
+}
+
+export interface BudgetLineTable {
+  id: string;
+  budget_id: string;
+  category: string;
+  distribution_key_id: string;
+  planned_amount: Numeric;
+}
+
+export interface FundCallTable {
+  id: string;
+  coproperty_id: string;
+  exercise_id: string;
+  call_type: Generated<string>;
+  label: string;
+  issue_date: DateString;
+  due_date: DateString;
+  total_amount: Numeric;
+  status: Generated<string>;
+  created_at: Generated<Timestamp>;
+}
+
+export interface FundCallItemTable {
+  id: string;
+  fund_call_id: string;
+  lot_id: string;
+  distribution_key_id: string | null;
+  amount: Numeric;
+  created_at: Generated<Timestamp>;
+}
+
+export interface ReceivableTable {
+  id: string;
+  coproperty_id: string;
+  lot_id: string;
+  person_id: string;
+  exercise_id: string;
+  source_type: string;
+  source_id: string;
+  amount: Numeric;
+  due_date: DateString;
+  status: Generated<string>;
+  cancelled_at: Timestamp | null;
+  cancelled_by: string | null;
+  cancellation_reason: string | null;
+  created_at: Generated<Timestamp>;
+}
+
 export interface Database {
   schema_migrations: SchemaMigrationsTable;
   coproperty: CopropertyTable;
@@ -170,4 +226,9 @@ export interface Database {
   supplier_invoice: SupplierInvoiceTable;
   supplier_payment: SupplierPaymentTable;
   invoice_distribution: InvoiceDistributionTable;
+  budget: BudgetTable;
+  budget_line: BudgetLineTable;
+  fund_call: FundCallTable;
+  fund_call_item: FundCallItemTable;
+  receivable: ReceivableTable;
 }
