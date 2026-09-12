@@ -106,5 +106,20 @@
   "field": { "name": "Name", "address": "Adresse", "postalCode": "PLZ", "city": "Ort", "lotNumber": "Nummer", "tantiemes": "Anteile", "owner": "Eigentümer", "supplier": "Lieferant", "exerciseLabel": "Bezeichnung (z. B. 2024)", "startDate": "Beginn", "endDate": "Ende", "invoiceDate": "Datum", "amount": "Betrag (€)", "category": "Kategorie", "subscriptionAmount": "Grundgebühr (€)", "consumptionAmount": "Verbrauch (€)" },
   "btn": { "save": "Speichern", "cancel": "Abbrechen", "add": "Hinzufügen", "edit": "Bearbeiten", "delete": "Löschen", "retry": "Erneut versuchen", "create": "Anlegen" },
   "theme": { "toggle": "Design", "light": "Hell", "dark": "Dunkel" },
+  "auth": {
+    "title": "Anmelden",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "firstUse": "Erstnutzung? Verwaltungskonto anlegen",
+    "haveAccount": "Ich habe bereits ein Konto",
+    "create": "Verwaltungskonto anlegen",
+    "displayName": "Name",
+    "roleBureau": "Verwaltung",
+    "roleCoprop": "Eigentümer",
+    "readOnly": "Nur-Lese-Zugriff — Änderungen sind der Verwaltung vorbehalten.",
+    "forbidden": "Aktion der Verwaltung vorbehalten."
+  },
   "footer": "Ehrenamtliche Hausverwaltung — internes Tool für den Verwaltungsbeirat und Eigentümer."
 }

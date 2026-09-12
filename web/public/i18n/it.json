@@ -106,5 +106,20 @@
   "field": { "name": "Nome", "address": "Indirizzo", "postalCode": "CAP", "city": "Città", "lotNumber": "Numero", "tantiemes": "Millesimi", "owner": "Proprietario", "supplier": "Fornitore", "exerciseLabel": "Etichetta (es. 2024)", "startDate": "Inizio", "endDate": "Fine", "invoiceDate": "Data", "amount": "Importo (€)", "category": "Categoria", "subscriptionAmount": "Abbonamento (€)", "consumptionAmount": "Consumo (€)" },
   "btn": { "save": "Salva", "cancel": "Annulla", "add": "Aggiungi", "edit": "Modifica", "delete": "Elimina", "retry": "Riprova", "create": "Crea" },
   "theme": { "toggle": "Tema", "light": "Chiaro", "dark": "Scuro" },
+  "auth": {
+    "title": "Accedi",
+    "email": "E-mail",
+    "password": "Password",
+    "login": "Accedi",
+    "logout": "Esci",
+    "firstUse": "Primo accesso? Crea l’account del consiglio",
+    "haveAccount": "Ho già un account",
+    "create": "Crea l’account del consiglio",
+    "displayName": "Nome",
+    "roleBureau": "Consiglio",
+    "roleCoprop": "Condomino",
+    "readOnly": "Accesso in sola lettura — le modifiche sono riservate al consiglio.",
+    "forbidden": "Azione riservata al consiglio."
+  },
   "footer": "Gestione volontaria del condominio — strumento interno per il consiglio e i condomini."
 }

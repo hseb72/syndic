@@ -106,5 +106,20 @@
   "field": { "name": "Nom", "address": "Adresse", "postalCode": "Code postal", "city": "Ville", "lotNumber": "Numéro", "tantiemes": "Tantièmes", "owner": "Propriétaire", "supplier": "Fournisseur", "exerciseLabel": "Libellé (ex. 2024)", "startDate": "Début", "endDate": "Fin", "invoiceDate": "Date", "amount": "Montant (€)", "category": "Catégorie", "subscriptionAmount": "Abonnement (€)", "consumptionAmount": "Consommation (€)" },
   "btn": { "save": "Enregistrer", "cancel": "Annuler", "add": "Ajouter", "edit": "Modifier", "delete": "Supprimer", "retry": "Réessayer", "create": "Créer" },
   "theme": { "toggle": "Thème", "light": "Clair", "dark": "Sombre" },
+  "auth": {
+    "title": "Connexion",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "login": "Se connecter",
+    "logout": "Déconnexion",
+    "firstUse": "Première utilisation ? Créer le compte bureau",
+    "haveAccount": "J’ai déjà un compte",
+    "create": "Créer le compte bureau",
+    "displayName": "Nom",
+    "roleBureau": "Bureau",
+    "roleCoprop": "Copropriétaire",
+    "readOnly": "Accès en lecture seule — les modifications sont réservées au bureau.",
+    "forbidden": "Action réservée au bureau."
+  },
   "footer": "Gestion bénévole de copropriété — outil interne, à usage du conseil syndical et des copropriétaires."
 }

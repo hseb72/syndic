@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { AVAILABLE_LANGS, type Lang } from './app.config';
 import { ThemeService } from './core/theme.service';
+import { AuthService } from './core/auth.service';
 
 const LANG_NAMES: Record<Lang, string> = {
   fr: 'Français',
@@ -21,12 +22,12 @@ const LANG_STORAGE_KEY = 'syndic.lang';
 })
 export class AppComponent {
   readonly theme = inject(ThemeService);
+  readonly auth = inject(AuthService);
   private readonly transloco = inject(TranslocoService);
 
   readonly langs = AVAILABLE_LANGS;
   readonly langNames = LANG_NAMES;
   readonly activeLang = signal<Lang>('fr');
-  readonly mode = signal<'bureau' | 'coprop'>('bureau');
 
   constructor() {
     let initial = this.transloco.getActiveLang() as Lang;

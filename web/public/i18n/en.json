@@ -106,5 +106,20 @@
   "field": { "name": "Name", "address": "Address", "postalCode": "Postal code", "city": "City", "lotNumber": "Number", "tantiemes": "Shares", "owner": "Owner", "supplier": "Supplier", "exerciseLabel": "Label (e.g. 2024)", "startDate": "Start", "endDate": "End", "invoiceDate": "Date", "amount": "Amount (€)", "category": "Category", "subscriptionAmount": "Subscription (€)", "consumptionAmount": "Consumption (€)" },
   "btn": { "save": "Save", "cancel": "Cancel", "add": "Add", "edit": "Edit", "delete": "Delete", "retry": "Retry", "create": "Create" },
   "theme": { "toggle": "Theme", "light": "Light", "dark": "Dark" },
+  "auth": {
+    "title": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "firstUse": "First time? Create the board account",
+    "haveAccount": "I already have an account",
+    "create": "Create the board account",
+    "displayName": "Name",
+    "roleBureau": "Board",
+    "roleCoprop": "Co-owner",
+    "readOnly": "Read-only access — changes are reserved for the board.",
+    "forbidden": "Action reserved for the board."
+  },
   "footer": "Volunteer condo management — internal tool for the board and co-owners."
 }

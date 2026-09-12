@@ -106,5 +106,20 @@
   "field": { "name": "Nombre", "address": "Dirección", "postalCode": "Código postal", "city": "Ciudad", "lotNumber": "Número", "tantiemes": "Coeficiente", "owner": "Propietario", "supplier": "Proveedor", "exerciseLabel": "Etiqueta (ej. 2024)", "startDate": "Inicio", "endDate": "Fin", "invoiceDate": "Fecha", "amount": "Importe (€)", "category": "Categoría", "subscriptionAmount": "Abono (€)", "consumptionAmount": "Consumo (€)" },
   "btn": { "save": "Guardar", "cancel": "Cancelar", "add": "Añadir", "edit": "Editar", "delete": "Eliminar", "retry": "Reintentar", "create": "Crear" },
   "theme": { "toggle": "Tema", "light": "Claro", "dark": "Oscuro" },
+  "auth": {
+    "title": "Iniciar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "firstUse": "¿Primera vez? Crear la cuenta de la junta",
+    "haveAccount": "Ya tengo una cuenta",
+    "create": "Crear la cuenta de la junta",
+    "displayName": "Nombre",
+    "roleBureau": "Junta",
+    "roleCoprop": "Propietario",
+    "readOnly": "Acceso de solo lectura — los cambios están reservados a la junta.",
+    "forbidden": "Acción reservada a la junta."
+  },
   "footer": "Gestión voluntaria de la comunidad — herramienta interna para la junta y los propietarios."
 }
