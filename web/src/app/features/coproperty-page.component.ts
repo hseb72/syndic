@@ -47,6 +47,13 @@ export class CopropertyPageComponent implements OnInit {
     owner: new FormControl('', { nonNullable: true }),
   });
 
+  readonly accessLotId = signal<string | null>(null);
+  readonly accessDone = signal<string | null>(null);
+  readonly accessForm = new FormGroup({
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
+  });
+
   ngOnInit(): void {
     this.loadCoproperties();
   }
@@ -162,6 +169,28 @@ export class CopropertyPageComponent implements OnInit {
       next: (ov) => {
         this.overview.set(ov);
         this.saving.set(false);
+      },
+      error: () => this.saving.set(false),
+    });
+  }
+
+  startAccess(lot: LotOverviewRow): void {
+    this.accessDone.set(null);
+    this.accessLotId.set(this.accessLotId() === lot.id ? null : lot.id);
+    this.accessForm.reset({ email: '', password: '' });
+  }
+
+  submitAccess(lot: LotOverviewRow): void {
+    const cop = this.selectedId();
+    const personId = lot.owners[0]?.personId;
+    if (!cop || !personId || this.accessForm.invalid) return;
+    this.saving.set(true);
+    const v = this.accessForm.getRawValue();
+    this.api.createOwnerAccess({ email: v.email, password: v.password, personId, copropertyId: cop }).subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.accessDone.set(lot.id);
+        this.accessLotId.set(null);
       },
       error: () => this.saving.set(false),
     });

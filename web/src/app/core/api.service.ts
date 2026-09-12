@@ -110,6 +110,33 @@ export interface RegularisationLot {
   amount: number;
 }
 
+export interface MyReceivable {
+  id: string;
+  lotNumber: string;
+  exercise: string | null;
+  amount: string;
+  paid: string;
+  remaining: number;
+  dueDate: string;
+  status: string;
+}
+
+export interface MySummary {
+  linked: boolean;
+  personName: string | null;
+  lots: { lotNumber: string; tantiemes: string | null }[];
+  receivables: MyReceivable[];
+  totals: { due: number; paid: number; remaining: number };
+}
+
+export interface RegularisationReport {
+  exists: boolean;
+  label: string | null;
+  issueDate: string | null;
+  total: number;
+  rows: { lotNumber: string; ownerLabel: string; amount: number }[];
+}
+
 export interface DashboardSummary {
   lotCount: number;
   totalTantiemes: string;
@@ -233,6 +260,21 @@ export class ApiService {
   getDashboard(copId: string, exerciseId?: string): Observable<DashboardSummary> {
     const q = exerciseId ? `?exerciseId=${exerciseId}` : '';
     return this.http.get<DashboardSummary>(`/api/coproperties/${copId}/dashboard${q}`);
+  }
+
+  getMySummary(exerciseId?: string): Observable<MySummary> {
+    const q = exerciseId ? `?exerciseId=${exerciseId}` : '';
+    return this.http.get<MySummary>(`/api/me/summary${q}`);
+  }
+
+  getRegularisationReport(copId: string, exerciseId: string): Observable<RegularisationReport> {
+    return this.http.get<RegularisationReport>(
+      `/api/coproperties/${copId}/exercises/${exerciseId}/regularisation-report`,
+    );
+  }
+
+  createOwnerAccess(input: { email: string; password: string; personId: string; copropertyId: string }): Observable<unknown> {
+    return this.http.post('/api/auth/register', { ...input, role: 'COPROPRIETAIRE' });
   }
 
   generateAccounting(copId: string, exerciseId: string): Observable<BalanceResult & { entries: number }> {

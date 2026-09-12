@@ -1,9 +1,10 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { createProvisionCall, listFundCalls } from './service.js';
+import { createProvisionCall, getRegularisationReport, listFundCalls } from './service.js';
 import { listReceivables } from '../receivable/service.js';
 
 const copParams = z.object({ copId: z.string().uuid() });
+const exParams = z.object({ copId: z.string().uuid(), exId: z.string().uuid() });
 const listQuery = z.object({ exerciseId: z.string().uuid().optional() });
 
 const createSchema = z.object({
@@ -32,5 +33,11 @@ export async function fundCallRoutes(app: FastifyInstance): Promise<void> {
     const { copId } = copParams.parse(request.params);
     const { exerciseId } = listQuery.parse(request.query);
     return listReceivables(copId, exerciseId);
+  });
+
+  // Rapport d'AG : répartition de la régularisation (lecture, tous rôles).
+  app.get('/coproperties/:copId/exercises/:exId/regularisation-report', async (request) => {
+    const { copId, exId } = exParams.parse(request.params);
+    return getRegularisationReport(copId, exId);
   });
 }

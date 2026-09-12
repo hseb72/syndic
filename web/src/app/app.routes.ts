@@ -19,6 +19,16 @@ export const routes: Routes = [
     loadComponent: () => import('./features/coproperty-page.component').then((m) => m.CopropertyPageComponent),
   },
   {
+    path: 'mes-charges',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/mycharges.component').then((m) => m.MyChargesComponent),
+  },
+  {
+    path: 'rapports',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/reports.component').then((m) => m.ReportsComponent),
+  },
+  {
     path: 'depenses',
     canActivate: [bureauGuard],
     loadComponent: () => import('./features/expenses.component').then((m) => m.ExpensesComponent),

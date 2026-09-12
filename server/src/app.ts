@@ -28,6 +28,7 @@ import { regularisationRoutes } from './modules/regularisation/routes.js';
 import { bankRoutes } from './modules/bank/routes.js';
 import { dashboardRoutes } from './modules/dashboard/routes.js';
 import { accountingRoutes } from './modules/accounting/routes.js';
+import { meRoutes } from './modules/me/routes.js';
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -100,6 +101,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(bankRoutes, { prefix: '/api' });
   await app.register(dashboardRoutes, { prefix: '/api' });
   await app.register(accountingRoutes, { prefix: '/api' });
+  await app.register(meRoutes, { prefix: '/api' });
 
   return app;
 }

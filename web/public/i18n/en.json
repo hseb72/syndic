@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Condominium" },
   "mode": { "bureau": "Board area", "coprop": "Co-owner area" },
-  "tab": { "dashboard": "Dashboard", "coprop": "Condominium", "expenses": "Expenses", "cash": "Finances", "bank": "Bank", "reg": "Adjustment", "acc": "Accounting" },
+  "tab": { "dashboard": "Dashboard", "coprop": "Condominium", "expenses": "Expenses", "cash": "Finances", "bank": "Bank", "reg": "Adjustment", "acc": "Accounting", "mine": "My charges", "reports": "Reports" },
   "health": { "label": "API status", "ok": "connected", "down": "unreachable", "checking": "checking…" },
   "dashboard": { "title": "Dashboard", "cash": "Cash balance", "unpaid": "Unpaid", "worklist": "To reconcile", "lots": "Units", "budgetTitle": "Budget for {{ y }}", "budgetVoted": "Voted budget", "expensesReal": "Actual expenses", "consumed": "used", "noData": "Select a condominium (Condominium tab) to see the dashboard.", "lines": "budget lines" },
   "coprop": {
@@ -136,5 +136,8 @@
     "readOnly": "Read-only access — changes are reserved for the board.",
     "forbidden": "Action reserved for the board."
   },
+  "mine": { "title": "My charges", "lots": "My units", "notLinked": "Your account is not linked to any unit. Contact the board.", "due": "Total due", "paid": "Paid", "remaining": "Left to pay", "empty": "No receivables.", "exercise": "Year" },
+  "reports": { "title": "AGM reports", "hint": "Documents shared at the general meeting.", "budget": "Planned budget", "regularisation": "Adjustment allocation", "none": "No adjustment generated for this year." },
+  "access": { "create": "Create access", "title": "Co-owner access", "email": "Email", "password": "Password (8+ chars)", "created": "Access created." },
   "footer": "Volunteer condo management — internal tool for the board and co-owners."
 }

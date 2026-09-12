@@ -43,7 +43,10 @@
           <button type="button" routerLink="/banque" routerLinkActive="active">{{ t('tab.bank') }}</button>
           <button type="button" routerLink="/regularisation" routerLinkActive="active">{{ t('tab.reg') }}</button>
           <button type="button" routerLink="/comptabilite" routerLinkActive="active">{{ t('tab.acc') }}</button>
+        } @else {
+          <button type="button" routerLink="/mes-charges" routerLinkActive="active">{{ t('tab.mine') }}</button>
         }
+        <button type="button" routerLink="/rapports" routerLinkActive="active">{{ t('tab.reports') }}</button>
       </div>
 
       @if (!auth.isBureau()) {

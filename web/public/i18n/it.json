@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Condominio" },
   "mode": { "bureau": "Area del consiglio", "coprop": "Area condomini" },
-  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio", "expenses": "Spese", "cash": "Tesoreria", "bank": "Banca", "reg": "Conguaglio", "acc": "Contabilità" },
+  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio", "expenses": "Spese", "cash": "Tesoreria", "bank": "Banca", "reg": "Conguaglio", "acc": "Contabilità", "mine": "Le mie spese", "reports": "Report" },
   "health": { "label": "Stato API", "ok": "connessa", "down": "non raggiungibile", "checking": "verifica…" },
   "dashboard": { "title": "Cruscotto", "cash": "Saldo di cassa", "unpaid": "Insoluti", "worklist": "Da riconciliare", "lots": "Unità", "budgetTitle": "Bilancio {{ y }}", "budgetVoted": "Bilancio votato", "expensesReal": "Spese reali", "consumed": "consumato", "noData": "Seleziona un condominio (scheda Condominio) per vedere il cruscotto.", "lines": "voci di bilancio" },
   "coprop": {
@@ -136,5 +136,8 @@
     "readOnly": "Accesso in sola lettura — le modifiche sono riservate al consiglio.",
     "forbidden": "Azione riservata al consiglio."
   },
+  "mine": { "title": "Le mie spese", "lots": "Le mie unità", "notLinked": "Il tuo account non è collegato ad alcuna unità. Contatta il consiglio.", "due": "Totale dovuto", "paid": "Pagato", "remaining": "Da pagare", "empty": "Nessun credito.", "exercise": "Esercizio" },
+  "reports": { "title": "Report dell’assemblea", "hint": "Documenti condivisi in assemblea.", "budget": "Bilancio preventivo", "regularisation": "Ripartizione del conguaglio", "none": "Nessun conguaglio generato per questo esercizio." },
+  "access": { "create": "Crea accesso", "title": "Accesso condomino", "email": "E-mail", "password": "Password (8+ car.)", "created": "Accesso creato." },
   "footer": "Gestione volontaria del condominio — strumento interno per il consiglio e i condomini."
 }

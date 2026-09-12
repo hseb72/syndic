@@ -24,6 +24,7 @@ export interface CreateUserInput {
   displayName?: string | null;
   role: 'BUREAU' | 'COPROPRIETAIRE';
   copropertyId?: string | null;
+  personId?: string | null;
 }
 
 export async function createUser(input: CreateUserInput) {
@@ -36,7 +37,16 @@ export async function createUser(input: CreateUserInput) {
       display_name: input.displayName ?? null,
       role: input.role,
       coproperty_id: input.copropertyId ?? null,
+      person_id: input.personId ?? null,
     })
-    .returning(['id', 'email', 'display_name', 'role', 'coproperty_id'])
+    .returning(['id', 'email', 'display_name', 'role', 'coproperty_id', 'person_id'])
     .executeTakeFirstOrThrow();
+}
+
+export function getUserById(id: string) {
+  return db
+    .selectFrom('app_user')
+    .select(['id', 'email', 'display_name', 'role', 'coproperty_id', 'person_id'])
+    .where('id', '=', id)
+    .executeTakeFirst();
 }

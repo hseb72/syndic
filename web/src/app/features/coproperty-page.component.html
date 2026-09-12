@@ -133,11 +133,42 @@
                       <td class="num">{{ lot.quotePart !== null ? (lot.quotePart | number: '1.2-2') + ' %' : '—' }}</td>
                       <td style="white-space:nowrap; text-align:right;">
                         @if (auth.isBureau()) {
+                          @if (lot.owners.length > 0) {
+                            <button class="btn sm ghost" type="button" (click)="startAccess(lot)">{{ t('access.create') }}</button>
+                          }
                           <button class="btn sm ghost" type="button" (click)="startEdit(lot)">{{ t('btn.edit') }}</button>
                           <button class="btn sm ghost danger" type="button" [disabled]="saving()" (click)="removeLot(lot)">{{ t('btn.delete') }}</button>
                         }
                       </td>
                     </tr>
+                    @if (auth.isBureau() && accessLotId() === lot.id) {
+                      <tr>
+                        <td colspan="5">
+                          <form class="panel" [formGroup]="accessForm" (ngSubmit)="submitAccess(lot)" style="margin:0;">
+                            <div class="hint" style="margin-bottom:8px;">{{ t('access.title') }} — {{ lot.ownerLabel }}</div>
+                            <div class="form-grid">
+                              <div class="field">
+                                <label [attr.for]="'acc-email-' + lot.id">{{ t('access.email') }}</label>
+                                <input [id]="'acc-email-' + lot.id" type="email" formControlName="email" autocomplete="off" />
+                              </div>
+                              <div class="field">
+                                <label [attr.for]="'acc-pwd-' + lot.id">{{ t('access.password') }}</label>
+                                <input [id]="'acc-pwd-' + lot.id" type="password" formControlName="password" autocomplete="new-password" />
+                              </div>
+                            </div>
+                            <div class="form-actions">
+                              <button class="btn primary" type="submit" [disabled]="accessForm.invalid || saving()">{{ t('btn.create') }}</button>
+                              <button class="btn ghost" type="button" (click)="accessLotId.set(null)">{{ t('btn.cancel') }}</button>
+                            </div>
+                          </form>
+                        </td>
+                      </tr>
+                    }
+                    @if (accessDone() === lot.id) {
+                      <tr>
+                        <td colspan="5"><div class="banner tip" style="margin:0;">{{ t('access.created') }}</div></td>
+                      </tr>
+                    }
                   }
                 }
               </tbody>

@@ -281,6 +281,7 @@ export interface AppUserTable {
   display_name: string | null;
   role: Generated<string>;
   coproperty_id: string | null;
+  person_id: string | null;
   created_at: Generated<Timestamp>;
 }
 

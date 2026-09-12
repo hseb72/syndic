@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Eigentümergemeinschaft" },
   "mode": { "bureau": "Verwaltungsbereich", "coprop": "Eigentümerbereich" },
-  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben", "cash": "Finanzen", "bank": "Bank", "reg": "Abrechnung", "acc": "Buchhaltung" },
+  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben", "cash": "Finanzen", "bank": "Bank", "reg": "Abrechnung", "acc": "Buchhaltung", "mine": "Meine Kosten", "reports": "Berichte" },
   "health": { "label": "API-Status", "ok": "verbunden", "down": "nicht erreichbar", "checking": "wird geprüft…" },
   "dashboard": { "title": "Übersicht", "cash": "Kontostand", "unpaid": "Offen", "worklist": "Abzugleichen", "lots": "Einheiten", "budgetTitle": "Budget {{ y }}", "budgetVoted": "Beschlossenes Budget", "expensesReal": "Tatsächliche Kosten", "consumed": "verbraucht", "noData": "Wählen Sie eine Gemeinschaft (Reiter Gemeinschaft), um die Übersicht zu sehen.", "lines": "Budgetposten" },
   "coprop": {
@@ -136,5 +136,8 @@
     "readOnly": "Nur-Lese-Zugriff — Änderungen sind der Verwaltung vorbehalten.",
     "forbidden": "Aktion der Verwaltung vorbehalten."
   },
+  "mine": { "title": "Meine Kosten", "lots": "Meine Einheiten", "notLinked": "Ihr Konto ist keiner Einheit zugeordnet. Wenden Sie sich an die Verwaltung.", "due": "Gesamt fällig", "paid": "Bezahlt", "remaining": "Noch zu zahlen", "empty": "Keine Forderungen.", "exercise": "Jahr" },
+  "reports": { "title": "Berichte der Versammlung", "hint": "In der Eigentümerversammlung geteilte Dokumente.", "budget": "Wirtschaftsplan", "regularisation": "Verteilung der Abrechnung", "none": "Keine Abrechnung für dieses Jahr erzeugt." },
+  "access": { "create": "Zugang anlegen", "title": "Eigentümerzugang", "email": "E-Mail", "password": "Passwort (8+ Zeichen)", "created": "Zugang angelegt." },
   "footer": "Ehrenamtliche Hausverwaltung — internes Tool für den Verwaltungsbeirat und Eigentümer."
 }

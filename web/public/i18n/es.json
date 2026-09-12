@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Comunidad de propietarios" },
   "mode": { "bureau": "Área de la junta", "coprop": "Área de propietarios" },
-  "tab": { "dashboard": "Panel", "coprop": "Comunidad", "expenses": "Gastos", "cash": "Tesorería", "bank": "Banco", "reg": "Regularización", "acc": "Contabilidad" },
+  "tab": { "dashboard": "Panel", "coprop": "Comunidad", "expenses": "Gastos", "cash": "Tesorería", "bank": "Banco", "reg": "Regularización", "acc": "Contabilidad", "mine": "Mis cuotas", "reports": "Informes" },
   "health": { "label": "Estado de la API", "ok": "conectada", "down": "no disponible", "checking": "comprobando…" },
   "dashboard": { "title": "Panel", "cash": "Saldo de tesorería", "unpaid": "Impagados", "worklist": "Por conciliar", "lots": "Fincas", "budgetTitle": "Presupuesto {{ y }}", "budgetVoted": "Presupuesto votado", "expensesReal": "Gastos reales", "consumed": "consumido", "noData": "Seleccione una comunidad (pestaña Comunidad) para ver el panel.", "lines": "líneas de presupuesto" },
   "coprop": {
@@ -136,5 +136,8 @@
     "readOnly": "Acceso de solo lectura — los cambios están reservados a la junta.",
     "forbidden": "Acción reservada a la junta."
   },
+  "mine": { "title": "Mis cuotas", "lots": "Mis fincas", "notLinked": "Su cuenta no está vinculada a ninguna finca. Contacte con la junta.", "due": "Total adeudado", "paid": "Pagado", "remaining": "Pendiente de pago", "empty": "No hay deudas.", "exercise": "Ejercicio" },
+  "reports": { "title": "Informes de la junta", "hint": "Documentos compartidos en la junta.", "budget": "Presupuesto previsto", "regularisation": "Reparto de la regularización", "none": "No se ha generado ninguna regularización para este ejercicio." },
+  "access": { "create": "Crear acceso", "title": "Acceso de propietario", "email": "Correo electrónico", "password": "Contraseña (8+ car.)", "created": "Acceso creado." },
   "footer": "Gestión voluntaria de la comunidad — herramienta interna para la junta y los propietarios."
 }

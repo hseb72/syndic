@@ -128,3 +128,51 @@ export function listFundCalls(copropertyId: string, exerciseId?: string) {
   if (exerciseId) q = q.where('exercise_id', '=', exerciseId);
   return q.execute();
 }
+
+/**
+ * Rapport d'AG : la répartition par lot du dernier appel de régularisation
+ * de l'exercice. Lecture — partagé à tous les copropriétaires.
+ */
+export async function getRegularisationReport(copropertyId: string, exerciseId: string) {
+  const call = await db
+    .selectFrom('fund_call')
+    .selectAll()
+    .where('coproperty_id', '=', copropertyId)
+    .where('exercise_id', '=', exerciseId)
+    .where('call_type', '=', 'REGULARISATION')
+    .orderBy('created_at', 'desc')
+    .executeTakeFirst();
+  if (!call) return { exists: false, label: null, issueDate: null, total: 0, rows: [] };
+
+  const items = await db
+    .selectFrom('fund_call_item as it')
+    .innerJoin('lot as l', 'l.id', 'it.lot_id')
+    .select(['it.lot_id as lotId', 'l.lot_number as lotNumber', 'it.amount as amount', 'l.created_at as createdAt'])
+    .where('it.fund_call_id', '=', call.id)
+    .orderBy('l.created_at', 'asc')
+    .execute();
+
+  const lotIds = items.map((i) => i.lotId);
+  const owners = lotIds.length
+    ? await db
+        .selectFrom('ownership')
+        .innerJoin('person as p', 'p.id', 'ownership.person_id')
+        .select(['ownership.lot_id as lotId', 'p.first_name as firstName', 'p.last_name as lastName', 'p.company_name as companyName'])
+        .where('ownership.lot_id', 'in', lotIds)
+        .where('ownership.valid_to', 'is', null)
+        .execute()
+    : [];
+  const ownerByLot = new Map<string, string>();
+  for (const o of owners) {
+    const name = o.companyName ?? [o.firstName, o.lastName].filter(Boolean).join(' ').trim();
+    ownerByLot.set(o.lotId, ownerByLot.has(o.lotId) ? `${ownerByLot.get(o.lotId)} / ${name}` : name);
+  }
+
+  return {
+    exists: true,
+    label: call.label,
+    issueDate: call.issue_date,
+    total: Math.round(Number(call.total_amount) * 100) / 100,
+    rows: items.map((i) => ({ lotNumber: i.lotNumber, ownerLabel: ownerByLot.get(i.lotId) ?? '', amount: Number(i.amount) })),
+  };
+}

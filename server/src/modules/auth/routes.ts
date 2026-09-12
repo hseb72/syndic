@@ -9,6 +9,7 @@ const registerSchema = z.object({
   displayName: z.string().nullish(),
   role: z.enum(['BUREAU', 'COPROPRIETAIRE']).optional(),
   copropertyId: z.string().uuid().nullish(),
+  personId: z.string().uuid().nullish(),
 });
 
 const loginSchema = z.object({
@@ -32,6 +33,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       displayName: input.displayName ?? null,
       role,
       copropertyId: input.copropertyId ?? null,
+      personId: input.personId ?? null,
     });
     return reply.code(201).send({ user });
   });
