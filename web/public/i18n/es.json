@@ -58,6 +58,12 @@
     "recEmpty": "No hay deudas para este ejercicio.",
     "remaining": "Saldo pendiente",
     "payRemaining": "Pagar el saldo",
+    "close": "Cerrar el ejercicio",
+    "reopen": "Reabrir",
+    "statusClosed": "Cerrado",
+    "statusOpen": "Abierto",
+    "carry": "Saldo a nuevo",
+    "carryHint": "Saldos pendientes trasladados al ejercicio siguiente. El cierre no toca ninguna línea bancaria.",
     "payHint": "El pago se aplica automáticamente a las deudas abiertas del pagador, de la más antigua a la más reciente."
   },
   "bank": {

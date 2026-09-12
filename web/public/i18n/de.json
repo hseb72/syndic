@@ -58,6 +58,12 @@
     "recEmpty": "Keine Forderungen für dieses Jahr.",
     "remaining": "Offener Saldo",
     "payRemaining": "Saldo zahlen",
+    "close": "Jahr abschließen",
+    "reopen": "Wieder öffnen",
+    "statusClosed": "Abgeschlossen",
+    "statusOpen": "Offen",
+    "carry": "Saldovortrag",
+    "carryHint": "Offene Salden werden ins nächste Jahr vorgetragen. Der Abschluss berührt keine Bankzeile.",
     "payHint": "Eine Zahlung wird automatisch den offenen Forderungen des Zahlers zugeordnet, älteste zuerst."
   },
   "bank": {

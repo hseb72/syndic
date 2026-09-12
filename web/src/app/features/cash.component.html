@@ -14,8 +14,22 @@
               <option [value]="e.id" [selected]="e.id === selectedExId()">{{ e.label || (e.start_date + ' → ' + e.end_date) }}</option>
             }
           </select>
+          @if (selectedExercise(); as ex) {
+            <span class="pill" [class.good]="ex.status !== 'CLOSED'" [class.neutral]="ex.status === 'CLOSED'">
+              {{ ex.status === 'CLOSED' ? t('cash.statusClosed') : t('cash.statusOpen') }}
+            </span>
+          }
         </div>
-        <button class="btn primary" type="button" (click)="showCallForm.set(!showCallForm())">{{ t('cash.add') }}</button>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          @if (selectedExercise(); as ex) {
+            @if (ex.status === 'CLOSED') {
+              <button class="btn sm" type="button" [disabled]="saving()" (click)="reopenExercise()">{{ t('cash.reopen') }}</button>
+            } @else {
+              <button class="btn sm" type="button" [disabled]="saving()" (click)="closeExercise()">{{ t('cash.close') }}</button>
+            }
+          }
+          <button class="btn primary" type="button" (click)="showCallForm.set(!showCallForm())">{{ t('cash.add') }}</button>
+        </div>
       </div>
 
       @if (showCallForm()) {
@@ -119,5 +133,35 @@
         </div>
       }
     </div>
+
+    <!-- Report à nouveau (exercice clôturé) -->
+    @if (carryForward().length > 0) {
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>{{ t('cash.carry') }}</h2>
+            <div class="hint">{{ t('cash.carryHint') }}</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ t('th.lot') }}</th>
+                <th class="num">{{ t('cash.remaining') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (cf of carryForward(); track cf.id) {
+                <tr>
+                  <td>{{ cf.lotNumber }}</td>
+                  <td class="num">{{ num(cf.amount) | number: '1.2-2' }} €</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
   }
 </ng-container>

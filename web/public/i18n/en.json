@@ -58,6 +58,12 @@
     "recEmpty": "No receivables for this year.",
     "remaining": "Balance due",
     "payRemaining": "Pay balance",
+    "close": "Close the year",
+    "reopen": "Reopen",
+    "statusClosed": "Closed",
+    "statusOpen": "Open",
+    "carry": "Carry-forward",
+    "carryHint": "Unpaid balances carried to the next year. The close touches no bank line.",
     "payHint": "A payment is automatically applied to the payer's open receivables, oldest first."
   },
   "bank": {

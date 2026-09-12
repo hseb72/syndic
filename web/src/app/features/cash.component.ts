@@ -1,9 +1,16 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoModule } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
 import { ApiService, type Exercise, type FundCall, type ReceivableRow } from '../core/api.service';
+
+interface CarryForwardRow {
+  id: string;
+  lotNumber: string;
+  kind: string;
+  amount: string;
+}
 
 const COP_STORAGE_KEY = 'syndic.copId';
 const EX_STORAGE_KEY = 'syndic.exId';
@@ -21,9 +28,12 @@ export class CashComponent implements OnInit {
   readonly selectedExId = signal<string | null>(null);
   readonly fundCalls = signal<FundCall[]>([]);
   readonly receivables = signal<ReceivableRow[]>([]);
+  readonly carryForward = signal<CarryForwardRow[]>([]);
   readonly loading = signal(true);
   readonly saving = signal(false);
   readonly showCallForm = signal(false);
+
+  readonly selectedExercise = computed(() => this.exercises().find((e) => e.id === this.selectedExId()) ?? null);
 
   readonly callForm = new FormGroup({
     label: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -77,6 +87,41 @@ export class CashComponent implements OnInit {
     if (!cop || !ex) return;
     this.api.listFundCalls(cop, ex).subscribe({ next: (c) => this.fundCalls.set(c) });
     this.api.listReceivables(cop, ex).subscribe({ next: (r) => this.receivables.set(r) });
+    this.api.listCarryForward(cop, ex).subscribe({ next: (cf) => this.carryForward.set(cf) });
+  }
+
+  private updateExercise(updated: Exercise): void {
+    this.exercises.update((list) => list.map((e) => (e.id === updated.id ? updated : e)));
+  }
+
+  closeExercise(): void {
+    const cop = this.copId();
+    const ex = this.selectedExId();
+    if (!cop || !ex) return;
+    this.saving.set(true);
+    this.api.closeExercise(cop, ex).subscribe({
+      next: (updated) => {
+        this.updateExercise(updated);
+        this.saving.set(false);
+        this.reload();
+      },
+      error: () => this.saving.set(false),
+    });
+  }
+
+  reopenExercise(): void {
+    const cop = this.copId();
+    const ex = this.selectedExId();
+    if (!cop || !ex) return;
+    this.saving.set(true);
+    this.api.reopenExercise(cop, ex).subscribe({
+      next: (updated) => {
+        this.updateExercise(updated);
+        this.saving.set(false);
+        this.reload();
+      },
+      error: () => this.saving.set(false),
+    });
   }
 
   submitCall(): void {

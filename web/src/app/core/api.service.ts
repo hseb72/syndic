@@ -257,6 +257,20 @@ export class ApiService {
     return this.http.get<ReceivableRow[]>(`/api/coproperties/${copId}/receivables?exerciseId=${exerciseId}`);
   }
 
+  closeExercise(copId: string, exerciseId: string): Observable<Exercise> {
+    return this.http.post<Exercise>(`/api/coproperties/${copId}/exercises/${exerciseId}/close`, {});
+  }
+
+  reopenExercise(copId: string, exerciseId: string): Observable<Exercise> {
+    return this.http.post<Exercise>(`/api/coproperties/${copId}/exercises/${exerciseId}/reopen`, {});
+  }
+
+  listCarryForward(copId: string, exerciseId: string): Observable<{ id: string; lotNumber: string; kind: string; amount: string }[]> {
+    return this.http.get<{ id: string; lotNumber: string; kind: string; amount: string }[]>(
+      `/api/coproperties/${copId}/exercises/${exerciseId}/carry-forward`,
+    );
+  }
+
   createPayment(
     copId: string,
     input: { personId: string; paymentDate: string; amount: number; autoAllocate: boolean },

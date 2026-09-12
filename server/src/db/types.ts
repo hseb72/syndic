@@ -155,6 +155,17 @@ export interface InvoiceDistributionTable {
   created_at: Generated<Timestamp>;
 }
 
+export interface ExerciseCarryForwardTable {
+  id: string;
+  from_exercise_id: string;
+  to_exercise_id: string;
+  lot_id: string | null;
+  kind: string;
+  amount: Numeric;
+  note: string | null;
+  created_at: Generated<Timestamp>;
+}
+
 export interface BudgetTable {
   id: string;
   coproperty_id: string;
@@ -274,6 +285,7 @@ export interface Database {
   lot_distribution_share: LotDistributionShareTable;
   meter_reading: MeterReadingTable;
   accounting_exercise: AccountingExerciseTable;
+  exercise_carry_forward: ExerciseCarryForwardTable;
   supplier: SupplierTable;
   supplier_invoice: SupplierInvoiceTable;
   supplier_payment: SupplierPaymentTable;

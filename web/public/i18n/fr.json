@@ -58,6 +58,12 @@
     "recEmpty": "Aucune créance pour cet exercice.",
     "remaining": "Reste dû",
     "payRemaining": "Payer le reste",
+    "close": "Clôturer l’exercice",
+    "reopen": "Ré-ouvrir",
+    "statusClosed": "Clôturé",
+    "statusOpen": "Ouvert",
+    "carry": "Report à nouveau",
+    "carryHint": "Soldes impayés reportés vers l’exercice suivant. La clôture ne touche aucune ligne bancaire.",
     "payHint": "Un paiement est lettré automatiquement sur les créances ouvertes du payeur, du plus ancien au plus récent."
   },
   "bank": {

@@ -58,6 +58,12 @@
     "recEmpty": "Nessun credito per questo esercizio.",
     "remaining": "Saldo dovuto",
     "payRemaining": "Salda il dovuto",
+    "close": "Chiudi l’esercizio",
+    "reopen": "Riapri",
+    "statusClosed": "Chiuso",
+    "statusOpen": "Aperto",
+    "carry": "Riporto a nuovo",
+    "carryHint": "Saldi non pagati riportati all’esercizio successivo. La chiusura non tocca alcuna riga bancaria.",
     "payHint": "Un pagamento viene applicato automaticamente ai crediti aperti del pagatore, dal più vecchio."
   },
   "bank": {
