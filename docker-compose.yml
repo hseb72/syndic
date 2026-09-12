@@ -1,0 +1,23 @@
+# Base de données pour le développement local.
+# L'API et le front tournent en local via npm (voir README.md).
+# Les Dockerfiles applicatifs + manifests K8s viendront au moment du déploiement.
+services:
+  db:
+    image: postgres:16
+    container_name: syndic-db
+    environment:
+      POSTGRES_USER: syndic
+      POSTGRES_PASSWORD: syndic
+      POSTGRES_DB: syndic
+    ports:
+      - "5432:5432"
+    volumes:
+      - syndic-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U syndic -d syndic"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  syndic-pgdata:
