@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Condominium" },
   "mode": { "bureau": "Board area", "coprop": "Co-owner area" },
-  "tab": { "dashboard": "Dashboard", "coprop": "Condominium" },
+  "tab": { "dashboard": "Dashboard", "coprop": "Condominium", "expenses": "Expenses" },
   "health": { "label": "API status", "ok": "connected", "down": "unreachable", "checking": "checking…" },
   "dashboard": { "title": "Dashboard", "socleNote": "Foundation in place: API, database and interface talk to each other. Features come in the next steps." },
   "coprop": {
@@ -21,9 +21,22 @@
     "count": "{{ n }} unit(s)",
     "confirmDelete": "Delete this unit?"
   },
-  "th": { "lot": "Unit", "owner": "Owner", "tantiemes": "Shares", "quotePart": "Share %", "actions": "" },
-  "field": { "name": "Name", "address": "Address", "postalCode": "Postal code", "city": "City", "lotNumber": "Number", "tantiemes": "Shares", "owner": "Owner" },
-  "btn": { "save": "Save", "cancel": "Cancel", "add": "Add", "edit": "Edit", "delete": "Delete", "retry": "Retry" },
+  "expenses": {
+    "title": "Invoices & expenses",
+    "exercise": "Financial year",
+    "newExercise": "New financial year",
+    "noExercise": "No financial year yet. Create one to record expenses.",
+    "add": "Add an invoice",
+    "empty": "No invoices for this year.",
+    "water": "Water bill (split subscription / consumption)",
+    "charges": "Charges allocated per unit",
+    "chargesHint": "Allocation of the year's actual expenses — basis of the annual adjustment.",
+    "compute": "Compute allocation",
+    "total": "Total charges"
+  },
+  "th": { "lot": "Unit", "owner": "Owner", "tantiemes": "Shares", "quotePart": "Share %", "actions": "", "supplier": "Supplier", "date": "Date", "category": "Category", "amount": "Amount", "paid": "Paid", "status": "Status", "charge": "Charge" },
+  "field": { "name": "Name", "address": "Address", "postalCode": "Postal code", "city": "City", "lotNumber": "Number", "tantiemes": "Shares", "owner": "Owner", "supplier": "Supplier", "exerciseLabel": "Label (e.g. 2024)", "startDate": "Start", "endDate": "End", "invoiceDate": "Date", "amount": "Amount (€)", "category": "Category", "subscriptionAmount": "Subscription (€)", "consumptionAmount": "Consumption (€)" },
+  "btn": { "save": "Save", "cancel": "Cancel", "add": "Add", "edit": "Edit", "delete": "Delete", "retry": "Retry", "create": "Create" },
   "theme": { "toggle": "Theme", "light": "Light", "dark": "Dark" },
   "footer": "Volunteer condo management — internal tool for the board and co-owners."
 }

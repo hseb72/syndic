@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Eigentümergemeinschaft" },
   "mode": { "bureau": "Verwaltungsbereich", "coprop": "Eigentümerbereich" },
-  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft" },
+  "tab": { "dashboard": "Übersicht", "coprop": "Gemeinschaft", "expenses": "Ausgaben" },
   "health": { "label": "API-Status", "ok": "verbunden", "down": "nicht erreichbar", "checking": "wird geprüft…" },
   "dashboard": { "title": "Übersicht", "socleNote": "Grundgerüst steht: API, Datenbank und Oberfläche kommunizieren. Funktionen folgen in den nächsten Schritten." },
   "coprop": {
@@ -21,9 +21,22 @@
     "count": "{{ n }} Einheit(en)",
     "confirmDelete": "Diese Einheit löschen?"
   },
-  "th": { "lot": "Einheit", "owner": "Eigentümer", "tantiemes": "Anteile", "quotePart": "Anteil %", "actions": "" },
-  "field": { "name": "Name", "address": "Adresse", "postalCode": "PLZ", "city": "Ort", "lotNumber": "Nummer", "tantiemes": "Anteile", "owner": "Eigentümer" },
-  "btn": { "save": "Speichern", "cancel": "Abbrechen", "add": "Hinzufügen", "edit": "Bearbeiten", "delete": "Löschen", "retry": "Erneut versuchen" },
+  "expenses": {
+    "title": "Rechnungen & Ausgaben",
+    "exercise": "Wirtschaftsjahr",
+    "newExercise": "Neues Wirtschaftsjahr",
+    "noExercise": "Noch kein Wirtschaftsjahr. Legen Sie eines an, um Ausgaben zu erfassen.",
+    "add": "Rechnung hinzufügen",
+    "empty": "Keine Rechnungen für dieses Jahr.",
+    "water": "Wasserrechnung (aufgeteilt: Grundgebühr / Verbrauch)",
+    "charges": "Kosten je Einheit verteilt",
+    "chargesHint": "Verteilung der tatsächlichen Jahreskosten — Grundlage der Abrechnung.",
+    "compute": "Verteilung berechnen",
+    "total": "Kosten gesamt"
+  },
+  "th": { "lot": "Einheit", "owner": "Eigentümer", "tantiemes": "Anteile", "quotePart": "Anteil %", "actions": "", "supplier": "Lieferant", "date": "Datum", "category": "Kategorie", "amount": "Betrag", "paid": "Bezahlt", "status": "Status", "charge": "Kosten" },
+  "field": { "name": "Name", "address": "Adresse", "postalCode": "PLZ", "city": "Ort", "lotNumber": "Nummer", "tantiemes": "Anteile", "owner": "Eigentümer", "supplier": "Lieferant", "exerciseLabel": "Bezeichnung (z. B. 2024)", "startDate": "Beginn", "endDate": "Ende", "invoiceDate": "Datum", "amount": "Betrag (€)", "category": "Kategorie", "subscriptionAmount": "Grundgebühr (€)", "consumptionAmount": "Verbrauch (€)" },
+  "btn": { "save": "Speichern", "cancel": "Abbrechen", "add": "Hinzufügen", "edit": "Bearbeiten", "delete": "Löschen", "retry": "Erneut versuchen", "create": "Anlegen" },
   "theme": { "toggle": "Design", "light": "Hell", "dark": "Dunkel" },
   "footer": "Ehrenamtliche Hausverwaltung — internes Tool für den Verwaltungsbeirat und Eigentümer."
 }

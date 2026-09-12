@@ -1,0 +1,182 @@
+<ng-container *transloco="let t">
+  @if (!copId()) {
+    <div class="card"><div class="empty">{{ t('coprop.none') }}</div></div>
+  } @else {
+    <!-- Exercice -->
+    <div class="card">
+      <div class="card-head">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <h2>{{ t('expenses.exercise') }}</h2>
+          @if (exercises().length > 0) {
+            <select class="lang-select" [value]="selectedExId()" (change)="selectExercise($any($event.target).value)" style="min-width:140px;">
+              @for (e of exercises(); track e.id) {
+                <option [value]="e.id" [selected]="e.id === selectedExId()">{{ e.label || (e.start_date + ' → ' + e.end_date) }}</option>
+              }
+            </select>
+          }
+        </div>
+        <button class="btn" type="button" (click)="showExForm.set(!showExForm())">{{ t('expenses.newExercise') }}</button>
+      </div>
+
+      @if (showExForm()) {
+        <form class="panel" [formGroup]="exForm" (ngSubmit)="submitExercise()">
+          <div class="form-grid">
+            <div class="field">
+              <label for="ex-label">{{ t('field.exerciseLabel') }}</label>
+              <input id="ex-label" type="text" formControlName="label" placeholder="2024" />
+            </div>
+            <div class="field">
+              <label for="ex-start">{{ t('field.startDate') }}</label>
+              <input id="ex-start" type="date" formControlName="startDate" />
+            </div>
+            <div class="field">
+              <label for="ex-end">{{ t('field.endDate') }}</label>
+              <input id="ex-end" type="date" formControlName="endDate" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit" [disabled]="exForm.invalid || saving()">{{ t('btn.create') }}</button>
+            <button class="btn ghost" type="button" (click)="showExForm.set(false)">{{ t('btn.cancel') }}</button>
+          </div>
+        </form>
+      }
+
+      @if (loading()) {
+        <div class="empty">{{ t('health.checking') }}</div>
+      } @else if (exercises().length === 0) {
+        <div class="empty">{{ t('expenses.noExercise') }}</div>
+      }
+    </div>
+
+    @if (selectedExId()) {
+      <!-- Factures -->
+      <div class="card">
+        <div class="card-head">
+          <h2>{{ t('expenses.title') }}</h2>
+          <button class="btn primary" type="button" (click)="showInvoiceForm.set(!showInvoiceForm())">{{ t('expenses.add') }}</button>
+        </div>
+
+        @if (showInvoiceForm()) {
+          <form class="panel" [formGroup]="invoiceForm" (ngSubmit)="submitInvoice()">
+            <div class="form-grid">
+              <div class="field">
+                <label for="inv-supplier">{{ t('field.supplier') }}</label>
+                <input id="inv-supplier" type="text" formControlName="supplierName" list="supplier-list" />
+                <datalist id="supplier-list">
+                  @for (s of suppliers(); track s.id) { <option [value]="s.name"></option> }
+                </datalist>
+              </div>
+              <div class="field">
+                <label for="inv-date">{{ t('field.invoiceDate') }}</label>
+                <input id="inv-date" type="date" formControlName="invoiceDate" />
+              </div>
+              <div class="field">
+                <label for="inv-cat">{{ t('field.category') }}</label>
+                <input id="inv-cat" type="text" formControlName="category" />
+              </div>
+            </div>
+
+            <label style="display:flex; align-items:center; gap:8px; margin:12px 0 8px; font-size:13px; font-weight:600; color:var(--ink-soft);">
+              <input type="checkbox" formControlName="isWater" style="width:16px; height:16px; accent-color:var(--accent);" />
+              {{ t('expenses.water') }}
+            </label>
+
+            @if (invoiceForm.controls.isWater.value) {
+              <div class="form-grid">
+                <div class="field">
+                  <label for="inv-sub">{{ t('field.subscriptionAmount') }}</label>
+                  <input id="inv-sub" type="number" step="0.01" min="0" formControlName="subscription" />
+                </div>
+                <div class="field">
+                  <label for="inv-cons">{{ t('field.consumptionAmount') }}</label>
+                  <input id="inv-cons" type="number" step="0.01" min="0" formControlName="consumption" />
+                </div>
+              </div>
+            } @else {
+              <div class="form-grid">
+                <div class="field">
+                  <label for="inv-amount">{{ t('field.amount') }}</label>
+                  <input id="inv-amount" type="number" step="0.01" min="0" formControlName="amount" />
+                </div>
+              </div>
+            }
+
+            <div class="form-actions">
+              <button class="btn primary" type="submit" [disabled]="invoiceForm.invalid || saving()">{{ t('btn.add') }}</button>
+              <button class="btn ghost" type="button" (click)="showInvoiceForm.set(false)">{{ t('btn.cancel') }}</button>
+            </div>
+          </form>
+        }
+
+        @if (invoices().length === 0) {
+          <div class="empty">{{ t('expenses.empty') }}</div>
+        } @else {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>{{ t('th.date') }}</th>
+                  <th>{{ t('th.supplier') }}</th>
+                  <th>{{ t('th.category') }}</th>
+                  <th class="num">{{ t('th.amount') }}</th>
+                  <th class="num">{{ t('th.paid') }}</th>
+                  <th>{{ t('th.status') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (inv of invoices(); track inv.id) {
+                  <tr>
+                    <td>{{ inv.invoiceDate }}</td>
+                    <td>{{ inv.supplierName }}</td>
+                    <td>{{ inv.category || '—' }}</td>
+                    <td class="num">{{ num(inv.amount) | number: '1.2-2' }}</td>
+                    <td class="num">{{ num(inv.paidAmount) | number: '1.2-2' }}</td>
+                    <td><span class="pill" [class.good]="inv.status === 'PAID'" [class.neutral]="inv.status !== 'PAID'">{{ inv.status }}</span></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+
+      <!-- Charges réparties -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>{{ t('expenses.charges') }}</h2>
+            <div class="hint">{{ t('expenses.chargesHint') }}</div>
+          </div>
+          <button class="btn" type="button" [disabled]="saving()" (click)="computeCharges()">{{ t('expenses.compute') }}</button>
+        </div>
+
+        @if (charges(); as c) {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>{{ t('th.lot') }}</th>
+                  <th class="num">{{ t('th.charge') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of c.byLot; track row.lotId) {
+                  <tr>
+                    <td>{{ row.lotNumber }}</td>
+                    <td class="num">{{ row.amount | number: '1.2-2' }} €</td>
+                  </tr>
+                }
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td style="font-weight:700;">{{ t('expenses.total') }}</td>
+                  <td class="num" style="font-weight:700;">{{ c.total | number: '1.2-2' }} €</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        }
+      </div>
+    }
+  }
+</ng-container>

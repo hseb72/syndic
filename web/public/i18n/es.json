@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Comunidad de propietarios" },
   "mode": { "bureau": "Área de la junta", "coprop": "Área de propietarios" },
-  "tab": { "dashboard": "Panel", "coprop": "Comunidad" },
+  "tab": { "dashboard": "Panel", "coprop": "Comunidad", "expenses": "Gastos" },
   "health": { "label": "Estado de la API", "ok": "conectada", "down": "no disponible", "checking": "comprobando…" },
   "dashboard": { "title": "Panel", "socleNote": "Base lista: API, base de datos e interfaz se comunican. Las funciones llegan en los siguientes pasos." },
   "coprop": {
@@ -21,9 +21,22 @@
     "count": "{{ n }} finca(s)",
     "confirmDelete": "¿Eliminar esta finca?"
   },
-  "th": { "lot": "Finca", "owner": "Propietario", "tantiemes": "Coeficiente", "quotePart": "Cuota %", "actions": "" },
-  "field": { "name": "Nombre", "address": "Dirección", "postalCode": "Código postal", "city": "Ciudad", "lotNumber": "Número", "tantiemes": "Coeficiente", "owner": "Propietario" },
-  "btn": { "save": "Guardar", "cancel": "Cancelar", "add": "Añadir", "edit": "Editar", "delete": "Eliminar", "retry": "Reintentar" },
+  "expenses": {
+    "title": "Facturas y gastos",
+    "exercise": "Ejercicio",
+    "newExercise": "Nuevo ejercicio",
+    "noExercise": "Aún no hay ejercicio. Cree uno para registrar gastos.",
+    "add": "Añadir una factura",
+    "empty": "No hay facturas para este ejercicio.",
+    "water": "Factura de agua (repartida: abono / consumo)",
+    "charges": "Gastos repartidos por finca",
+    "chargesHint": "Reparto de los gastos reales del ejercicio — base de la regularización.",
+    "compute": "Calcular el reparto",
+    "total": "Total de gastos"
+  },
+  "th": { "lot": "Finca", "owner": "Propietario", "tantiemes": "Coeficiente", "quotePart": "Cuota %", "actions": "", "supplier": "Proveedor", "date": "Fecha", "category": "Categoría", "amount": "Importe", "paid": "Pagado", "status": "Estado", "charge": "Gasto" },
+  "field": { "name": "Nombre", "address": "Dirección", "postalCode": "Código postal", "city": "Ciudad", "lotNumber": "Número", "tantiemes": "Coeficiente", "owner": "Propietario", "supplier": "Proveedor", "exerciseLabel": "Etiqueta (ej. 2024)", "startDate": "Inicio", "endDate": "Fin", "invoiceDate": "Fecha", "amount": "Importe (€)", "category": "Categoría", "subscriptionAmount": "Abono (€)", "consumptionAmount": "Consumo (€)" },
+  "btn": { "save": "Guardar", "cancel": "Cancelar", "add": "Añadir", "edit": "Editar", "delete": "Eliminar", "retry": "Reintentar", "create": "Crear" },
   "theme": { "toggle": "Tema", "light": "Claro", "dark": "Oscuro" },
   "footer": "Gestión voluntaria de la comunidad — herramienta interna para la junta y los propietarios."
 }

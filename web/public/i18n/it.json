@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Condominio" },
   "mode": { "bureau": "Area del consiglio", "coprop": "Area condomini" },
-  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio" },
+  "tab": { "dashboard": "Cruscotto", "coprop": "Condominio", "expenses": "Spese" },
   "health": { "label": "Stato API", "ok": "connessa", "down": "non raggiungibile", "checking": "verifica…" },
   "dashboard": { "title": "Cruscotto", "socleNote": "Base pronta: API, database e interfaccia comunicano. Le funzionalità arrivano nei passi successivi." },
   "coprop": {
@@ -21,9 +21,22 @@
     "count": "{{ n }} unità",
     "confirmDelete": "Eliminare questa unità?"
   },
-  "th": { "lot": "Unità", "owner": "Proprietario", "tantiemes": "Millesimi", "quotePart": "Quota %", "actions": "" },
-  "field": { "name": "Nome", "address": "Indirizzo", "postalCode": "CAP", "city": "Città", "lotNumber": "Numero", "tantiemes": "Millesimi", "owner": "Proprietario" },
-  "btn": { "save": "Salva", "cancel": "Annulla", "add": "Aggiungi", "edit": "Modifica", "delete": "Elimina", "retry": "Riprova" },
+  "expenses": {
+    "title": "Fatture e spese",
+    "exercise": "Esercizio",
+    "newExercise": "Nuovo esercizio",
+    "noExercise": "Nessun esercizio. Creane uno per registrare le spese.",
+    "add": "Aggiungi una fattura",
+    "empty": "Nessuna fattura per questo esercizio.",
+    "water": "Bolletta dell’acqua (ripartita: abbonamento / consumo)",
+    "charges": "Spese ripartite per unità",
+    "chargesHint": "Ripartizione delle spese reali dell’esercizio — base del conguaglio.",
+    "compute": "Calcola la ripartizione",
+    "total": "Totale spese"
+  },
+  "th": { "lot": "Unità", "owner": "Proprietario", "tantiemes": "Millesimi", "quotePart": "Quota %", "actions": "", "supplier": "Fornitore", "date": "Data", "category": "Categoria", "amount": "Importo", "paid": "Pagato", "status": "Stato", "charge": "Spesa" },
+  "field": { "name": "Nome", "address": "Indirizzo", "postalCode": "CAP", "city": "Città", "lotNumber": "Numero", "tantiemes": "Millesimi", "owner": "Proprietario", "supplier": "Fornitore", "exerciseLabel": "Etichetta (es. 2024)", "startDate": "Inizio", "endDate": "Fine", "invoiceDate": "Data", "amount": "Importo (€)", "category": "Categoria", "subscriptionAmount": "Abbonamento (€)", "consumptionAmount": "Consumo (€)" },
+  "btn": { "save": "Salva", "cancel": "Annulla", "add": "Aggiungi", "edit": "Modifica", "delete": "Elimina", "retry": "Riprova", "create": "Crea" },
   "theme": { "toggle": "Tema", "light": "Chiaro", "dark": "Scuro" },
   "footer": "Gestione volontaria del condominio — strumento interno per il consiglio e i condomini."
 }

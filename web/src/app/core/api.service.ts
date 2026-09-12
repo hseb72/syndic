@@ -50,6 +50,54 @@ export interface CreateLotInput {
   description?: string | null;
 }
 
+export interface Exercise {
+  id: string;
+  label: string | null;
+  start_date: string;
+  end_date: string;
+  status: string;
+}
+
+export interface Supplier {
+  id: string;
+  name: string;
+}
+
+export interface InvoiceRow {
+  id: string;
+  invoiceNumber: string | null;
+  invoiceDate: string;
+  amount: string;
+  category: string | null;
+  status: string;
+  exerciseId: string;
+  supplierName: string;
+  paidAmount: string;
+}
+
+export interface InvoiceDistributionInput {
+  keyCode: 'GENERAL' | 'EAU';
+  label?: string | null;
+  amount: number;
+  periodLabel?: string | null;
+}
+
+export interface CreateInvoiceInput {
+  supplierId: string;
+  exerciseId: string;
+  invoiceDate: string;
+  amount: number;
+  category?: string | null;
+  invoiceNumber?: string | null;
+  distributions?: InvoiceDistributionInput[];
+}
+
+export interface ChargesResult {
+  exerciseId: string;
+  total: number;
+  byLot: { lotId: string; lotNumber: string; amount: number }[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private http = inject(HttpClient);
@@ -84,5 +132,33 @@ export class ApiService {
 
   deleteLot(copId: string, lotId: string): Observable<CopropertyOverview> {
     return this.http.delete<CopropertyOverview>(`/api/coproperties/${copId}/lots/${lotId}`);
+  }
+
+  listExercises(copId: string): Observable<Exercise[]> {
+    return this.http.get<Exercise[]>(`/api/coproperties/${copId}/exercises`);
+  }
+
+  createExercise(copId: string, input: { label: string; startDate: string; endDate: string }): Observable<Exercise> {
+    return this.http.post<Exercise>(`/api/coproperties/${copId}/exercises`, input);
+  }
+
+  listSuppliers(copId: string): Observable<Supplier[]> {
+    return this.http.get<Supplier[]>(`/api/coproperties/${copId}/suppliers`);
+  }
+
+  createSupplier(copId: string, name: string): Observable<Supplier> {
+    return this.http.post<Supplier>(`/api/coproperties/${copId}/suppliers`, { name });
+  }
+
+  listInvoices(copId: string, exerciseId: string): Observable<InvoiceRow[]> {
+    return this.http.get<InvoiceRow[]>(`/api/coproperties/${copId}/invoices?exerciseId=${exerciseId}`);
+  }
+
+  createInvoice(copId: string, input: CreateInvoiceInput): Observable<unknown> {
+    return this.http.post(`/api/coproperties/${copId}/invoices`, input);
+  }
+
+  getCharges(copId: string, exerciseId: string): Observable<ChargesResult> {
+    return this.http.get<ChargesResult>(`/api/coproperties/${copId}/exercises/${exerciseId}/charges`);
   }
 }

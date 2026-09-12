@@ -10,5 +10,9 @@ export const routes: Routes = [
     path: 'coproprietes',
     loadComponent: () => import('./features/coproperty-page.component').then((m) => m.CopropertyPageComponent),
   },
+  {
+    path: 'depenses',
+    loadComponent: () => import('./features/expenses.component').then((m) => m.ExpensesComponent),
+  },
   { path: '**', redirectTo: 'tableau-de-bord' },
 ];

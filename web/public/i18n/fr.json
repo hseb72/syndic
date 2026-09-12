@@ -1,7 +1,7 @@
 {
   "app": { "name": "Syndic", "sub": "Copropriété" },
   "mode": { "bureau": "Espace bureau", "coprop": "Espace copropriétaires" },
-  "tab": { "dashboard": "Tableau de bord", "coprop": "Copropriété" },
+  "tab": { "dashboard": "Tableau de bord", "coprop": "Copropriété", "expenses": "Dépenses" },
   "health": { "label": "État de l’API", "ok": "connectée", "down": "injoignable", "checking": "vérification…" },
   "dashboard": { "title": "Tableau de bord", "socleNote": "Socle en place : API, base de données et interface communiquent. Les fonctionnalités arrivent aux étapes suivantes." },
   "coprop": {
@@ -21,9 +21,22 @@
     "count": "{{ n }} lot(s)",
     "confirmDelete": "Supprimer ce lot ?"
   },
-  "th": { "lot": "Lot", "owner": "Propriétaire", "tantiemes": "Tantièmes", "quotePart": "Quote-part", "actions": "" },
-  "field": { "name": "Nom", "address": "Adresse", "postalCode": "Code postal", "city": "Ville", "lotNumber": "Numéro", "tantiemes": "Tantièmes", "owner": "Propriétaire" },
-  "btn": { "save": "Enregistrer", "cancel": "Annuler", "add": "Ajouter", "edit": "Modifier", "delete": "Supprimer", "retry": "Réessayer" },
+  "expenses": {
+    "title": "Factures & dépenses",
+    "exercise": "Exercice",
+    "newExercise": "Nouvel exercice",
+    "noExercise": "Aucun exercice. Créez-en un pour saisir des dépenses.",
+    "add": "Ajouter une facture",
+    "empty": "Aucune facture pour cet exercice.",
+    "water": "Facture d’eau (ventilée abonnement / consommation)",
+    "charges": "Charges réparties par lot",
+    "chargesHint": "Répartition des dépenses réelles de l’exercice — base de la régularisation.",
+    "compute": "Calculer la répartition",
+    "total": "Total des charges"
+  },
+  "th": { "lot": "Lot", "owner": "Propriétaire", "tantiemes": "Tantièmes", "quotePart": "Quote-part", "actions": "", "supplier": "Fournisseur", "date": "Date", "category": "Catégorie", "amount": "Montant", "paid": "Payé", "status": "Statut", "charge": "Charge" },
+  "field": { "name": "Nom", "address": "Adresse", "postalCode": "Code postal", "city": "Ville", "lotNumber": "Numéro", "tantiemes": "Tantièmes", "owner": "Propriétaire", "supplier": "Fournisseur", "exerciseLabel": "Libellé (ex. 2024)", "startDate": "Début", "endDate": "Fin", "invoiceDate": "Date", "amount": "Montant (€)", "category": "Catégorie", "subscriptionAmount": "Abonnement (€)", "consumptionAmount": "Consommation (€)" },
+  "btn": { "save": "Enregistrer", "cancel": "Annuler", "add": "Ajouter", "edit": "Modifier", "delete": "Supprimer", "retry": "Réessayer", "create": "Créer" },
   "theme": { "toggle": "Thème", "light": "Clair", "dark": "Sombre" },
   "footer": "Gestion bénévole de copropriété — outil interne, à usage du conseil syndical et des copropriétaires."
 }
