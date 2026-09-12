@@ -6,13 +6,24 @@
   "dashboard": { "title": "Tableau de bord", "socleNote": "Socle en place : API, base de données et interface communiquent. Les fonctionnalités arrivent aux étapes suivantes." },
   "coprop": {
     "title": "Copropriétés",
+    "select": "Copropriété",
+    "none": "Sélectionnez ou créez une copropriété pour commencer.",
     "empty": "Aucune copropriété enregistrée pour l’instant.",
     "add": "Ajouter une copropriété",
     "created": "Copropriété créée.",
     "count": "{{ n }} copropriété(s)"
   },
-  "field": { "name": "Nom", "address": "Adresse", "postalCode": "Code postal", "city": "Ville" },
-  "btn": { "save": "Enregistrer", "cancel": "Annuler", "add": "Ajouter", "retry": "Réessayer" },
+  "lots": {
+    "title": "Lots & copropriétaires",
+    "add": "Ajouter un lot",
+    "empty": "Aucun lot pour l’instant. Ajoutez-en un pour commencer.",
+    "total": "Total tantièmes",
+    "count": "{{ n }} lot(s)",
+    "confirmDelete": "Supprimer ce lot ?"
+  },
+  "th": { "lot": "Lot", "owner": "Propriétaire", "tantiemes": "Tantièmes", "quotePart": "Quote-part", "actions": "" },
+  "field": { "name": "Nom", "address": "Adresse", "postalCode": "Code postal", "city": "Ville", "lotNumber": "Numéro", "tantiemes": "Tantièmes", "owner": "Propriétaire" },
+  "btn": { "save": "Enregistrer", "cancel": "Annuler", "add": "Ajouter", "edit": "Modifier", "delete": "Supprimer", "retry": "Réessayer" },
   "theme": { "toggle": "Thème", "light": "Clair", "dark": "Sombre" },
   "footer": "Gestion bénévole de copropriété — outil interne, à usage du conseil syndical et des copropriétaires."
 }

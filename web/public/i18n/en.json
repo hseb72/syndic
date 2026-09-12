@@ -6,13 +6,24 @@
   "dashboard": { "title": "Dashboard", "socleNote": "Foundation in place: API, database and interface talk to each other. Features come in the next steps." },
   "coprop": {
     "title": "Condominiums",
+    "select": "Condominium",
+    "none": "Select or create a condominium to get started.",
     "empty": "No condominium recorded yet.",
     "add": "Add a condominium",
     "created": "Condominium created.",
     "count": "{{ n }} condominium(s)"
   },
-  "field": { "name": "Name", "address": "Address", "postalCode": "Postal code", "city": "City" },
-  "btn": { "save": "Save", "cancel": "Cancel", "add": "Add", "retry": "Retry" },
+  "lots": {
+    "title": "Units & co-owners",
+    "add": "Add a unit",
+    "empty": "No units yet. Add one to get started.",
+    "total": "Total shares",
+    "count": "{{ n }} unit(s)",
+    "confirmDelete": "Delete this unit?"
+  },
+  "th": { "lot": "Unit", "owner": "Owner", "tantiemes": "Shares", "quotePart": "Share %", "actions": "" },
+  "field": { "name": "Name", "address": "Address", "postalCode": "Postal code", "city": "City", "lotNumber": "Number", "tantiemes": "Shares", "owner": "Owner" },
+  "btn": { "save": "Save", "cancel": "Cancel", "add": "Add", "edit": "Edit", "delete": "Delete", "retry": "Retry" },
   "theme": { "toggle": "Theme", "light": "Light", "dark": "Dark" },
   "footer": "Volunteer condo management — internal tool for the board and co-owners."
 }

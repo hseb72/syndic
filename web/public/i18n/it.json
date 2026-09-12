@@ -6,13 +6,24 @@
   "dashboard": { "title": "Cruscotto", "socleNote": "Base pronta: API, database e interfaccia comunicano. Le funzionalità arrivano nei passi successivi." },
   "coprop": {
     "title": "Condomini",
+    "select": "Condominio",
+    "none": "Seleziona o crea un condominio per iniziare.",
     "empty": "Nessun condominio registrato per ora.",
     "add": "Aggiungi un condominio",
     "created": "Condominio creato.",
     "count": "{{ n }} condominio/i"
   },
-  "field": { "name": "Nome", "address": "Indirizzo", "postalCode": "CAP", "city": "Città" },
-  "btn": { "save": "Salva", "cancel": "Annulla", "add": "Aggiungi", "retry": "Riprova" },
+  "lots": {
+    "title": "Unità e condomini",
+    "add": "Aggiungi un’unità",
+    "empty": "Nessuna unità per ora. Aggiungine una per iniziare.",
+    "total": "Totale millesimi",
+    "count": "{{ n }} unità",
+    "confirmDelete": "Eliminare questa unità?"
+  },
+  "th": { "lot": "Unità", "owner": "Proprietario", "tantiemes": "Millesimi", "quotePart": "Quota %", "actions": "" },
+  "field": { "name": "Nome", "address": "Indirizzo", "postalCode": "CAP", "city": "Città", "lotNumber": "Numero", "tantiemes": "Millesimi", "owner": "Proprietario" },
+  "btn": { "save": "Salva", "cancel": "Annulla", "add": "Aggiungi", "edit": "Modifica", "delete": "Elimina", "retry": "Riprova" },
   "theme": { "toggle": "Tema", "light": "Chiaro", "dark": "Scuro" },
   "footer": "Gestione volontaria del condominio — strumento interno per il consiglio e i condomini."
 }

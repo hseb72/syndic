@@ -26,6 +26,30 @@ export interface CreateCopropertyInput {
   country?: string;
 }
 
+export interface LotOverviewRow {
+  id: string;
+  lotNumber: string;
+  description: string | null;
+  tantiemes: string;
+  quotePart: number | null;
+  owners: { personId: string; name: string }[];
+  ownerLabel: string;
+}
+
+export interface CopropertyOverview {
+  generalKeyBase: string | null;
+  totalTantiemes: string;
+  lotCount: number;
+  lots: LotOverviewRow[];
+}
+
+export interface CreateLotInput {
+  lotNumber: string;
+  tantiemes: number;
+  ownerName?: string | null;
+  description?: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private http = inject(HttpClient);
@@ -40,5 +64,25 @@ export class ApiService {
 
   createCoproperty(input: CreateCopropertyInput): Observable<Coproperty> {
     return this.http.post<Coproperty>('/api/coproperties', input);
+  }
+
+  getOverview(copId: string): Observable<CopropertyOverview> {
+    return this.http.get<CopropertyOverview>(`/api/coproperties/${copId}/overview`);
+  }
+
+  createLot(copId: string, input: CreateLotInput): Observable<CopropertyOverview> {
+    return this.http.post<CopropertyOverview>(`/api/coproperties/${copId}/lots`, input);
+  }
+
+  updateLotTantiemes(copId: string, lotId: string, tantiemes: number): Observable<CopropertyOverview> {
+    return this.http.patch<CopropertyOverview>(`/api/coproperties/${copId}/lots/${lotId}`, { tantiemes });
+  }
+
+  setLotOwner(copId: string, lotId: string, name: string): Observable<CopropertyOverview> {
+    return this.http.post<CopropertyOverview>(`/api/coproperties/${copId}/lots/${lotId}/owner`, { name });
+  }
+
+  deleteLot(copId: string, lotId: string): Observable<CopropertyOverview> {
+    return this.http.delete<CopropertyOverview>(`/api/coproperties/${copId}/lots/${lotId}`);
   }
 }

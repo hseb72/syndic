@@ -6,13 +6,24 @@
   "dashboard": { "title": "Panel", "socleNote": "Base lista: API, base de datos e interfaz se comunican. Las funciones llegan en los siguientes pasos." },
   "coprop": {
     "title": "Comunidades",
+    "select": "Comunidad",
+    "none": "Seleccione o cree una comunidad para empezar.",
     "empty": "Aún no hay ninguna comunidad registrada.",
     "add": "Añadir una comunidad",
     "created": "Comunidad creada.",
     "count": "{{ n }} comunidad(es)"
   },
-  "field": { "name": "Nombre", "address": "Dirección", "postalCode": "Código postal", "city": "Ciudad" },
-  "btn": { "save": "Guardar", "cancel": "Cancelar", "add": "Añadir", "retry": "Reintentar" },
+  "lots": {
+    "title": "Fincas y propietarios",
+    "add": "Añadir una finca",
+    "empty": "Aún no hay fincas. Añada una para empezar.",
+    "total": "Total coeficientes",
+    "count": "{{ n }} finca(s)",
+    "confirmDelete": "¿Eliminar esta finca?"
+  },
+  "th": { "lot": "Finca", "owner": "Propietario", "tantiemes": "Coeficiente", "quotePart": "Cuota %", "actions": "" },
+  "field": { "name": "Nombre", "address": "Dirección", "postalCode": "Código postal", "city": "Ciudad", "lotNumber": "Número", "tantiemes": "Coeficiente", "owner": "Propietario" },
+  "btn": { "save": "Guardar", "cancel": "Cancelar", "add": "Añadir", "edit": "Editar", "delete": "Eliminar", "retry": "Reintentar" },
   "theme": { "toggle": "Tema", "light": "Claro", "dark": "Oscuro" },
   "footer": "Gestión voluntaria de la comunidad — herramienta interna para la junta y los propietarios."
 }

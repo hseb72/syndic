@@ -1,0 +1,145 @@
+<ng-container *transloco="let t">
+  <!-- Sélecteur de copropriété -->
+  <div class="card">
+    <div class="card-head">
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <h2>{{ t('coprop.title') }}</h2>
+        @if (coproperties().length > 0) {
+          <select
+            class="lang-select"
+            [value]="selectedId()"
+            (change)="selectCop($any($event.target).value)"
+            style="min-width:200px;"
+          >
+            @for (c of coproperties(); track c.id) {
+              <option [value]="c.id" [selected]="c.id === selectedId()">{{ c.name }}</option>
+            }
+          </select>
+        }
+      </div>
+      <button class="btn" type="button" (click)="showCopForm.set(!showCopForm())">
+        {{ t('coprop.add') }}
+      </button>
+    </div>
+
+    @if (showCopForm()) {
+      <form class="panel" [formGroup]="copForm" (ngSubmit)="submitCop()">
+        <div class="form-grid">
+          <div class="field">
+            <label for="cop-name">{{ t('field.name') }}</label>
+            <input id="cop-name" type="text" formControlName="name" />
+          </div>
+          <div class="field">
+            <label for="cop-address">{{ t('field.address') }}</label>
+            <input id="cop-address" type="text" formControlName="address" />
+          </div>
+          <div class="field">
+            <label for="cop-city">{{ t('field.city') }}</label>
+            <input id="cop-city" type="text" formControlName="city" />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn primary" type="submit" [disabled]="copForm.invalid || saving()">{{ t('btn.save') }}</button>
+          <button class="btn ghost" type="button" (click)="showCopForm.set(false)">{{ t('btn.cancel') }}</button>
+        </div>
+      </form>
+    }
+
+    @if (loadingList()) {
+      <div class="empty">{{ t('health.checking') }}</div>
+    } @else if (coproperties().length === 0) {
+      <div class="empty">{{ t('coprop.none') }}</div>
+    }
+  </div>
+
+  <!-- Lots de la copropriété sélectionnée -->
+  @if (selectedId()) {
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>{{ t('lots.title') }}</h2>
+          @if (overview(); as ov) {
+            <div class="hint">
+              {{ t('lots.count', { n: ov.lotCount }) }} · {{ t('lots.total') }} : <span class="num">{{ fmt(ov.totalTantiemes) }}</span>
+            </div>
+          }
+        </div>
+        <button class="btn primary" type="button" (click)="showLotForm.set(!showLotForm())">{{ t('lots.add') }}</button>
+      </div>
+
+      @if (showLotForm()) {
+        <form class="panel" [formGroup]="lotForm" (ngSubmit)="submitLot()">
+          <div class="form-grid">
+            <div class="field">
+              <label for="lot-number">{{ t('field.lotNumber') }}</label>
+              <input id="lot-number" type="text" formControlName="lotNumber" />
+            </div>
+            <div class="field">
+              <label for="lot-tantiemes">{{ t('field.tantiemes') }}</label>
+              <input id="lot-tantiemes" type="number" min="0" step="1" formControlName="tantiemes" />
+            </div>
+            <div class="field">
+              <label for="lot-owner">{{ t('field.owner') }}</label>
+              <input id="lot-owner" type="text" formControlName="owner" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit" [disabled]="lotForm.invalid || saving()">{{ t('btn.add') }}</button>
+            <button class="btn ghost" type="button" (click)="showLotForm.set(false)">{{ t('btn.cancel') }}</button>
+          </div>
+        </form>
+      }
+
+      @if (loadingOverview()) {
+        <div class="empty">{{ t('health.checking') }}</div>
+      } @else if (overview()) {
+        @if (overview()!; as ov) {
+        @if (ov.lots.length === 0) {
+          <div class="empty">{{ t('lots.empty') }}</div>
+        } @else {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>{{ t('th.lot') }}</th>
+                  <th>{{ t('th.owner') }}</th>
+                  <th class="num">{{ t('th.tantiemes') }}</th>
+                  <th class="num">{{ t('th.quotePart') }}</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (lot of ov.lots; track lot.id) {
+                  @if (editingLotId() === lot.id) {
+                    <tr [formGroup]="editForm">
+                      <td>{{ lot.lotNumber }}</td>
+                      <td><input type="text" formControlName="owner" style="width:100%;" /></td>
+                      <td class="num"><input type="number" min="0" step="1" formControlName="tantiemes" style="width:90px; text-align:right;" /></td>
+                      <td class="num">—</td>
+                      <td style="white-space:nowrap; text-align:right;">
+                        <button class="btn sm primary" type="button" [disabled]="saving()" (click)="saveEdit(lot)">{{ t('btn.save') }}</button>
+                        <button class="btn sm ghost" type="button" (click)="cancelEdit()">{{ t('btn.cancel') }}</button>
+                      </td>
+                    </tr>
+                  } @else {
+                    <tr>
+                      <td>{{ lot.lotNumber }}</td>
+                      <td>{{ lot.ownerLabel || '—' }}</td>
+                      <td class="num">{{ fmt(lot.tantiemes) }}</td>
+                      <td class="num">{{ lot.quotePart !== null ? (lot.quotePart | number: '1.2-2') + ' %' : '—' }}</td>
+                      <td style="white-space:nowrap; text-align:right;">
+                        <button class="btn sm ghost" type="button" (click)="startEdit(lot)">{{ t('btn.edit') }}</button>
+                        <button class="btn sm ghost danger" type="button" [disabled]="saving()" (click)="removeLot(lot)">{{ t('btn.delete') }}</button>
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+        }
+      }
+    </div>
+  }
+</ng-container>
