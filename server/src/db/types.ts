@@ -274,8 +274,19 @@ export interface BankReconciliationTable {
   created_at: Generated<Timestamp>;
 }
 
+export interface AppUserTable {
+  id: string;
+  email: string;
+  password_hash: string;
+  display_name: string | null;
+  role: Generated<string>;
+  coproperty_id: string | null;
+  created_at: Generated<Timestamp>;
+}
+
 export interface Database {
   schema_migrations: SchemaMigrationsTable;
+  app_user: AppUserTable;
   coproperty: CopropertyTable;
   building: BuildingTable;
   lot: LotTable;

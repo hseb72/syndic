@@ -14,4 +14,6 @@ export const config = {
   databaseUrl: required('DATABASE_URL', 'postgres://syndic:syndic@localhost:5432/syndic'),
   // Origines autorisées pour le front (CORS), séparées par des virgules.
   corsOrigins: (process.env.CORS_ORIGINS ?? 'http://localhost:4200').split(',').map((s) => s.trim()),
+  // Secret de signature des jetons JWT. À définir impérativement en production.
+  jwtSecret: process.env.JWT_SECRET ?? 'dev-secret-change-me',
 } as const;
