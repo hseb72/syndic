@@ -41,6 +41,7 @@
     "esbuild@0.28.0": true,
     "@parcel/watcher@2.6.0": true,
     "lmdb@3.2.6": true,
-    "msgpackr-extract@3.0.4": true
+    "msgpackr-extract@3.0.4": true,
+    "canvas@2.11.2": true
   }
 }
