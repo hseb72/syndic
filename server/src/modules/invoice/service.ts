@@ -90,13 +90,19 @@ export interface UpdateInvoiceInput {
   fund?: 'COURANT' | 'TRAVAUX';
   invoiceNumber?: string | null;
   dueDate?: string | null;
+  /**
+   * Si fourni, remplace intégralement la ventilation (ex. dépense d'eau où l'on
+   * veut redéfinir la part abonnement / consommation). Sinon, un changement de
+   * montant ré-échelonne les portions existantes à l'identique.
+   */
+  distributions?: InvoiceDistributionInput[];
 }
 
 /**
  * Corrige une facture/dépense. Les champs sont modifiables librement ; si le
- * montant change, les portions de ventilation sont ré-échelonnées à
- * l'identique (le partage GÉNÉRAL/EAU est conservé), pour que charges et
- * régularisation restent cohérentes.
+ * montant change (sans nouvelle ventilation explicite), les portions sont
+ * ré-échelonnées à l'identique (le partage GÉNÉRAL/EAU est conservé), pour que
+ * charges et régularisation restent cohérentes.
  */
 export async function updateInvoice(copropertyId: string, invoiceId: string, input: UpdateInvoiceInput) {
   const inv = await db
@@ -106,6 +112,18 @@ export async function updateInvoice(copropertyId: string, invoiceId: string, inp
     .where('coproperty_id', '=', copropertyId)
     .executeTakeFirst();
   if (!inv) throw Object.assign(new Error('Facture introuvable.'), { statusCode: 404 });
+
+  if (input.distributions && input.distributions.length > 0 && input.amount !== undefined) {
+    const sum = input.distributions.reduce((acc, p) => acc + p.amount, 0);
+    if (Math.abs(sum - input.amount) > CENT) {
+      throw Object.assign(
+        new Error(
+          `La ventilation (${sum.toFixed(2)}) ne correspond pas au montant de la facture (${input.amount.toFixed(2)}).`,
+        ),
+        { statusCode: 400 },
+      );
+    }
+  }
 
   await db.transaction().execute(async (tx) => {
     const set: Record<string, unknown> = {};
@@ -120,7 +138,27 @@ export async function updateInvoice(copropertyId: string, invoiceId: string, inp
       await tx.updateTable('supplier_invoice').set(set).where('id', '=', invoiceId).execute();
     }
 
-    if (input.amount !== undefined && Math.abs(input.amount - Number(inv.amount)) > CENT) {
+    if (input.distributions && input.distributions.length > 0) {
+      // Remplacement intégral de la ventilation.
+      await tx.deleteFrom('invoice_distribution').where('supplier_invoice_id', '=', invoiceId).execute();
+      for (const p of input.distributions) {
+        const keyId =
+          p.keyCode === 'EAU'
+            ? await ensureWaterKey(tx, copropertyId)
+            : await ensureGeneralKey(tx, copropertyId);
+        await tx
+          .insertInto('invoice_distribution')
+          .values({
+            id: randomUUID(),
+            supplier_invoice_id: invoiceId,
+            distribution_key_id: keyId,
+            label: p.label ?? null,
+            amount: p.amount,
+            period_label: p.periodLabel ?? null,
+          })
+          .execute();
+      }
+    } else if (input.amount !== undefined && Math.abs(input.amount - Number(inv.amount)) > CENT) {
       const portions = await tx
         .selectFrom('invoice_distribution')
         .select(['id', 'amount'])
@@ -136,6 +174,26 @@ export async function updateInvoice(copropertyId: string, invoiceId: string, inp
   });
 
   return db.selectFrom('supplier_invoice').selectAll().where('id', '=', invoiceId).executeTakeFirstOrThrow();
+}
+
+/** Détail d'une facture/dépense avec sa ventilation (pour l'écran de correction). */
+export async function getInvoice(copropertyId: string, invoiceId: string) {
+  const inv = await db
+    .selectFrom('supplier_invoice')
+    .selectAll()
+    .where('id', '=', invoiceId)
+    .where('coproperty_id', '=', copropertyId)
+    .executeTakeFirst();
+  if (!inv) throw Object.assign(new Error('Facture introuvable.'), { statusCode: 404 });
+
+  const distributions = await db
+    .selectFrom('invoice_distribution as d')
+    .innerJoin('distribution_key as k', 'k.id', 'd.distribution_key_id')
+    .select(['d.id as id', 'k.code as keyCode', 'd.label as label', 'd.amount as amount', 'd.period_label as periodLabel'])
+    .where('d.supplier_invoice_id', '=', invoiceId)
+    .execute();
+
+  return { ...inv, distributions };
 }
 
 /**

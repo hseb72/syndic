@@ -283,9 +283,14 @@ export class BankComponent implements OnInit {
   }
 
   private prefillInvoices(inv: InvoiceSuggestion[], tx: BankTx): void {
-    // Pré-remplit la première facture qui correspond au montant de la ligne.
-    const target = inv.find((i) => Math.abs(i.remaining - tx.remaining) <= 0.01);
-    if (target) this.setAmount(target.id, Math.min(target.remaining, tx.remaining));
+    // Priorise une facture dont le reste correspond exactement à la ligne, puis
+    // répartit dans cet ordre : chaque case = min(reste dû, reste de la ligne).
+    const ordered = [...inv].sort((a, b) => {
+      const ea = Math.abs(a.remaining - tx.remaining) <= 0.01 ? 0 : 1;
+      const eb = Math.abs(b.remaining - tx.remaining) <= 0.01 ? 0 : 1;
+      return ea - eb;
+    });
+    this.autofillTargets(ordered.map((i) => ({ id: i.id, remaining: i.remaining })));
   }
 
   pickPayer(personId: string): void {
@@ -317,6 +322,17 @@ export class BankComponent implements OnInit {
 
   /** Répartit le reste de la ligne sur les créances, de la plus ancienne à la plus récente. */
   private autofill(rows: ReceivableRow[]): void {
+    this.autofillTargets(rows.map((r) => ({ id: r.id, remaining: r.remaining })));
+  }
+
+  /**
+   * Pré-remplit chaque cible avec min(reste dû, reste de la ligne bancaire), en
+   * consommant la ligne de la première cible à la dernière : si la ligne est
+   * inférieure au reste dû, la case reçoit le montant de la ligne ; si elle est
+   * supérieure, la case reçoit le reste dû (le surplus part sur la cible
+   * suivante — split).
+   */
+  private autofillTargets(rows: { id: string; remaining: number }[]): void {
     let left = this.lineRemaining();
     const map: Record<string, number> = {};
     for (const r of rows) {

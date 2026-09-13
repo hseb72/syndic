@@ -96,14 +96,12 @@
               </div>
             </div>
 
-            @if (!editingInv()) {
-              <label style="display:flex; align-items:center; gap:8px; margin:12px 0 8px; font-size:13px; font-weight:600; color:var(--ink-soft);">
-                <input type="checkbox" formControlName="isWater" style="width:16px; height:16px; accent-color:var(--accent);" />
-                {{ t('expenses.water') }}
-              </label>
-            }
+            <label style="display:flex; align-items:center; gap:8px; margin:12px 0 8px; font-size:13px; font-weight:600; color:var(--ink-soft);">
+              <input type="checkbox" formControlName="isWater" style="width:16px; height:16px; accent-color:var(--accent);" />
+              {{ t('expenses.water') }}
+            </label>
 
-            @if (invoiceForm.controls.isWater.value && !editingInv()) {
+            @if (invoiceForm.controls.isWater.value) {
               <div class="form-grid">
                 <div class="field">
                   <label for="inv-sub">{{ t('field.subscriptionAmount') }}</label>

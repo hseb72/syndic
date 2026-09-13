@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { createInvoice, deleteInvoice, listInvoices, recordPayment, updateInvoice } from './service.js';
+import { createInvoice, deleteInvoice, getInvoice, listInvoices, recordPayment, updateInvoice } from './service.js';
 
 const copParams = z.object({ copId: z.string().uuid() });
 const invParams = z.object({ copId: z.string().uuid(), invoiceId: z.string().uuid() });
@@ -33,6 +33,7 @@ const updateSchema = z.object({
   amount: z.number().positive().optional(),
   category: z.string().nullish(),
   fund: z.enum(['COURANT', 'TRAVAUX']).optional(),
+  distributions: z.array(distributionSchema).optional(),
 });
 
 const paymentSchema = z.object({
@@ -52,6 +53,11 @@ export async function invoiceRoutes(app: FastifyInstance): Promise<void> {
     const { copId } = copParams.parse(request.params);
     const input = createSchema.parse(request.body);
     return reply.code(201).send(await createInvoice(copId, input));
+  });
+
+  app.get('/coproperties/:copId/invoices/:invoiceId', async (request) => {
+    const { copId, invoiceId } = invParams.parse(request.params);
+    return getInvoice(copId, invoiceId);
   });
 
   app.patch('/coproperties/:copId/invoices/:invoiceId', async (request) => {

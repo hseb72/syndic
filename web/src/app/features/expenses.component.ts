@@ -195,18 +195,36 @@ export class ExpensesComponent implements OnInit {
   }
 
   startEdit(inv: InvoiceRow): void {
+    const cop = this.copId();
+    if (!cop) return;
     this.editingInv.set(inv);
+    this.showInvoiceForm.set(true);
+    // Valeurs de base (scalaire) ; on complète avec la ventilation eau si besoin.
     this.invoiceForm.reset({
       supplierName: inv.supplierName,
       invoiceDate: inv.invoiceDate,
       category: inv.category ?? '',
-      fund: (inv.fund === 'TRAVAUX' ? 'TRAVAUX' : 'COURANT'),
+      fund: inv.fund === 'TRAVAUX' ? 'TRAVAUX' : 'COURANT',
       isWater: false,
       amount: Number(inv.amount),
       subscription: null,
       consumption: null,
     });
-    this.showInvoiceForm.set(true);
+    // Récupère la ventilation : si une portion « eau » existe, on rétablit le
+    // mode eau (abonnement / consommation) pour pouvoir le corriger.
+    this.api.getInvoice(cop, inv.id).subscribe({
+      next: (detail) => {
+        if (this.editingInv()?.id !== inv.id) return;
+        const water = detail.distributions.find((d) => d.keyCode === 'EAU');
+        if (!water) return;
+        const general = detail.distributions.find((d) => d.keyCode === 'GENERAL');
+        this.invoiceForm.patchValue({
+          isWater: true,
+          subscription: general ? Number(general.amount) : 0,
+          consumption: Number(water.amount),
+        });
+      },
+    });
   }
 
   cancelInvoiceForm(): void {
@@ -230,15 +248,31 @@ export class ExpensesComponent implements OnInit {
 
       const editing = this.editingInv();
       if (editing) {
-        // Correction d'une facture/dépense existante. Le montant (scalaire)
-        // ré-échelonne côté serveur la ventilation existante à l'identique.
+        // Correction d'une facture/dépense existante.
+        const period = this.selectedExercise()?.label ?? undefined;
+        let amount: number;
+        let distributions;
+        if (v.isWater) {
+          // Redéfinition explicite du partage abonnement / consommation.
+          const sub = Number(v.subscription ?? 0);
+          const cons = Number(v.consumption ?? 0);
+          amount = Math.round((sub + cons) * 100) / 100;
+          distributions = [
+            { keyCode: 'GENERAL' as const, label: 'Abonnement', amount: sub },
+            { keyCode: 'EAU' as const, label: 'Consommation', amount: cons, periodLabel: period },
+          ];
+        } else {
+          // Montant scalaire : la ventilation existante est ré-échelonnée serveur.
+          amount = Number(v.amount ?? 0);
+        }
         await firstValueFrom(
           this.api.updateInvoice(cop, editing.id, {
             supplierId: supplier.id,
             invoiceDate: v.invoiceDate,
-            amount: Number(v.amount ?? 0),
+            amount,
             category: v.category || null,
             fund: v.fund,
+            distributions,
           }),
         );
       } else {

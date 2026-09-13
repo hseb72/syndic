@@ -108,6 +108,25 @@ export interface UpdateInvoiceInput {
   fund?: 'COURANT' | 'TRAVAUX';
   invoiceNumber?: string | null;
   dueDate?: string | null;
+  distributions?: InvoiceDistributionInput[];
+}
+
+export interface InvoiceDetail {
+  id: string;
+  supplier_id: string;
+  invoice_date: string;
+  amount: string;
+  category: string | null;
+  fund: string;
+  invoice_number: string | null;
+  due_date: string | null;
+  distributions: {
+    id: string;
+    keyCode: string;
+    label: string | null;
+    amount: string;
+    periodLabel: string | null;
+  }[];
 }
 
 export interface ChargesResult {
@@ -515,6 +534,10 @@ export class ApiService {
 
   createInvoice(copId: string, input: CreateInvoiceInput): Observable<unknown> {
     return this.http.post(`/api/coproperties/${copId}/invoices`, input);
+  }
+
+  getInvoice(copId: string, invoiceId: string): Observable<InvoiceDetail> {
+    return this.http.get<InvoiceDetail>(`/api/coproperties/${copId}/invoices/${invoiceId}`);
   }
 
   updateInvoice(copId: string, invoiceId: string, input: UpdateInvoiceInput): Observable<unknown> {
