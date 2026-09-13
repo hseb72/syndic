@@ -66,7 +66,7 @@
     "exercise": "Exercice",
     "newExercise": "Nouvel exercice",
     "noExercise": "Aucun exercice. Créez-en un pour saisir des dépenses.",
-    "add": "Ajouter une facture",
+    "add": "Ajouter une dépense",
     "empty": "Aucune facture pour cet exercice.",
     "water": "Facture d’eau (ventilée abonnement / consommation)",
     "charges": "Charges réparties par lot",
@@ -82,7 +82,9 @@
     "pay": "Payer le solde",
     "fund": "Fonds",
     "fundCurrent": "Charges courantes",
-    "fundWorks": "Fonds travaux"
+    "fundWorks": "Fonds travaux",
+    "payee": "Bénéficiaire (fournisseur, banque…)",
+    "addHint": "Toute dépense de la copropriété — avec ou sans facture (ex. frais bancaires). Le numéro de facture n'est pas requis."
   },
   "reg": {
     "title": "Régularisation annuelle",

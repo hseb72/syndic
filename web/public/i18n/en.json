@@ -66,7 +66,7 @@
     "exercise": "Financial year",
     "newExercise": "New financial year",
     "noExercise": "No financial year yet. Create one to record expenses.",
-    "add": "Add an invoice",
+    "add": "Add an expense",
     "empty": "No invoices for this year.",
     "water": "Water bill (split subscription / consumption)",
     "charges": "Charges allocated per unit",
@@ -82,7 +82,9 @@
     "pay": "Pay balance",
     "fund": "Fund",
     "fundCurrent": "Current charges",
-    "fundWorks": "Works fund"
+    "fundWorks": "Works fund",
+    "payee": "Payee (supplier, bank…)",
+    "addHint": "Any expense — with or without an invoice (e.g. bank fees). An invoice number is not required."
   },
   "reg": {
     "title": "Annual adjustment",

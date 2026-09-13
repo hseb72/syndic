@@ -58,9 +58,10 @@
 
         @if (showInvoiceForm()) {
           <form class="panel" [formGroup]="invoiceForm" (ngSubmit)="submitInvoice()">
+            <div class="hint" style="margin-bottom:8px;">{{ t('expenses.addHint') }}</div>
             <div class="form-grid">
               <div class="field">
-                <label for="inv-supplier">{{ t('field.supplier') }}</label>
+                <label for="inv-supplier">{{ t('expenses.payee') }}</label>
                 <input id="inv-supplier" type="text" formControlName="supplierName" list="supplier-list" />
                 <datalist id="supplier-list">
                   @for (s of suppliers(); track s.id) { <option [value]="s.name"></option> }
@@ -72,7 +73,19 @@
               </div>
               <div class="field">
                 <label for="inv-cat">{{ t('field.category') }}</label>
-                <input id="inv-cat" type="text" formControlName="category" />
+                <input id="inv-cat" type="text" formControlName="category" list="category-list" />
+                <datalist id="category-list">
+                  <option value="Frais bancaires"></option>
+                  <option value="Assurance"></option>
+                  <option value="Eau"></option>
+                  <option value="Électricité"></option>
+                  <option value="Entretien"></option>
+                  <option value="Ascenseur"></option>
+                  <option value="Espaces verts"></option>
+                  <option value="Honoraires"></option>
+                  <option value="Impôts & taxes"></option>
+                  <option value="Travaux"></option>
+                </datalist>
               </div>
               <div class="field">
                 <label for="inv-fund">{{ t('expenses.fund') }}</label>
