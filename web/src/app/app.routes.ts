@@ -44,6 +44,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/bank.component').then((m) => m.BankComponent),
   },
   {
+    path: 'avis',
+    canActivate: [bureauGuard],
+    loadComponent: () => import('./features/notices.component').then((m) => m.NoticesComponent),
+  },
+  {
     path: 'regularisation',
     canActivate: [bureauGuard],
     loadComponent: () => import('./features/regularisation.component').then((m) => m.RegularisationComponent),

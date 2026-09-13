@@ -16,7 +16,8 @@
     "reg": "Abrechnung",
     "acc": "Buchhaltung",
     "mine": "Meine Kosten",
-    "reports": "Berichte"
+    "reports": "Berichte",
+    "notices": "Avise"
   },
   "health": {
     "label": "API-Status",
@@ -295,5 +296,23 @@
     "REGULARISATION": "Abrechnung",
     "HORS_BUDGET": "Außerplanmäßig",
     "AUTRE": "Sonstige"
+  },
+  "notices": {
+    "title": "Zahlungsavise",
+    "hint": "Ein Avis fasst die offenen Forderungen eines Eigentümers (Vorschüsse, Abrechnungen…) zu einem zu zahlenden Betrag zusammen. Jede Forderung behält Art und Jahr.",
+    "label": "Bezeichnung",
+    "issueDate": "Ausstellungsdatum",
+    "dueDate": "Fälligkeit",
+    "generate": "Avise erzeugen",
+    "generated": "{{ n }} Avis erzeugt.",
+    "list": "Ausgestellte Avise",
+    "empty": "Kein Avis. Aus offenen Forderungen erzeugen.",
+    "detail": "Details",
+    "markPaid": "Als bezahlt markieren",
+    "totalDue": "Zu zahlen",
+    "open": "Offen",
+    "paid": "Bezahlt",
+    "cancelled": "Storniert",
+    "confirmCancel": "Diesen Avis stornieren? Die Forderungen werden wieder verfügbar."
   }
 }

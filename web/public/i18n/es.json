@@ -16,7 +16,8 @@
     "reg": "Regularización",
     "acc": "Contabilidad",
     "mine": "Mis cuotas",
-    "reports": "Informes"
+    "reports": "Informes",
+    "notices": "Avisos"
   },
   "health": {
     "label": "Estado de la API",
@@ -295,5 +296,23 @@
     "REGULARISATION": "Regularización",
     "HORS_BUDGET": "Fuera de presupuesto",
     "AUTRE": "Otro"
+  },
+  "notices": {
+    "title": "Avisos de pago",
+    "hint": "Un aviso agrupa las deudas abiertas de un propietario (provisiones, regularizaciones…) en un solo importe a pagar. Cada deuda conserva su naturaleza y ejercicio.",
+    "label": "Etiqueta",
+    "issueDate": "Fecha de emisión",
+    "dueDate": "Vencimiento",
+    "generate": "Generar avisos",
+    "generated": "{{ n }} aviso(s) generado(s).",
+    "list": "Avisos emitidos",
+    "empty": "Ningún aviso. Genérelos a partir de las deudas abiertas.",
+    "detail": "Detalle",
+    "markPaid": "Marcar pagado",
+    "totalDue": "Total a pagar",
+    "open": "Por pagar",
+    "paid": "Pagado",
+    "cancelled": "Anulado",
+    "confirmCancel": "¿Anular este aviso? Las deudas vuelven a estar disponibles."
   }
 }

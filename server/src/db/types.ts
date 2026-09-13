@@ -248,6 +248,26 @@ export interface PaymentAllocationTable {
   created_at: Generated<Timestamp>;
 }
 
+export interface PaymentNoticeTable {
+  id: string;
+  coproperty_id: string;
+  person_id: string;
+  label: string;
+  issue_date: DateString;
+  due_date: DateString;
+  total_amount: Numeric;
+  status: Generated<string>;
+  created_at: Generated<Timestamp>;
+}
+
+export interface PaymentNoticeLineTable {
+  id: string;
+  payment_notice_id: string;
+  receivable_id: string;
+  amount: Numeric;
+  created_at: Generated<Timestamp>;
+}
+
 export interface BankAccountTable {
   id: string;
   coproperty_id: string;
@@ -350,6 +370,8 @@ export interface Database {
   receivable: ReceivableTable;
   owner_payment: OwnerPaymentTable;
   payment_allocation: PaymentAllocationTable;
+  payment_notice: PaymentNoticeTable;
+  payment_notice_line: PaymentNoticeLineTable;
   bank_account: BankAccountTable;
   bank_transaction: BankTransactionTable;
   bank_reconciliation: BankReconciliationTable;

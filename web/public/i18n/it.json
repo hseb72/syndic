@@ -16,7 +16,8 @@
     "reg": "Conguaglio",
     "acc": "Contabilità",
     "mine": "Le mie spese",
-    "reports": "Report"
+    "reports": "Report",
+    "notices": "Avvisi"
   },
   "health": {
     "label": "Stato API",
@@ -295,5 +296,23 @@
     "REGULARISATION": "Conguaglio",
     "HORS_BUDGET": "Fuori budget",
     "AUTRE": "Altro"
+  },
+  "notices": {
+    "title": "Avvisi di pagamento",
+    "hint": "Un avviso raggruppa i crediti aperti di un condomino (acconti, conguagli…) in un unico importo da pagare. Ogni credito conserva natura ed esercizio.",
+    "label": "Etichetta",
+    "issueDate": "Data di emissione",
+    "dueDate": "Scadenza",
+    "generate": "Genera avvisi",
+    "generated": "{{ n }} avviso/i generato/i.",
+    "list": "Avvisi emessi",
+    "empty": "Nessun avviso. Generali dai crediti aperti.",
+    "detail": "Dettaglio",
+    "markPaid": "Segna pagato",
+    "totalDue": "Totale da pagare",
+    "open": "Da pagare",
+    "paid": "Pagato",
+    "cancelled": "Annullato",
+    "confirmCancel": "Annullare questo avviso? I crediti tornano disponibili."
   }
 }

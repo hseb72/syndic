@@ -264,9 +264,53 @@ export interface RegularisationResult {
   byLot: RegularisationLot[];
 }
 
+export interface PaymentNotice {
+  id: string;
+  personId: string;
+  personName: string;
+  label: string;
+  issueDate: string;
+  dueDate: string;
+  total: number;
+  paid: number;
+  remaining: number;
+  status: string;
+  lineCount: number;
+}
+
+export interface NoticeLine {
+  receivableId: string;
+  nature: string;
+  exercise: string | null;
+  lotNumber: string;
+  amount: number;
+  paid: number;
+  remaining: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private http = inject(HttpClient);
+
+  listPaymentNotices(copId: string): Observable<PaymentNotice[]> {
+    return this.http.get<PaymentNotice[]>(`/api/coproperties/${copId}/payment-notices`);
+  }
+
+  getNoticeLines(copId: string, id: string): Observable<NoticeLine[]> {
+    return this.http.get<NoticeLine[]>(`/api/coproperties/${copId}/payment-notices/${id}/lines`);
+  }
+
+  generateNotices(copId: string, input: { label: string; issueDate: string; dueDate: string }): Observable<{ created: number }> {
+    return this.http.post<{ created: number }>(`/api/coproperties/${copId}/payment-notices/generate`, input);
+  }
+
+  payNotice(copId: string, id: string, input: { paymentDate: string }): Observable<{ paymentId: string; allocated: number }> {
+    return this.http.post<{ paymentId: string; allocated: number }>(`/api/coproperties/${copId}/payment-notices/${id}/pay`, input);
+  }
+
+  cancelNotice(copId: string, id: string): Observable<{ cancelled: boolean }> {
+    return this.http.post<{ cancelled: boolean }>(`/api/coproperties/${copId}/payment-notices/${id}/cancel`, {});
+  }
 
   health(): Observable<HealthStatus> {
     return this.http.get<HealthStatus>('/health');

@@ -16,7 +16,8 @@
     "reg": "Adjustment",
     "acc": "Accounting",
     "mine": "My charges",
-    "reports": "Reports"
+    "reports": "Reports",
+    "notices": "Notices"
   },
   "health": {
     "label": "API status",
@@ -295,5 +296,23 @@
     "REGULARISATION": "Adjustment",
     "HORS_BUDGET": "Off-budget",
     "AUTRE": "Other"
+  },
+  "notices": {
+    "title": "Payment notices",
+    "hint": "A notice groups a co-owner's open receivables (provisions, adjustments…) into one amount to pay. Each receivable keeps its type and year.",
+    "label": "Label",
+    "issueDate": "Issue date",
+    "dueDate": "Due date",
+    "generate": "Generate notices",
+    "generated": "{{ n }} notice(s) generated.",
+    "list": "Issued notices",
+    "empty": "No notice. Generate them from open receivables.",
+    "detail": "Details",
+    "markPaid": "Mark paid",
+    "totalDue": "Total due",
+    "open": "To pay",
+    "paid": "Paid",
+    "cancelled": "Cancelled",
+    "confirmCancel": "Cancel this notice? Its receivables become available again."
   }
 }
