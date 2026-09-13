@@ -84,7 +84,8 @@
     "fundCurrent": "Current charges",
     "fundWorks": "Works fund",
     "payee": "Payee (supplier, bank…)",
-    "addHint": "Any expense — with or without an invoice (e.g. bank fees). An invoice number is not required."
+    "addHint": "Any expense — with or without an invoice (e.g. bank fees). An invoice number is not required.",
+    "editHint": "Correct this expense. A new amount re-scales its allocation proportionally."
   },
   "reg": {
     "title": "Annual adjustment",

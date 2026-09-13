@@ -84,7 +84,8 @@
     "fundCurrent": "Charges courantes",
     "fundWorks": "Fonds travaux",
     "payee": "Bénéficiaire (fournisseur, banque…)",
-    "addHint": "Toute dépense de la copropriété — avec ou sans facture (ex. frais bancaires). Le numéro de facture n'est pas requis."
+    "addHint": "Toute dépense de la copropriété — avec ou sans facture (ex. frais bancaires). Le numéro de facture n'est pas requis.",
+    "editHint": "Corrigez les informations de cette dépense. Le nouveau montant ré-échelonne la ventilation à l’identique."
   },
   "reg": {
     "title": "Régularisation annuelle",

@@ -84,7 +84,8 @@
     "fundCurrent": "Laufende Kosten",
     "fundWorks": "Instandhaltungsrücklage",
     "payee": "Empfänger (Lieferant, Bank…)",
-    "addHint": "Jede Ausgabe — mit oder ohne Rechnung (z. B. Bankgebühren). Eine Rechnungsnummer ist nicht erforderlich."
+    "addHint": "Jede Ausgabe — mit oder ohne Rechnung (z. B. Bankgebühren). Eine Rechnungsnummer ist nicht erforderlich.",
+    "editHint": "Korrigieren Sie diese Ausgabe. Ein neuer Betrag skaliert die Verteilung proportional neu."
   },
   "reg": {
     "title": "Jahresabrechnung",

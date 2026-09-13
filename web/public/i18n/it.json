@@ -84,7 +84,8 @@
     "fundCurrent": "Spese correnti",
     "fundWorks": "Fondo lavori",
     "payee": "Beneficiario (fornitore, banca…)",
-    "addHint": "Qualsiasi spesa — con o senza fattura (es. spese bancarie). Il numero di fattura non è richiesto."
+    "addHint": "Qualsiasi spesa — con o senza fattura (es. spese bancarie). Il numero di fattura non è richiesto.",
+    "editHint": "Correggi questa spesa. Un nuovo importo riscala la ripartizione in modo proporzionale."
   },
   "reg": {
     "title": "Conguaglio annuale",

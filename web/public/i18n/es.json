@@ -84,7 +84,8 @@
     "fundCurrent": "Gastos corrientes",
     "fundWorks": "Fondo de obras",
     "payee": "Beneficiario (proveedor, banco…)",
-    "addHint": "Cualquier gasto — con o sin factura (p. ej. gastos bancarios). No se requiere número de factura."
+    "addHint": "Cualquier gasto — con o sin factura (p. ej. gastos bancarios). No se requiere número de factura.",
+    "editHint": "Corrija este gasto. Un nuevo importe reescala su reparto proporcionalmente."
   },
   "reg": {
     "title": "Regularización anual",

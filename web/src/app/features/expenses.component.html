@@ -53,12 +53,12 @@
       <div class="card">
         <div class="card-head">
           <h2>{{ t('expenses.title') }}</h2>
-          <button class="btn primary" type="button" (click)="showInvoiceForm.set(!showInvoiceForm())">{{ t('expenses.add') }}</button>
+          <button class="btn primary" type="button" (click)="showInvoiceForm() ? cancelInvoiceForm() : startAdd()">{{ t('expenses.add') }}</button>
         </div>
 
         @if (showInvoiceForm()) {
           <form class="panel" [formGroup]="invoiceForm" (ngSubmit)="submitInvoice()">
-            <div class="hint" style="margin-bottom:8px;">{{ t('expenses.addHint') }}</div>
+            <div class="hint" style="margin-bottom:8px;">{{ editingInv() ? t('expenses.editHint') : t('expenses.addHint') }}</div>
             <div class="form-grid">
               <div class="field">
                 <label for="inv-supplier">{{ t('expenses.payee') }}</label>
@@ -96,12 +96,14 @@
               </div>
             </div>
 
-            <label style="display:flex; align-items:center; gap:8px; margin:12px 0 8px; font-size:13px; font-weight:600; color:var(--ink-soft);">
-              <input type="checkbox" formControlName="isWater" style="width:16px; height:16px; accent-color:var(--accent);" />
-              {{ t('expenses.water') }}
-            </label>
+            @if (!editingInv()) {
+              <label style="display:flex; align-items:center; gap:8px; margin:12px 0 8px; font-size:13px; font-weight:600; color:var(--ink-soft);">
+                <input type="checkbox" formControlName="isWater" style="width:16px; height:16px; accent-color:var(--accent);" />
+                {{ t('expenses.water') }}
+              </label>
+            }
 
-            @if (invoiceForm.controls.isWater.value) {
+            @if (invoiceForm.controls.isWater.value && !editingInv()) {
               <div class="form-grid">
                 <div class="field">
                   <label for="inv-sub">{{ t('field.subscriptionAmount') }}</label>
@@ -122,8 +124,8 @@
             }
 
             <div class="form-actions">
-              <button class="btn primary" type="submit" [disabled]="invoiceForm.invalid || saving()">{{ t('btn.add') }}</button>
-              <button class="btn ghost" type="button" (click)="showInvoiceForm.set(false)">{{ t('btn.cancel') }}</button>
+              <button class="btn primary" type="submit" [disabled]="invoiceForm.invalid || saving()">{{ editingInv() ? t('btn.save') : t('btn.add') }}</button>
+              <button class="btn ghost" type="button" (click)="cancelInvoiceForm()">{{ t('btn.cancel') }}</button>
             </div>
           </form>
         }
@@ -162,6 +164,8 @@
                       @if (inv.status !== 'PAID') {
                         <button class="btn sm" type="button" [disabled]="saving()" (click)="payInvoice(inv)">{{ t('expenses.pay') }}</button>
                       }
+                      <button class="btn sm ghost" type="button" [disabled]="saving()" (click)="startEdit(inv)">{{ t('btn.edit') }}</button>
+                      <button class="btn sm ghost danger" type="button" [disabled]="saving()" (click)="deleteInvoice(inv)">{{ t('btn.delete') }}</button>
                     </td>
                   </tr>
                 }

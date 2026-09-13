@@ -39,6 +39,7 @@ export class ExpensesComponent implements OnInit {
   readonly saving = signal(false);
   readonly showExForm = signal(false);
   readonly showInvoiceForm = signal(false);
+  readonly editingInv = signal<InvoiceRow | null>(null);
 
   readonly selectedExercise = computed(() => this.exercises().find((e) => e.id === this.selectedExId()) ?? null);
 
@@ -187,6 +188,33 @@ export class ExpensesComponent implements OnInit {
     });
   }
 
+  startAdd(): void {
+    this.editingInv.set(null);
+    this.invoiceForm.reset({ isWater: false, fund: 'COURANT' });
+    this.showInvoiceForm.set(true);
+  }
+
+  startEdit(inv: InvoiceRow): void {
+    this.editingInv.set(inv);
+    this.invoiceForm.reset({
+      supplierName: inv.supplierName,
+      invoiceDate: inv.invoiceDate,
+      category: inv.category ?? '',
+      fund: (inv.fund === 'TRAVAUX' ? 'TRAVAUX' : 'COURANT'),
+      isWater: false,
+      amount: Number(inv.amount),
+      subscription: null,
+      consumption: null,
+    });
+    this.showInvoiceForm.set(true);
+  }
+
+  cancelInvoiceForm(): void {
+    this.showInvoiceForm.set(false);
+    this.editingInv.set(null);
+    this.invoiceForm.reset({ isWater: false, fund: 'COURANT' });
+  }
+
   async submitInvoice(): Promise<void> {
     const cop = this.copId();
     const ex = this.selectedExId();
@@ -200,39 +228,73 @@ export class ExpensesComponent implements OnInit {
       const supplier = existing ?? (await firstValueFrom(this.api.createSupplier(cop, v.supplierName.trim())));
       if (!existing) this.suppliers.update((list) => [...list, supplier]);
 
-      const period = this.selectedExercise()?.label ?? undefined;
-      let amount: number;
-      let distributions;
-      if (v.isWater) {
-        const sub = Number(v.subscription ?? 0);
-        const cons = Number(v.consumption ?? 0);
-        amount = Math.round((sub + cons) * 100) / 100;
-        distributions = [
-          { keyCode: 'GENERAL' as const, label: 'Abonnement', amount: sub },
-          { keyCode: 'EAU' as const, label: 'Consommation', amount: cons, periodLabel: period },
-        ];
+      const editing = this.editingInv();
+      if (editing) {
+        // Correction d'une facture/dépense existante. Le montant (scalaire)
+        // ré-échelonne côté serveur la ventilation existante à l'identique.
+        await firstValueFrom(
+          this.api.updateInvoice(cop, editing.id, {
+            supplierId: supplier.id,
+            invoiceDate: v.invoiceDate,
+            amount: Number(v.amount ?? 0),
+            category: v.category || null,
+            fund: v.fund,
+          }),
+        );
       } else {
-        amount = Number(v.amount ?? 0);
-      }
+        const period = this.selectedExercise()?.label ?? undefined;
+        let amount: number;
+        let distributions;
+        if (v.isWater) {
+          const sub = Number(v.subscription ?? 0);
+          const cons = Number(v.consumption ?? 0);
+          amount = Math.round((sub + cons) * 100) / 100;
+          distributions = [
+            { keyCode: 'GENERAL' as const, label: 'Abonnement', amount: sub },
+            { keyCode: 'EAU' as const, label: 'Consommation', amount: cons, periodLabel: period },
+          ];
+        } else {
+          amount = Number(v.amount ?? 0);
+        }
 
-      await firstValueFrom(
-        this.api.createInvoice(cop, {
-          supplierId: supplier.id,
-          exerciseId: ex,
-          invoiceDate: v.invoiceDate,
-          amount,
-          category: v.category || null,
-          fund: v.fund,
-          distributions,
-        }),
-      );
-      this.invoiceForm.reset({ isWater: false, fund: 'COURANT' });
-      this.showInvoiceForm.set(false);
+        await firstValueFrom(
+          this.api.createInvoice(cop, {
+            supplierId: supplier.id,
+            exerciseId: ex,
+            invoiceDate: v.invoiceDate,
+            amount,
+            category: v.category || null,
+            fund: v.fund,
+            distributions,
+          }),
+        );
+      }
+      this.cancelInvoiceForm();
       this.loadInvoices();
       this.charges.set(null);
     } finally {
       this.saving.set(false);
     }
+  }
+
+  deleteInvoice(inv: InvoiceRow): void {
+    const cop = this.copId();
+    if (!cop) return;
+    if (!confirm(this.confirmDeleteText(inv))) return;
+    this.saving.set(true);
+    this.api.deleteInvoice(cop, inv.id).subscribe({
+      next: () => {
+        if (this.editingInv()?.id === inv.id) this.cancelInvoiceForm();
+        this.loadInvoices();
+        this.charges.set(null);
+        this.saving.set(false);
+      },
+      error: () => this.saving.set(false),
+    });
+  }
+
+  private confirmDeleteText(inv: InvoiceRow): string {
+    return `${inv.supplierName} · ${Number(inv.amount).toFixed(2)} € — supprimer définitivement cette dépense ?`;
   }
 
   computeCharges(): void {

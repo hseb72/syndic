@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { sql } from 'kysely';
 import { db } from '../../db/index.js';
+import { distribute } from '../../util/money.js';
 import { ensureGeneralKey, ensureWaterKey } from '../distribution/service.js';
 
 export interface InvoiceDistributionInput {
@@ -79,6 +80,89 @@ export async function createInvoice(copropertyId: string, input: CreateInvoiceIn
   });
 
   return db.selectFrom('supplier_invoice').selectAll().where('id', '=', invoiceId).executeTakeFirstOrThrow();
+}
+
+export interface UpdateInvoiceInput {
+  supplierId?: string;
+  invoiceDate?: string;
+  amount?: number;
+  category?: string | null;
+  fund?: 'COURANT' | 'TRAVAUX';
+  invoiceNumber?: string | null;
+  dueDate?: string | null;
+}
+
+/**
+ * Corrige une facture/dépense. Les champs sont modifiables librement ; si le
+ * montant change, les portions de ventilation sont ré-échelonnées à
+ * l'identique (le partage GÉNÉRAL/EAU est conservé), pour que charges et
+ * régularisation restent cohérentes.
+ */
+export async function updateInvoice(copropertyId: string, invoiceId: string, input: UpdateInvoiceInput) {
+  const inv = await db
+    .selectFrom('supplier_invoice')
+    .select(['id', 'amount'])
+    .where('id', '=', invoiceId)
+    .where('coproperty_id', '=', copropertyId)
+    .executeTakeFirst();
+  if (!inv) throw Object.assign(new Error('Facture introuvable.'), { statusCode: 404 });
+
+  await db.transaction().execute(async (tx) => {
+    const set: Record<string, unknown> = {};
+    if (input.supplierId !== undefined) set['supplier_id'] = input.supplierId;
+    if (input.invoiceDate !== undefined) set['invoice_date'] = input.invoiceDate;
+    if (input.category !== undefined) set['category'] = input.category;
+    if (input.fund !== undefined) set['fund'] = input.fund;
+    if (input.invoiceNumber !== undefined) set['invoice_number'] = input.invoiceNumber;
+    if (input.dueDate !== undefined) set['due_date'] = input.dueDate;
+    if (input.amount !== undefined) set['amount'] = input.amount;
+    if (Object.keys(set).length > 0) {
+      await tx.updateTable('supplier_invoice').set(set).where('id', '=', invoiceId).execute();
+    }
+
+    if (input.amount !== undefined && Math.abs(input.amount - Number(inv.amount)) > CENT) {
+      const portions = await tx
+        .selectFrom('invoice_distribution')
+        .select(['id', 'amount'])
+        .where('supplier_invoice_id', '=', invoiceId)
+        .execute();
+      if (portions.length > 0) {
+        const scaled = distribute(input.amount, portions.map((p) => Number(p.amount)));
+        for (let i = 0; i < portions.length; i++) {
+          await tx.updateTable('invoice_distribution').set({ amount: scaled[i]! }).where('id', '=', portions[i]!.id).execute();
+        }
+      }
+    }
+  });
+
+  return db.selectFrom('supplier_invoice').selectAll().where('id', '=', invoiceId).executeTakeFirstOrThrow();
+}
+
+/**
+ * Supprime une facture/dépense créée par erreur. Retire aussi ses portions de
+ * ventilation, ses paiements fournisseurs et les rapprochements bancaires qui
+ * s'y rattachaient (la ligne bancaire redevient disponible).
+ */
+export async function deleteInvoice(copropertyId: string, invoiceId: string) {
+  const inv = await db
+    .selectFrom('supplier_invoice')
+    .select('id')
+    .where('id', '=', invoiceId)
+    .where('coproperty_id', '=', copropertyId)
+    .executeTakeFirst();
+  if (!inv) throw Object.assign(new Error('Facture introuvable.'), { statusCode: 404 });
+
+  await db.transaction().execute(async (tx) => {
+    await tx
+      .deleteFrom('bank_reconciliation')
+      .where('target_type', '=', 'SUPPLIER_PAYMENT')
+      .where('target_id', 'in', (eb) => eb.selectFrom('supplier_payment').select('id').where('supplier_invoice_id', '=', invoiceId))
+      .execute();
+    await tx.deleteFrom('supplier_payment').where('supplier_invoice_id', '=', invoiceId).execute();
+    await tx.deleteFrom('invoice_distribution').where('supplier_invoice_id', '=', invoiceId).execute();
+    await tx.deleteFrom('supplier_invoice').where('id', '=', invoiceId).execute();
+  });
+  return { deleted: true };
 }
 
 export async function listInvoices(copropertyId: string, exerciseId?: string) {

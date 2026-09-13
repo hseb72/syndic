@@ -100,6 +100,16 @@ export interface CreateInvoiceInput {
   distributions?: InvoiceDistributionInput[];
 }
 
+export interface UpdateInvoiceInput {
+  supplierId?: string;
+  invoiceDate?: string;
+  amount?: number;
+  category?: string | null;
+  fund?: 'COURANT' | 'TRAVAUX';
+  invoiceNumber?: string | null;
+  dueDate?: string | null;
+}
+
 export interface ChargesResult {
   exerciseId: string;
   total: number;
@@ -505,6 +515,14 @@ export class ApiService {
 
   createInvoice(copId: string, input: CreateInvoiceInput): Observable<unknown> {
     return this.http.post(`/api/coproperties/${copId}/invoices`, input);
+  }
+
+  updateInvoice(copId: string, invoiceId: string, input: UpdateInvoiceInput): Observable<unknown> {
+    return this.http.patch(`/api/coproperties/${copId}/invoices/${invoiceId}`, input);
+  }
+
+  deleteInvoice(copId: string, invoiceId: string): Observable<unknown> {
+    return this.http.delete(`/api/coproperties/${copId}/invoices/${invoiceId}`);
   }
 
   getCharges(copId: string, exerciseId: string): Observable<ChargesResult> {
