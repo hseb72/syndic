@@ -179,7 +179,8 @@
     "amount": "Importo",
     "paid": "Pagato",
     "status": "Stato",
-    "charge": "Spesa"
+    "charge": "Spesa",
+    "nature": "Natura"
   },
   "field": {
     "name": "Nome",
@@ -284,6 +285,12 @@
     "BANQUE": "Spese bancarie",
     "IMPOTS": "Imposte",
     "APPEL_FONDS": "Chiamata fondi",
+    "AUTRE": "Altro"
+  },
+  "recnat": {
+    "PROVISION": "Acconto",
+    "REGULARISATION": "Conguaglio",
+    "HORS_BUDGET": "Fuori budget",
     "AUTRE": "Altro"
   }
 }

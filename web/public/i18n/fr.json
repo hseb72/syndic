@@ -179,7 +179,8 @@
     "amount": "Montant",
     "paid": "Payé",
     "status": "Statut",
-    "charge": "Charge"
+    "charge": "Charge",
+    "nature": "Nature"
   },
   "field": {
     "name": "Nom",
@@ -284,6 +285,12 @@
     "BANQUE": "Frais bancaires",
     "IMPOTS": "Impôts & taxes",
     "APPEL_FONDS": "Appel de fonds",
+    "AUTRE": "Autre"
+  },
+  "recnat": {
+    "PROVISION": "Provision",
+    "REGULARISATION": "Régularisation",
+    "HORS_BUDGET": "Hors budget",
     "AUTRE": "Autre"
   }
 }

@@ -181,6 +181,8 @@
               <tr>
                 <th>{{ t('th.lot') }}</th>
                 <th>{{ t('th.owner') }}</th>
+                <th>{{ t('th.nature') }}</th>
+                <th>{{ t('mine.exercise') }}</th>
                 <th class="num">{{ t('th.amount') }}</th>
                 <th class="num">{{ t('th.paid') }}</th>
                 <th class="num">{{ t('cash.remaining') }}</th>
@@ -193,6 +195,8 @@
                 <tr>
                   <td>{{ r.lotNumber }}</td>
                   <td>{{ r.personName }}</td>
+                  <td><span class="pill neutral">{{ t('recnat.' + r.nature) }}</span></td>
+                  <td>{{ r.exercise || '—' }}</td>
                   <td class="num">{{ num(r.amount) | number: '1.2-2' }}</td>
                   <td class="num">{{ num(r.allocated) | number: '1.2-2' }}</td>
                   <td class="num" style="font-weight:600;">{{ r.remaining | number: '1.2-2' }}</td>

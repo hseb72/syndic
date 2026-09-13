@@ -120,6 +120,7 @@ export interface MyReceivable {
   id: string;
   lotNumber: string;
   exercise: string | null;
+  nature: string;
   amount: string;
   paid: string;
   remaining: number;
@@ -244,6 +245,8 @@ export interface ReceivableRow {
   remaining: number;
   dueDate: string;
   status: string;
+  nature: string;
+  exercise: string | null;
 }
 
 export interface RegularisationResult {

@@ -215,6 +215,7 @@ export interface ReceivableTable {
   exercise_id: string;
   source_type: string;
   source_id: string;
+  nature: Generated<string>; // PROVISION | REGULARISATION | HORS_BUDGET | AUTRE
   amount: Numeric;
   due_date: DateString;
   status: Generated<string>;

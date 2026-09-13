@@ -184,6 +184,7 @@ export async function generateRegularisation(copropertyId: string, input: Genera
             exercise_id: input.exerciseN1Id,
             source_type: 'FUND_CALL_ITEM',
             source_id: itemId,
+            nature: 'REGULARISATION',
             amount: amt,
             due_date: input.dueDate,
           })

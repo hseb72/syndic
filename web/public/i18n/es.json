@@ -179,7 +179,8 @@
     "amount": "Importe",
     "paid": "Pagado",
     "status": "Estado",
-    "charge": "Gasto"
+    "charge": "Gasto",
+    "nature": "Naturaleza"
   },
   "field": {
     "name": "Nombre",
@@ -284,6 +285,12 @@
     "BANQUE": "Gastos bancarios",
     "IMPOTS": "Impuestos",
     "APPEL_FONDS": "Derrama",
+    "AUTRE": "Otro"
+  },
+  "recnat": {
+    "PROVISION": "Provisión",
+    "REGULARISATION": "Regularización",
+    "HORS_BUDGET": "Fuera de presupuesto",
     "AUTRE": "Otro"
   }
 }

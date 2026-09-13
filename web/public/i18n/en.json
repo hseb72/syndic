@@ -179,7 +179,8 @@
     "amount": "Amount",
     "paid": "Paid",
     "status": "Status",
-    "charge": "Charge"
+    "charge": "Charge",
+    "nature": "Type"
   },
   "field": {
     "name": "Name",
@@ -284,6 +285,12 @@
     "BANQUE": "Bank fees",
     "IMPOTS": "Taxes",
     "APPEL_FONDS": "Fund call",
+    "AUTRE": "Other"
+  },
+  "recnat": {
+    "PROVISION": "Provision",
+    "REGULARISATION": "Adjustment",
+    "HORS_BUDGET": "Off-budget",
     "AUTRE": "Other"
   }
 }

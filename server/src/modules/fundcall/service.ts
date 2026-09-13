@@ -59,6 +59,10 @@ export async function createProvisionCall(copropertyId: string, input: CreatePro
   const lots = await lotsWithSharesAndOwners(copropertyId, keyId);
   const amounts = distribute(input.totalAmount, lots.map((l) => l.share));
 
+  const callType = input.callType ?? 'PROVISION';
+  // Nature de la créance déduite du type d'appel (figée sur la créance).
+  const nature = callType === 'EXCEPTIONNEL' ? 'HORS_BUDGET' : 'PROVISION';
+
   const fundCallId = randomUUID();
   await db.transaction().execute(async (tx) => {
     await tx
@@ -67,7 +71,7 @@ export async function createProvisionCall(copropertyId: string, input: CreatePro
         id: fundCallId,
         coproperty_id: copropertyId,
         exercise_id: input.exerciseId,
-        call_type: input.callType ?? 'PROVISION',
+        call_type: callType,
         label: input.label,
         issue_date: input.issueDate,
         due_date: input.dueDate,
@@ -108,6 +112,7 @@ export async function createProvisionCall(copropertyId: string, input: CreatePro
             exercise_id: input.exerciseId,
             source_type: 'FUND_CALL_ITEM',
             source_id: itemId,
+            nature,
             amount: amt,
             due_date: input.dueDate,
           })

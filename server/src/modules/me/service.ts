@@ -6,6 +6,7 @@ export interface MyReceivable {
   id: string;
   lotNumber: string;
   exercise: string | null;
+  nature: string;
   amount: string;
   paid: string;
   remaining: number;
@@ -63,12 +64,13 @@ export async function getMySummary(userId: string, copId: string, exerciseId?: s
     id: string;
     lotNumber: string;
     exercise: string | null;
+    nature: string;
     amount: string;
     paid: string;
     dueDate: string;
     status: string;
   }>`
-    select r.id, l.lot_number as "lotNumber", ex.label as exercise,
+    select r.id, l.lot_number as "lotNumber", ex.label as exercise, r.nature,
            r.amount, r.due_date as "dueDate", r.status,
            coalesce((select sum(pa.amount) from payment_allocation pa where pa.receivable_id = r.id), 0) as paid
     from receivable r
@@ -88,6 +90,7 @@ export async function getMySummary(userId: string, copId: string, exerciseId?: s
     id: r.id,
     lotNumber: r.lotNumber,
     exercise: r.exercise,
+    nature: r.nature,
     amount: r.amount,
     paid: String(r.paid),
     remaining: Math.round((Number(r.amount) - Number(r.paid)) * 100) / 100,

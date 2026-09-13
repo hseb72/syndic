@@ -12,6 +12,8 @@ export interface ReceivableRow {
   remaining: number;
   dueDate: string;
   status: string;
+  nature: string;
+  exercise: string | null;
 }
 
 interface Raw {
@@ -26,6 +28,8 @@ interface Raw {
   allocated: string;
   dueDate: string;
   status: string;
+  nature: string;
+  exercise: string | null;
 }
 
 /**
@@ -45,10 +49,13 @@ export async function listReceivables(copropertyId: string, exerciseId?: string)
            r.amount,
            coalesce((select sum(pa.amount) from payment_allocation pa where pa.receivable_id = r.id), 0) as allocated,
            r.due_date     as "dueDate",
-           r.status
+           r.status,
+           r.nature,
+           ex.label       as "exercise"
     from receivable r
     join lot l    on l.id = r.lot_id
     join person p on p.id = r.person_id
+    join accounting_exercise ex on ex.id = r.exercise_id
     where r.coproperty_id = ${copropertyId}
       ${exerciseId ? sql`and r.exercise_id = ${exerciseId}` : sql``}
     order by l.created_at asc
@@ -68,6 +75,8 @@ export async function listReceivables(copropertyId: string, exerciseId?: string)
       remaining,
       dueDate: r.dueDate,
       status: r.status,
+      nature: r.nature,
+      exercise: r.exercise,
     };
   });
 }

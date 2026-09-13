@@ -179,7 +179,8 @@
     "amount": "Betrag",
     "paid": "Bezahlt",
     "status": "Status",
-    "charge": "Kosten"
+    "charge": "Kosten",
+    "nature": "Art"
   },
   "field": {
     "name": "Name",
@@ -284,6 +285,12 @@
     "BANQUE": "Bankgebühren",
     "IMPOTS": "Steuern",
     "APPEL_FONDS": "Mittelabruf",
+    "AUTRE": "Sonstige"
+  },
+  "recnat": {
+    "PROVISION": "Vorschuss",
+    "REGULARISATION": "Abrechnung",
+    "HORS_BUDGET": "Außerplanmäßig",
     "AUTRE": "Sonstige"
   }
 }

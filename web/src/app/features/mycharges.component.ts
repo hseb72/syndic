@@ -63,6 +63,7 @@ const EX_STORAGE_KEY = 'syndic.exId';
                   <thead>
                     <tr>
                       <th>{{ t('mine.exercise') }}</th>
+                      <th>{{ t('th.nature') }}</th>
                       <th>{{ t('th.lot') }}</th>
                       <th class="num">{{ t('th.amount') }}</th>
                       <th class="num">{{ t('th.paid') }}</th>
@@ -74,6 +75,7 @@ const EX_STORAGE_KEY = 'syndic.exId';
                     @for (r of d.receivables; track r.id) {
                       <tr>
                         <td>{{ r.exercise }}</td>
+                        <td><span class="pill neutral">{{ t('recnat.' + r.nature) }}</span></td>
                         <td>{{ r.lotNumber }}</td>
                         <td class="num">{{ num(r.amount) | number: '1.2-2' }}</td>
                         <td class="num">{{ num(r.paid) | number: '1.2-2' }}</td>
