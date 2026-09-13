@@ -172,7 +172,16 @@
     "category": "Categoria",
     "comment": "Commento",
     "commentPlaceholder": "Nota…",
-    "confirmImport": "Importa queste righe"
+    "confirmImport": "Importa queste righe",
+    "recoCredit": "Incasso condomino",
+    "recoDebit": "Pagamento fornitore",
+    "allocated": "Assegnato",
+    "allOwners": "Tutti i condomini",
+    "noReceivable": "Nessun credito aperto per questo condomino.",
+    "noInvoice": "Nessuna fattura da saldare. Crea la spesa.",
+    "allocate": "Assegna",
+    "createExpense": "Crea la spesa",
+    "createExpenseHint": "Crea una spesa da questa riga (importo = riga), poi riconcilia."
   },
   "th": {
     "lot": "Unità",

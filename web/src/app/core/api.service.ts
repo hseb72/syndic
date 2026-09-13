@@ -178,6 +178,17 @@ export interface PayerSuggestion {
   lotNumber: string;
 }
 
+export interface InvoiceSuggestion {
+  id: string;
+  supplierName: string;
+  invoiceNumber: string | null;
+  invoiceDate: string;
+  category: string | null;
+  amount: string;
+  remaining: number;
+  score: number;
+}
+
 export interface BankImportRow {
   transactionDate: string;
   amount: number;
@@ -630,6 +641,22 @@ export class ApiService {
 
   suggestPayers(copId: string, txId: string): Observable<PayerSuggestion[]> {
     return this.http.get<PayerSuggestion[]>(`/api/coproperties/${copId}/bank-transactions/${txId}/suggest`);
+  }
+
+  suggestInvoices(copId: string, txId: string): Observable<InvoiceSuggestion[]> {
+    return this.http.get<InvoiceSuggestion[]>(`/api/coproperties/${copId}/bank-transactions/${txId}/suggest-invoices`);
+  }
+
+  reconcileTransaction(
+    copId: string,
+    txId: string,
+    input: {
+      payerPersonId?: string | null;
+      receivableAllocations?: { receivableId: string; amount: number }[];
+      invoiceAllocations?: { invoiceId: string; amount: number }[];
+    },
+  ): Observable<{ reconciled: number }> {
+    return this.http.post<{ reconciled: number }>(`/api/coproperties/${copId}/bank-transactions/${txId}/reconcile`, input);
   }
 
   recordOwnerPaymentFromLine(copId: string, txId: string, personId: string): Observable<unknown> {

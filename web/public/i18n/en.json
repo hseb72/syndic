@@ -172,7 +172,16 @@
     "category": "Category",
     "comment": "Comment",
     "commentPlaceholder": "Note…",
-    "confirmImport": "Import these lines"
+    "confirmImport": "Import these lines",
+    "recoCredit": "Owner payment",
+    "recoDebit": "Supplier payment",
+    "allocated": "Allocated",
+    "allOwners": "All owners",
+    "noReceivable": "No open receivable for this owner.",
+    "noInvoice": "No unpaid invoice. Create the expense.",
+    "allocate": "Allocate",
+    "createExpense": "Create expense",
+    "createExpenseHint": "Creates an expense from this line (amount = line), then reconcile."
   },
   "th": {
     "lot": "Unit",

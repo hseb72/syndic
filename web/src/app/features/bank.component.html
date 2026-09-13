@@ -144,29 +144,97 @@
                     </span>
                   </td>
                   <td style="text-align:right; white-space:nowrap;">
-                    @if (tx.status !== 'RECONCILED' && tx.direction === 'CREDIT') {
-                      <button class="btn sm" type="button" (click)="startReconcile(tx)">{{ t('bank.reconcile') }}</button>
+                    @if (tx.status !== 'RECONCILED') {
+                      <button class="btn sm" type="button" (click)="openReconcile(tx)">{{ t('bank.reconcile') }}</button>
                     }
                   </td>
                 </tr>
-                @if (activeTxId() === tx.id) {
+                @if (reconcileTx()?.id === tx.id) {
                   <tr>
                     <td colspan="7" style="background:var(--surface-2);">
-                      <div style="padding:6px 4px;">
-                        <span style="font-size:13px; font-weight:600; color:var(--ink-soft); margin-right:8px;">
-                          {{ t('bank.isPaymentFrom') }}
-                        </span>
-                        @if (loadingSuggest()) {
+                      <div style="padding:8px 4px;">
+                        <div class="hint" style="margin-bottom:8px;">
+                          {{ isCredit(tx) ? t('bank.recoCredit') : t('bank.recoDebit') }} ·
+                          {{ t('cash.remaining') }} : <strong>{{ tx.remaining | number: '1.2-2' }} €</strong> ·
+                          {{ t('bank.allocated') }} : <strong [class.good]="totalAllocated() > 0">{{ totalAllocated() | number: '1.2-2' }} €</strong>
+                        </div>
+
+                        @if (loadingReco()) {
                           <span class="pill neutral">{{ t('health.checking') }}</span>
-                        } @else if (suggestions().length === 0) {
-                          <span style="color:var(--muted); font-size:13px;">{{ t('bank.noSuggestion') }}</span>
+                        } @else if (isCredit(tx)) {
+                          <!-- Crédit : encaissement copropriétaire -->
+                          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:8px;">
+                            <span style="font-size:13px; color:var(--ink-soft);">{{ t('bank.isPaymentFrom') }}</span>
+                            @for (s of payers(); track s.personId) {
+                              <button class="btn sm" type="button" [class.primary]="payerId() === s.personId" (click)="pickPayer(s.personId)">{{ s.name }} · {{ t('th.lot') }} {{ s.lotNumber }}</button>
+                            }
+                            <button class="btn sm ghost" type="button" (click)="loadAllReceivables()">{{ t('bank.allOwners') }}</button>
+                          </div>
+                          @if (receivables().length === 0) {
+                            <div class="empty">{{ t('bank.noReceivable') }}</div>
+                          } @else {
+                            <div class="table-wrap">
+                              <table>
+                                <thead><tr><th>{{ t('th.owner') }}</th><th>{{ t('th.nature') }}</th><th>{{ t('mine.exercise') }}</th><th>{{ t('th.lot') }}</th><th class="num">{{ t('cash.remaining') }}</th><th class="num">{{ t('bank.allocate') }}</th></tr></thead>
+                                <tbody>
+                                  @for (r of receivables(); track r.id) {
+                                    <tr>
+                                      <td>{{ r.personName }}</td>
+                                      <td><span class="pill neutral">{{ t('recnat.' + r.nature) }}</span></td>
+                                      <td>{{ r.exercise || '—' }}</td>
+                                      <td>{{ r.lotNumber }}</td>
+                                      <td class="num">{{ r.remaining | number: '1.2-2' }}</td>
+                                      <td class="num"><input type="text" inputmode="decimal" [value]="amountOf(r.id) || ''" (change)="setAmount(r.id, $any($event.target).value)" style="width:90px; text-align:right;" /></td>
+                                    </tr>
+                                  }
+                                </tbody>
+                              </table>
+                            </div>
+                          }
                         } @else {
-                          @for (s of suggestions(); track s.personId) {
-                            <button class="btn sm primary" type="button" style="margin:2px 4px 2px 0;" [disabled]="saving()" (click)="record(tx, s.personId)">
-                              {{ s.name }} · {{ t('th.lot') }} {{ s.lotNumber }}
-                            </button>
+                          <!-- Débit : décaissement fournisseur -->
+                          @if (invoiceSug().length === 0 && !showCreateExpense()) {
+                            <div class="empty">{{ t('bank.noInvoice') }}</div>
+                          }
+                          @if (invoiceSug().length > 0) {
+                            <div class="table-wrap">
+                              <table>
+                                <thead><tr><th>{{ t('th.supplier') }}</th><th>{{ t('th.date') }}</th><th>{{ t('th.category') }}</th><th class="num">{{ t('cash.remaining') }}</th><th class="num">{{ t('bank.allocate') }}</th></tr></thead>
+                                <tbody>
+                                  @for (inv of invoiceSug(); track inv.id) {
+                                    <tr>
+                                      <td>{{ inv.supplierName }}</td>
+                                      <td>{{ inv.invoiceDate }}</td>
+                                      <td>{{ inv.category || '—' }}</td>
+                                      <td class="num">{{ inv.remaining | number: '1.2-2' }}</td>
+                                      <td class="num"><input type="text" inputmode="decimal" [value]="amountOf(inv.id) || ''" (change)="setAmount(inv.id, $any($event.target).value)" style="width:90px; text-align:right;" /></td>
+                                    </tr>
+                                  }
+                                </tbody>
+                              </table>
+                            </div>
+                          }
+                          @if (showCreateExpense()) {
+                            <div class="panel" style="margin-top:8px;">
+                              <div class="hint" style="margin-bottom:6px;">{{ t('bank.createExpenseHint') }}</div>
+                              <div class="form-grid">
+                                <div class="field"><label>{{ t('expenses.payee') }}</label><input type="text" [(ngModel)]="ceName" /></div>
+                                <div class="field"><label>{{ t('field.category') }}</label><input type="text" [(ngModel)]="ceCategory" /></div>
+                              </div>
+                              <div class="form-actions">
+                                <button class="btn primary" type="button" [disabled]="!ceName.trim() || saving()" (click)="submitCreateExpense()">{{ t('bank.createExpense') }}</button>
+                                <button class="btn ghost" type="button" (click)="showCreateExpense.set(false)">{{ t('btn.cancel') }}</button>
+                              </div>
+                            </div>
+                          } @else {
+                            <button class="btn sm ghost" type="button" style="margin-top:8px;" (click)="startCreateExpense()">+ {{ t('bank.createExpense') }}</button>
                           }
                         }
+
+                        <div class="form-actions" style="margin-top:10px;">
+                          <button class="btn primary" type="button" [disabled]="totalAllocated() <= 0 || saving()" (click)="reconcile()">{{ t('bank.reconcile') }}</button>
+                          <button class="btn ghost" type="button" (click)="reconcileTx.set(null)">{{ t('btn.cancel') }}</button>
+                        </div>
                       </div>
                     </td>
                   </tr>

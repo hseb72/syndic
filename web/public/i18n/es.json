@@ -172,7 +172,16 @@
     "category": "Categoría",
     "comment": "Comentario",
     "commentPlaceholder": "Nota…",
-    "confirmImport": "Importar estas líneas"
+    "confirmImport": "Importar estas líneas",
+    "recoCredit": "Cobro del propietario",
+    "recoDebit": "Pago a proveedor",
+    "allocated": "Asignado",
+    "allOwners": "Todos los propietarios",
+    "noReceivable": "Ninguna deuda abierta para este propietario.",
+    "noInvoice": "Ninguna factura pendiente. Cree el gasto.",
+    "allocate": "Asignar",
+    "createExpense": "Crear el gasto",
+    "createExpenseHint": "Crea un gasto a partir de esta línea (importe = línea) y concilia."
   },
   "th": {
     "lot": "Finca",

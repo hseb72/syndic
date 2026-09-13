@@ -7,7 +7,9 @@ import {
   importTransactions,
   listAccounts,
   listTransactions,
+  reconcileTransaction,
   recordOwnerPaymentFromLine,
+  suggestInvoices,
   suggestPayers,
   updateTransaction,
 } from './service.js';
@@ -58,6 +60,12 @@ const updateTxSchema = z.object({
 
 const recordSchema = z.object({ personId: z.string().uuid() });
 
+const reconcileSchema = z.object({
+  payerPersonId: z.string().uuid().nullish(),
+  receivableAllocations: z.array(z.object({ receivableId: z.string().uuid(), amount: z.number().positive() })).optional(),
+  invoiceAllocations: z.array(z.object({ invoiceId: z.string().uuid(), amount: z.number().positive() })).optional(),
+});
+
 export async function bankRoutes(app: FastifyInstance): Promise<void> {
   app.get('/coproperties/:copId/bank-accounts', async (request) => {
     const { copId } = copParams.parse(request.params);
@@ -101,6 +109,17 @@ export async function bankRoutes(app: FastifyInstance): Promise<void> {
   app.get('/coproperties/:copId/bank-transactions/:txId/suggest', async (request) => {
     const { copId, txId } = txParams.parse(request.params);
     return suggestPayers(copId, txId);
+  });
+
+  app.get('/coproperties/:copId/bank-transactions/:txId/suggest-invoices', async (request) => {
+    const { copId, txId } = txParams.parse(request.params);
+    return suggestInvoices(copId, txId);
+  });
+
+  app.post('/coproperties/:copId/bank-transactions/:txId/reconcile', async (request, reply) => {
+    const { copId, txId } = txParams.parse(request.params);
+    const input = reconcileSchema.parse(request.body);
+    return reply.code(201).send(await reconcileTransaction(copId, txId, input));
   });
 
   app.post('/coproperties/:copId/bank-transactions/:txId/record-owner-payment', async (request, reply) => {

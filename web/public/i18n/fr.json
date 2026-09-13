@@ -172,7 +172,16 @@
     "category": "Catégorie",
     "comment": "Commentaire",
     "commentPlaceholder": "Note…",
-    "confirmImport": "Importer ces lignes"
+    "confirmImport": "Importer ces lignes",
+    "recoCredit": "Encaissement copropriétaire",
+    "recoDebit": "Décaissement fournisseur",
+    "allocated": "Affecté",
+    "allOwners": "Tous les copropriétaires",
+    "noReceivable": "Aucune créance ouverte pour ce copropriétaire.",
+    "noInvoice": "Aucune facture non soldée. Créez la dépense.",
+    "allocate": "À affecter",
+    "createExpense": "Créer la dépense",
+    "createExpenseHint": "Crée une dépense à partir de cette ligne (montant = ligne), puis rapproche."
   },
   "th": {
     "lot": "Lot",

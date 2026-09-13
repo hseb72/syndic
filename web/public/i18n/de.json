@@ -172,7 +172,16 @@
     "category": "Kategorie",
     "comment": "Kommentar",
     "commentPlaceholder": "Notiz…",
-    "confirmImport": "Diese Zeilen importieren"
+    "confirmImport": "Diese Zeilen importieren",
+    "recoCredit": "Eigentümer-Zahlung",
+    "recoDebit": "Lieferanten-Zahlung",
+    "allocated": "Zugeordnet",
+    "allOwners": "Alle Eigentümer",
+    "noReceivable": "Keine offene Forderung für diesen Eigentümer.",
+    "noInvoice": "Keine offene Rechnung. Ausgabe anlegen.",
+    "allocate": "Zuordnen",
+    "createExpense": "Ausgabe anlegen",
+    "createExpenseHint": "Legt aus dieser Zeile eine Ausgabe an (Betrag = Zeile) und gleicht ab."
   },
   "th": {
     "lot": "Einheit",

@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { sql } from 'kysely';
 import { db } from '../../db/index.js';
-import { createPayment } from '../payment/service.js';
+import { createPayment, allocatePayment } from '../payment/service.js';
 import { categorize } from './categorize.js';
 
 const CENT = 0.01;
@@ -201,6 +201,123 @@ export async function suggestPayers(copropertyId: string, bankTransactionId: str
     }
   }
   return matches;
+}
+
+/** Factures non soldées, proposées pour rapprocher un débit bancaire. */
+export async function suggestInvoices(copropertyId: string, bankTransactionId: string) {
+  const tx = await db
+    .selectFrom('bank_transaction')
+    .select(['label', 'amount'])
+    .where('id', '=', bankTransactionId)
+    .executeTakeFirstOrThrow();
+  const amountAbs = Math.abs(Number(tx.amount));
+  const label = (tx.label ?? '').toLowerCase();
+
+  const rows = await sql<{
+    id: string;
+    supplierName: string;
+    invoiceNumber: string | null;
+    invoiceDate: string;
+    category: string | null;
+    amount: string;
+    remaining: string;
+  }>`
+    select inv.id, s.name as "supplierName", inv.invoice_number as "invoiceNumber",
+           inv.invoice_date as "invoiceDate", inv.category, inv.amount,
+           (inv.amount - coalesce((select sum(sp.amount) from supplier_payment sp where sp.supplier_invoice_id = inv.id), 0)) as remaining
+    from supplier_invoice inv
+    join supplier s on s.id = inv.supplier_id
+    where inv.coproperty_id = ${copropertyId} and inv.status <> 'CANCELLED'
+    order by inv.invoice_date desc
+  `.execute(db);
+
+  return rows.rows
+    .map((r) => {
+      const remaining = Math.round(Number(r.remaining) * 100) / 100;
+      const nameHit = r.supplierName && label.includes(r.supplierName.toLowerCase());
+      const amountHit = Math.abs(remaining - amountAbs) <= 0.01 || Math.abs(Number(r.amount) - amountAbs) <= 0.01;
+      return { ...r, remaining, score: (amountHit ? 2 : 0) + (nameHit ? 1 : 0) };
+    })
+    .filter((r) => r.remaining > 0.01)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 20);
+}
+
+export interface ReconcileInput {
+  payerPersonId?: string | null;
+  receivableAllocations?: { receivableId: string; amount: number }[];
+  invoiceAllocations?: { invoiceId: string; amount: number }[];
+}
+
+/**
+ * Rapprochement unifié d'une ligne bancaire : on y affecte une ou plusieurs
+ * cibles — créances de copropriétaires (encaissement) et/ou factures
+ * fournisseurs (décaissement), chacune pour un montant. Autorise le partiel
+ * (la ligne garde son reste), le split (plusieurs cibles) et, combiné à
+ * plusieurs lignes vers une même cible, le paiement en plusieurs fois.
+ */
+export async function reconcileTransaction(copropertyId: string, bankTransactionId: string, input: ReconcileInput) {
+  const tx = await db
+    .selectFrom('bank_transaction as bt')
+    .innerJoin('bank_account as ba', 'ba.id', 'bt.bank_account_id')
+    .select(['bt.id as id', 'bt.transaction_date as date', 'bt.label as label'])
+    .where('bt.id', '=', bankTransactionId)
+    .where('ba.coproperty_id', '=', copropertyId)
+    .executeTakeFirst();
+  if (!tx) throw Object.assign(new Error('Ligne bancaire introuvable.'), { statusCode: 404 });
+
+  const recAllocs = (input.receivableAllocations ?? []).filter((a) => a.amount > CENT);
+  const invAllocs = (input.invoiceAllocations ?? []).filter((a) => a.amount > CENT);
+  if (recAllocs.length === 0 && invAllocs.length === 0) {
+    throw Object.assign(new Error('Aucune affectation fournie.'), { statusCode: 400 });
+  }
+
+  let reconciled = 0;
+
+  // Encaissement copropriétaire : un seul paiement, ventilé sur les créances.
+  if (recAllocs.length > 0) {
+    const sum = Math.round(recAllocs.reduce((s, a) => s + a.amount, 0) * 100) / 100;
+    const payment = await createPayment(copropertyId, {
+      personId: input.payerPersonId ?? null,
+      paymentDate: tx.date,
+      amount: sum,
+      reference: tx.label,
+      autoAllocate: false,
+    });
+    await allocatePayment(payment.id, { allocations: recAllocs });
+    await db
+      .insertInto('bank_reconciliation')
+      .values({ id: randomUUID(), bank_transaction_id: bankTransactionId, target_type: 'OWNER_PAYMENT', target_id: payment.id, amount: sum })
+      .execute();
+    reconciled += sum;
+  }
+
+  // Décaissements fournisseurs : un paiement + un lien par facture.
+  for (const a of invAllocs) {
+    await db.transaction().execute(async (trx) => {
+      const spId = randomUUID();
+      await trx
+        .insertInto('supplier_payment')
+        .values({ id: spId, supplier_invoice_id: a.invoiceId, payment_date: tx.date, amount: a.amount, reference: tx.label })
+        .execute();
+      const inv = await trx.selectFrom('supplier_invoice').select('amount').where('id', '=', a.invoiceId).executeTakeFirstOrThrow();
+      const paid = await trx
+        .selectFrom('supplier_payment')
+        .select((eb) => eb.fn.coalesce(eb.fn.sum<string>('amount'), sql<string>`0`).as('total'))
+        .where('supplier_invoice_id', '=', a.invoiceId)
+        .executeTakeFirstOrThrow();
+      if (Number(paid.total) + CENT >= Number(inv.amount)) {
+        await trx.updateTable('supplier_invoice').set({ status: 'PAID' }).where('id', '=', a.invoiceId).execute();
+      }
+      await trx
+        .insertInto('bank_reconciliation')
+        .values({ id: randomUUID(), bank_transaction_id: bankTransactionId, target_type: 'SUPPLIER_PAYMENT', target_id: spId, amount: a.amount })
+        .execute();
+    });
+    reconciled += a.amount;
+  }
+
+  return { reconciled: Math.round(reconciled * 100) / 100 };
 }
 
 /**

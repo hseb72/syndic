@@ -3,7 +3,14 @@ import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
-import { ApiService, type BankImportRow, type BankTx, type PayerSuggestion } from '../core/api.service';
+import {
+  ApiService,
+  type BankImportRow,
+  type BankTx,
+  type InvoiceSuggestion,
+  type PayerSuggestion,
+  type ReceivableRow,
+} from '../core/api.service';
 import { extractPdfPages, parseStatement } from '../core/statement-import';
 
 const COP_STORAGE_KEY = 'syndic.copId';
@@ -49,9 +56,19 @@ export class BankComponent implements OnInit {
   readonly importResult = signal<{ inserted: number; received: number } | null>(null);
   readonly saving = signal(false);
 
-  readonly activeTxId = signal<string | null>(null);
-  readonly suggestions = signal<PayerSuggestion[]>([]);
-  readonly loadingSuggest = signal(false);
+  // --- Rapprochement unifié ---
+  readonly reconcileTx = signal<BankTx | null>(null);
+  readonly payers = signal<PayerSuggestion[]>([]);
+  readonly payerId = signal<string | null>(null);
+  readonly receivables = signal<ReceivableRow[]>([]); // créances candidates (crédit)
+  readonly invoiceSug = signal<InvoiceSuggestion[]>([]); // factures candidates (débit)
+  readonly amounts = signal<Record<string, number>>({}); // cibleId -> montant affecté
+  readonly loadingReco = signal(false);
+  readonly showAllRecv = signal(false);
+  // création de dépense à la volée (débit)
+  readonly showCreateExpense = signal(false);
+  ceName = '';
+  ceCategory = '';
 
   // Import PDF : analyse côté navigateur puis revue avant import.
   readonly pdfBusy = signal(false);
@@ -218,36 +235,188 @@ export class BankComponent implements OnInit {
     });
   }
 
-  startReconcile(tx: BankTx): void {
-    if (this.activeTxId() === tx.id) {
-      this.activeTxId.set(null);
+  isCredit(tx: BankTx): boolean {
+    return tx.direction === 'CREDIT';
+  }
+
+  openReconcile(tx: BankTx): void {
+    if (this.reconcileTx()?.id === tx.id) {
+      this.reconcileTx.set(null);
       return;
     }
     const cop = this.copId();
     if (!cop) return;
-    this.activeTxId.set(tx.id);
-    this.suggestions.set([]);
-    this.loadingSuggest.set(true);
-    this.api.suggestPayers(cop, tx.id).subscribe({
-      next: (s) => {
-        this.suggestions.set(s);
-        this.loadingSuggest.set(false);
+    this.reconcileTx.set(tx);
+    this.amounts.set({});
+    this.payers.set([]);
+    this.payerId.set(null);
+    this.receivables.set([]);
+    this.invoiceSug.set([]);
+    this.showAllRecv.set(false);
+    this.showCreateExpense.set(false);
+    this.loadingReco.set(true);
+    if (this.isCredit(tx)) {
+      // Crédit : encaissement copropriétaire. On suggère le payeur.
+      this.api.suggestPayers(cop, tx.id).subscribe({
+        next: (s) => {
+          this.payers.set(s);
+          this.loadingReco.set(false);
+          if (s.length > 0) this.pickPayer(s[0]!.personId);
+        },
+        error: () => this.loadingReco.set(false),
+      });
+    } else {
+      // Débit : décaissement fournisseur. On suggère les factures non soldées.
+      this.api.suggestInvoices(cop, tx.id).subscribe({
+        next: (inv) => {
+          this.invoiceSug.set(inv);
+          this.loadingReco.set(false);
+          this.prefillInvoices(inv, tx);
+        },
+        error: () => this.loadingReco.set(false),
+      });
+    }
+  }
+
+  private lineRemaining(): number {
+    return this.reconcileTx()?.remaining ?? 0;
+  }
+
+  private prefillInvoices(inv: InvoiceSuggestion[], tx: BankTx): void {
+    // Pré-remplit la première facture qui correspond au montant de la ligne.
+    const target = inv.find((i) => Math.abs(i.remaining - tx.remaining) <= 0.01);
+    if (target) this.setAmount(target.id, Math.min(target.remaining, tx.remaining));
+  }
+
+  pickPayer(personId: string): void {
+    const cop = this.copId();
+    if (!cop) return;
+    this.payerId.set(personId);
+    this.showAllRecv.set(false);
+    this.api.listReceivables(cop).subscribe({
+      next: (rows) => {
+        const mine = rows.filter((r) => r.personId === personId && r.remaining > 0);
+        this.receivables.set(mine);
+        this.autofill(mine);
       },
-      error: () => this.loadingSuggest.set(false),
     });
   }
 
-  async record(tx: BankTx, personId: string): Promise<void> {
+  loadAllReceivables(): void {
     const cop = this.copId();
     if (!cop) return;
+    this.showAllRecv.set(true);
+    this.api.listReceivables(cop).subscribe({
+      next: (rows) => {
+        const open = rows.filter((r) => r.remaining > 0);
+        this.receivables.set(open);
+        this.autofill(open);
+      },
+    });
+  }
+
+  /** Répartit le reste de la ligne sur les créances, de la plus ancienne à la plus récente. */
+  private autofill(rows: ReceivableRow[]): void {
+    let left = this.lineRemaining();
+    const map: Record<string, number> = {};
+    for (const r of rows) {
+      if (left <= 0.01) break;
+      const amt = Math.min(r.remaining, left);
+      map[r.id] = Math.round(amt * 100) / 100;
+      left = Math.round((left - amt) * 100) / 100;
+    }
+    this.amounts.set(map);
+  }
+
+  setAmount(id: string, value: number | string): void {
+    const n = Number(String(value).replace(',', '.'));
+    this.amounts.update((m) => ({ ...m, [id]: Number.isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : 0 }));
+  }
+
+  amountOf(id: string): number {
+    return this.amounts()[id] ?? 0;
+  }
+
+  totalAllocated(): number {
+    return Math.round(Object.values(this.amounts()).reduce((s, a) => s + (a || 0), 0) * 100) / 100;
+  }
+
+  startCreateExpense(): void {
+    const tx = this.reconcileTx();
+    this.showCreateExpense.set(true);
+    this.ceName = tx?.label ?? '';
+    this.ceCategory = tx?.category ? this.transloco.translate('bankcat.' + tx.category) : '';
+  }
+
+  async submitCreateExpense(): Promise<void> {
+    const cop = this.copId();
+    const tx = this.reconcileTx();
+    if (!cop || !tx || !this.ceName.trim()) return;
     this.saving.set(true);
     try {
-      await firstValueFrom(this.api.recordOwnerPaymentFromLine(cop, tx.id, personId));
-      this.activeTxId.set(null);
-      this.load();
+      // Exercice courant.
+      const ex = await firstValueFrom(this.api.listExercises(cop));
+      let exId: string | null = null;
+      try {
+        exId = localStorage.getItem('syndic.exId');
+      } catch {
+        /* ignore */
+      }
+      const exercise = ex.find((e) => e.id === exId) ?? ex[0];
+      if (!exercise) return;
+      // Résolution du bénéficiaire (création si nouveau).
+      const suppliers = await firstValueFrom(this.api.listSuppliers(cop));
+      const name = this.ceName.trim();
+      const existing = suppliers.find((s) => s.name.toLowerCase() === name.toLowerCase());
+      const supplier = existing ?? (await firstValueFrom(this.api.createSupplier(cop, name)));
+      await firstValueFrom(
+        this.api.createInvoice(cop, {
+          supplierId: supplier.id,
+          exerciseId: exercise.id,
+          invoiceDate: tx.transactionDate,
+          amount: Math.abs(Number(tx.amount)),
+          category: this.ceCategory || null,
+        }),
+      );
+      // Recharge les suggestions ; la nouvelle facture apparaît, pré-remplie.
+      const inv = await firstValueFrom(this.api.suggestInvoices(cop, tx.id));
+      this.invoiceSug.set(inv);
+      this.prefillInvoices(inv, tx);
+      this.showCreateExpense.set(false);
     } finally {
       this.saving.set(false);
     }
+  }
+
+  reconcile(): void {
+    const cop = this.copId();
+    const tx = this.reconcileTx();
+    if (!cop || !tx) return;
+    const amounts = this.amounts();
+    this.saving.set(true);
+    const input: {
+      payerPersonId?: string | null;
+      receivableAllocations?: { receivableId: string; amount: number }[];
+      invoiceAllocations?: { invoiceId: string; amount: number }[];
+    } = {};
+    if (this.isCredit(tx)) {
+      input.payerPersonId = this.payerId();
+      input.receivableAllocations = this.receivables()
+        .filter((r) => (amounts[r.id] ?? 0) > 0)
+        .map((r) => ({ receivableId: r.id, amount: amounts[r.id]! }));
+    } else {
+      input.invoiceAllocations = this.invoiceSug()
+        .filter((i) => (amounts[i.id] ?? 0) > 0)
+        .map((i) => ({ invoiceId: i.id, amount: amounts[i.id]! }));
+    }
+    this.api.reconcileTransaction(cop, tx.id, input).subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.reconcileTx.set(null);
+        this.load();
+      },
+      error: () => this.saving.set(false),
+    });
   }
 
   num(n: string | number): number {
