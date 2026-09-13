@@ -17,7 +17,8 @@
     "acc": "Accounting",
     "mine": "My charges",
     "reports": "Reports",
-    "notices": "Notices"
+    "notices": "Notices",
+    "assemblies": "Meetings"
   },
   "health": {
     "label": "API status",
@@ -314,5 +315,69 @@
     "paid": "Paid",
     "cancelled": "Cancelled",
     "confirmCancel": "Cancel this notice? Its receivables become available again."
+  },
+  "asm": {
+    "title": "General meetings",
+    "hint": "Prepare the notice: agenda, majorities and annexes (account reports). A meeting can cover several years.",
+    "new": "New meeting",
+    "kind": "Type",
+    "ordinary": "Ordinary",
+    "extraordinary": "Extraordinary",
+    "meetingDate": "Meeting date",
+    "meetingTime": "Time",
+    "location": "Location",
+    "convocationDate": "Sent on",
+    "empty": "No meeting. Create one.",
+    "edit": "Open",
+    "confirmDelete": "Delete this meeting?",
+    "agenda": "Agenda",
+    "viewConvocation": "View notice",
+    "noResolution": "No resolution. Add agenda items.",
+    "resolution": "Resolution",
+    "resolutionPlaceholder": "Item title…",
+    "majority": "Majority",
+    "addResolution": "Add resolution",
+    "quickAdd": "Common resolutions:",
+    "presetApproval": "Approval of accounts",
+    "presetQuitus": "Discharge of the syndic",
+    "presetBudget": "Vote on the budget",
+    "presetCouncil": "Election of the council",
+    "annexes": "Annexes",
+    "annex": "Annex",
+    "noAnnex": "No annex.",
+    "addAnnex": "Add annex",
+    "annexNote": "Title / reference"
+  },
+  "maj": {
+    "ART_24": "Article 24",
+    "ART_25": "Article 25",
+    "ART_26": "Article 26",
+    "UNANIMITE": "Unanimity",
+    "INFORMATION": "Information"
+  },
+  "annex": {
+    "BUDGET": "Planned budget",
+    "COMPARATIF": "Costs vs budget",
+    "REGULARISATION": "Allocation & adjustment",
+    "IMPAYES": "Unpaid balances",
+    "TRESORERIE": "Cash position",
+    "LIBRE": "Attachment"
+  },
+  "conv": {
+    "title": "Notice",
+    "format": "Format",
+    "simple": "Simplified",
+    "regulatory": "Regulatory",
+    "print": "Print / PDF",
+    "hint": "Notice preview. 'Print / PDF' opens the browser print dialog (choose 'Save as PDF').",
+    "heading": "Notice of general meeting",
+    "daysBefore": "days before the meeting",
+    "delayWarn": "Less than 21 days' notice: check the notice is valid.",
+    "annexN": "Annex {{ n }}",
+    "budget": "Budget",
+    "real": "Actual",
+    "variance": "Variance",
+    "noImpayes": "No unpaid balance.",
+    "dummy": ""
   }
 }

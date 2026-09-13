@@ -1,0 +1,163 @@
+<ng-container *transloco="let t">
+  @if (!copId()) {
+    <div class="card"><div class="empty">{{ t('coprop.none') }}</div></div>
+  } @else {
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>{{ t('asm.title') }}</h2>
+          <div class="hint">{{ t('asm.hint') }}</div>
+        </div>
+        <button class="btn primary" type="button" (click)="showCreate.set(!showCreate())">{{ t('asm.new') }}</button>
+      </div>
+
+      @if (showCreate()) {
+        <div class="panel">
+          <div class="form-grid">
+            <div class="field">
+              <label>{{ t('asm.kind') }}</label>
+              <select [(ngModel)]="newKind">
+                <option value="ORDINAIRE">{{ t('asm.ordinary') }}</option>
+                <option value="EXTRAORDINAIRE">{{ t('asm.extraordinary') }}</option>
+              </select>
+            </div>
+            <div class="field"><label>{{ t('asm.meetingDate') }}</label><input type="date" [(ngModel)]="newDate" /></div>
+            <div class="field"><label>{{ t('asm.meetingTime') }}</label><input type="time" [(ngModel)]="newTime" /></div>
+            <div class="field"><label>{{ t('asm.location') }}</label><input type="text" [(ngModel)]="newLocation" /></div>
+            <div class="field"><label>{{ t('asm.convocationDate') }}</label><input type="date" [(ngModel)]="newConvocationDate" /></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="button" [disabled]="!newDate || saving()" (click)="createAssembly()">{{ t('btn.create') }}</button>
+            <button class="btn ghost" type="button" (click)="showCreate.set(false)">{{ t('btn.cancel') }}</button>
+          </div>
+        </div>
+      }
+
+      @if (assemblies().length === 0) {
+        <div class="empty">{{ t('asm.empty') }}</div>
+      } @else {
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>{{ t('asm.meetingDate') }}</th><th>{{ t('asm.kind') }}</th><th>{{ t('asm.location') }}</th><th>{{ t('th.status') }}</th><th></th></tr></thead>
+            <tbody>
+              @for (a of assemblies(); track a.id) {
+                <tr [style.background]="selected()?.id === a.id ? 'var(--surface-2)' : ''">
+                  <td>{{ a.meeting_date }} {{ a.meeting_time }}</td>
+                  <td>{{ a.kind === 'EXTRAORDINAIRE' ? t('asm.extraordinary') : t('asm.ordinary') }}</td>
+                  <td>{{ a.location || '—' }}</td>
+                  <td><span class="pill neutral">{{ a.status }}</span></td>
+                  <td style="text-align:right; white-space:nowrap;">
+                    <button class="btn sm ghost" type="button" (click)="open(a)">{{ t('asm.edit') }}</button>
+                    <button class="btn sm ghost danger" type="button" (click)="removeAssembly(a)">{{ t('btn.delete') }}</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+
+    <!-- Éditeur de l'assemblée sélectionnée -->
+    @if (selected(); as a) {
+      <div class="card">
+        <div class="card-head">
+          <h2>{{ t('asm.agenda') }} — {{ a.meeting_date }}</h2>
+          <a class="btn primary" [routerLink]="['/assemblees', a.id, 'convocation']">{{ t('asm.viewConvocation') }}</a>
+        </div>
+
+        <!-- Ordre du jour -->
+        <h3 style="margin:6px 0;">{{ t('asm.agenda') }}</h3>
+        @if (resolutions().length === 0) {
+          <div class="empty">{{ t('asm.noResolution') }}</div>
+        } @else {
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:36px;">#</th><th>{{ t('asm.resolution') }}</th><th>{{ t('asm.majority') }}</th><th>{{ t('mine.exercise') }}</th><th></th></tr></thead>
+              <tbody>
+                @for (r of resolutions(); track r.id; let i = $index) {
+                  <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ r.title }}</td>
+                    <td><span class="pill neutral">{{ t('maj.' + r.majority) }}</span></td>
+                    <td>{{ exLabel(r.exercise_id) || '—' }}</td>
+                    <td style="text-align:right;"><button class="btn sm ghost danger" type="button" (click)="removeResolution(r)">✕</button></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        <div class="panel" style="margin-top:10px;">
+          <div class="hint" style="margin-bottom:6px;">{{ t('asm.quickAdd') }}</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
+            @for (p of presets(); track p.title) {
+              <button class="btn sm ghost" type="button" (click)="addResolution(p)">+ {{ p.title }}</button>
+            }
+          </div>
+          <div class="form-grid">
+            <div class="field" style="grid-column: span 2;"><label>{{ t('asm.resolution') }}</label><input type="text" [(ngModel)]="resTitle" [placeholder]="t('asm.resolutionPlaceholder')" /></div>
+            <div class="field">
+              <label>{{ t('asm.majority') }}</label>
+              <select [(ngModel)]="resMajority">
+                @for (m of majorities; track m) { <option [value]="m">{{ t('maj.' + m) }}</option> }
+              </select>
+            </div>
+            <div class="field">
+              <label>{{ t('mine.exercise') }}</label>
+              <select [(ngModel)]="resExercise">
+                <option value="">—</option>
+                @for (e of exercises(); track e.id) { <option [value]="e.id">{{ e.label }}</option> }
+              </select>
+            </div>
+          </div>
+          <div class="form-actions"><button class="btn primary" type="button" [disabled]="!resTitle.trim() || saving()" (click)="addResolution()">{{ t('asm.addResolution') }}</button></div>
+        </div>
+
+        <!-- Annexes -->
+        <h3 style="margin:16px 0 6px;">{{ t('asm.annexes') }}</h3>
+        @if (annexes().length === 0) {
+          <div class="empty">{{ t('asm.noAnnex') }}</div>
+        } @else {
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>{{ t('asm.annex') }}</th><th>{{ t('mine.exercise') }}</th><th></th></tr></thead>
+              <tbody>
+                @for (an of annexes(); track an.id) {
+                  <tr>
+                    <td>{{ t('annex.' + an.report_type) }} {{ an.report_type === 'LIBRE' && an.note ? '— ' + an.note : '' }}</td>
+                    <td>{{ exLabel(an.exercise_id) || '—' }}</td>
+                    <td style="text-align:right;"><button class="btn sm ghost danger" type="button" (click)="removeAnnex(an)">✕</button></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+        <div class="panel" style="margin-top:10px;">
+          <div class="form-grid">
+            <div class="field">
+              <label>{{ t('asm.annex') }}</label>
+              <select [(ngModel)]="anType">
+                @for (rt of reportTypes; track rt) { <option [value]="rt">{{ t('annex.' + rt) }}</option> }
+              </select>
+            </div>
+            @if (anType !== 'LIBRE') {
+              <div class="field">
+                <label>{{ t('mine.exercise') }}</label>
+                <select [(ngModel)]="anExercise">
+                  <option value="">—</option>
+                  @for (e of exercises(); track e.id) { <option [value]="e.id">{{ e.label }}</option> }
+                </select>
+              </div>
+            } @else {
+              <div class="field" style="grid-column: span 2;"><label>{{ t('asm.annexNote') }}</label><input type="text" [(ngModel)]="anNote" /></div>
+            }
+          </div>
+          <div class="form-actions"><button class="btn primary" type="button" [disabled]="saving()" (click)="addAnnex()">{{ t('asm.addAnnex') }}</button></div>
+        </div>
+      </div>
+    }
+  }
+</ng-container>

@@ -17,7 +17,8 @@
     "acc": "Buchhaltung",
     "mine": "Meine Kosten",
     "reports": "Berichte",
-    "notices": "Avise"
+    "notices": "Avise",
+    "assemblies": "Versammlungen"
   },
   "health": {
     "label": "API-Status",
@@ -314,5 +315,69 @@
     "paid": "Bezahlt",
     "cancelled": "Storniert",
     "confirmCancel": "Diesen Avis stornieren? Die Forderungen werden wieder verfügbar."
+  },
+  "asm": {
+    "title": "Eigentümerversammlungen",
+    "hint": "Einladung vorbereiten: Tagesordnung, Mehrheiten und Anlagen (Abrechnungen). Eine Versammlung kann mehrere Jahre betreffen.",
+    "new": "Neue Versammlung",
+    "kind": "Art",
+    "ordinary": "Ordentlich",
+    "extraordinary": "Außerordentlich",
+    "meetingDate": "Datum",
+    "meetingTime": "Uhrzeit",
+    "location": "Ort",
+    "convocationDate": "Versandt am",
+    "empty": "Keine Versammlung. Erstellen Sie eine.",
+    "edit": "Öffnen",
+    "confirmDelete": "Diese Versammlung löschen?",
+    "agenda": "Tagesordnung",
+    "viewConvocation": "Einladung ansehen",
+    "noResolution": "Kein Beschluss. Tagesordnungspunkte hinzufügen.",
+    "resolution": "Beschluss",
+    "resolutionPlaceholder": "Titel des Punktes…",
+    "majority": "Mehrheit",
+    "addResolution": "Beschluss hinzufügen",
+    "quickAdd": "Häufige Beschlüsse:",
+    "presetApproval": "Genehmigung der Abrechnung",
+    "presetQuitus": "Entlastung der Verwaltung",
+    "presetBudget": "Beschluss über das Budget",
+    "presetCouncil": "Wahl des Beirats",
+    "annexes": "Anlagen",
+    "annex": "Anlage",
+    "noAnnex": "Keine Anlage.",
+    "addAnnex": "Anlage hinzufügen",
+    "annexNote": "Titel / Verweis"
+  },
+  "maj": {
+    "ART_24": "Artikel 24",
+    "ART_25": "Artikel 25",
+    "ART_26": "Artikel 26",
+    "UNANIMITE": "Einstimmigkeit",
+    "INFORMATION": "Information"
+  },
+  "annex": {
+    "BUDGET": "Wirtschaftsplan",
+    "COMPARATIF": "Kosten / Budget",
+    "REGULARISATION": "Verteilung & Abrechnung",
+    "IMPAYES": "Offene Posten",
+    "TRESORERIE": "Liquiditätslage",
+    "LIBRE": "Anhang"
+  },
+  "conv": {
+    "title": "Einladung",
+    "format": "Format",
+    "simple": "Vereinfacht",
+    "regulatory": "Regelkonform",
+    "print": "Drucken / PDF",
+    "hint": "Vorschau der Einladung. „Drucken / PDF“ öffnet den Druckdialog (‚Als PDF speichern‘).",
+    "heading": "Einladung zur Eigentümerversammlung",
+    "daysBefore": "Tage vor der Versammlung",
+    "delayWarn": "Weniger als 21 Tage Frist: Gültigkeit prüfen.",
+    "annexN": "Anlage {{ n }}",
+    "budget": "Budget",
+    "real": "Ist",
+    "variance": "Abweichung",
+    "noImpayes": "Keine offenen Posten.",
+    "dummy": ""
   }
 }

@@ -1,0 +1,145 @@
+<ng-container *transloco="let t">
+  <!-- Barre d'outils (non imprimée) -->
+  <div class="card no-print">
+    <div class="card-head" style="align-items:center;">
+      <h2>{{ t('conv.title') }}</h2>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <label style="font-size:13px; color:var(--ink-soft);">{{ t('conv.format') }}</label>
+        <select [ngModel]="format()" (ngModelChange)="format.set($event)">
+          <option value="SIMPLIFIE">{{ t('conv.simple') }}</option>
+          <option value="REGLEMENTAIRE">{{ t('conv.regulatory') }}</option>
+        </select>
+        <button class="btn primary" type="button" (click)="print()">{{ t('conv.print') }}</button>
+      </div>
+    </div>
+    <div class="hint">{{ t('conv.hint') }}</div>
+  </div>
+
+  @if (loading()) {
+    <div class="card"><div class="empty">{{ t('health.checking') }}</div></div>
+  } @else {
+    @if (assembly(); as a) {
+    <div class="convocation">
+      <!-- En-tête -->
+      <header class="conv-head">
+        @if (coproperty(); as c) {
+          <div class="conv-copro">
+            <strong>{{ c.name }}</strong>
+            @if (c.address) { <div>{{ c.address }}</div> }
+            <div>{{ (c.postal_code || '') + ' ' + (c.city || '') }}</div>
+          </div>
+        }
+        <h1>{{ t('conv.heading') }} {{ a.kind === 'EXTRAORDINAIRE' ? t('asm.extraordinary') : t('asm.ordinary') }}</h1>
+        <div class="conv-meta">
+          <div><strong>{{ t('asm.meetingDate') }} :</strong> {{ a.meeting_date }}{{ a.meeting_time ? ' — ' + a.meeting_time : '' }}</div>
+          @if (a.location) { <div><strong>{{ t('asm.location') }} :</strong> {{ a.location }}</div> }
+          @if (a.convocation_date) {
+            <div><strong>{{ t('asm.convocationDate') }} :</strong> {{ a.convocation_date }}
+              @if (daysBefore() !== null) { <span class="hint"> ({{ daysBefore() }} {{ t('conv.daysBefore') }})</span> }
+            </div>
+          }
+        </div>
+        @if (daysBefore() !== null && daysBefore()! < 21) {
+          <div class="banner error no-print" style="margin-top:8px;">{{ t('conv.delayWarn') }}</div>
+        }
+      </header>
+
+      <!-- Ordre du jour -->
+      <section class="conv-section">
+        <h2>{{ t('asm.agenda') }}</h2>
+        @if (resolutions().length === 0) {
+          <div class="empty">{{ t('asm.noResolution') }}</div>
+        } @else {
+          <ol class="conv-agenda">
+            @for (r of resolutions(); track r.id) {
+              <li>
+                <span class="conv-res-title">{{ r.title }}</span>
+                <span class="pill neutral" style="margin-left:8px;">{{ t('maj.' + r.majority) }}</span>
+                @if (r.body) { <div class="conv-res-body">{{ r.body }}</div> }
+              </li>
+            }
+          </ol>
+        }
+      </section>
+
+      <!-- Annexes -->
+      @for (d of annexData(); track d.annex.id; let i = $index) {
+        <section class="conv-section conv-annex">
+          <h2>
+            @if (format() === 'REGLEMENTAIRE' && d.annex.report_type !== 'LIBRE') {
+              {{ t('conv.annexN', { n: annexNumber(i) }) }} —
+            }
+            {{ t('annex.' + d.annex.report_type) }}
+            @if (d.exerciseLabel) { <span class="conv-annex-ex">· {{ d.exerciseLabel }}</span> }
+          </h2>
+
+          @switch (d.annex.report_type) {
+            @case ('BUDGET') {
+              @if (d.budget) {
+                <table class="conv-table">
+                  <thead><tr><th>{{ t('th.category') }}</th><th>{{ t('budget.key') }}</th><th class="num">{{ t('th.amount') }}</th></tr></thead>
+                  <tbody>
+                    @for (l of d.budget.lines; track l.id) { <tr><td>{{ l.category }}</td><td>{{ l.keyName }}</td><td class="num">{{ num(l.plannedAmount) | number: '1.2-2' }}</td></tr> }
+                  </tbody>
+                  <tfoot><tr><td colspan="2">{{ t('budget.total') }}</td><td class="num">{{ d.budget.total | number: '1.2-2' }} €</td></tr></tfoot>
+                </table>
+              }
+            }
+            @case ('COMPARATIF') {
+              @if (d.comparison) {
+                <table class="conv-table">
+                  <thead><tr><th>{{ t('th.category') }}</th><th class="num">{{ t('conv.budget') }}</th><th class="num">{{ t('conv.real') }}</th><th class="num">{{ t('conv.variance') }}</th></tr></thead>
+                  <tbody>
+                    @for (r of d.comparison.rows; track r.category) {
+                      <tr><td>{{ r.category }}</td><td class="num">{{ r.budget | number: '1.2-2' }}</td><td class="num">{{ r.real | number: '1.2-2' }}</td>
+                        <td class="num" [class.critical]="r.variance > 0" [class.good]="r.variance < 0">{{ r.variance | number: '1.2-2' }}</td></tr>
+                    }
+                  </tbody>
+                  <tfoot><tr><td>{{ t('budget.total') }}</td><td class="num">{{ d.comparison.budgetTotal | number: '1.2-2' }}</td><td class="num">{{ d.comparison.realTotal | number: '1.2-2' }}</td><td class="num">{{ (d.comparison.realTotal - d.comparison.budgetTotal) | number: '1.2-2' }}</td></tr></tfoot>
+                </table>
+              }
+            }
+            @case ('REGULARISATION') {
+              @if (d.regularisation && d.regularisation.exists) {
+                <table class="conv-table">
+                  <thead><tr><th>{{ t('th.lot') }}</th><th>{{ t('th.owner') }}</th><th class="num">{{ t('reg.colAppel') }}</th></tr></thead>
+                  <tbody>
+                    @for (row of d.regularisation.rows; track row.lotNumber) { <tr><td>{{ row.lotNumber }}</td><td>{{ row.ownerLabel || '—' }}</td><td class="num">{{ row.amount | number: '1.2-2' }} €</td></tr> }
+                  </tbody>
+                  <tfoot><tr><td colspan="2">{{ t('reg.total') }}</td><td class="num">{{ d.regularisation.total | number: '1.2-2' }} €</td></tr></tfoot>
+                </table>
+              } @else { <div class="empty">{{ t('reports.none') }}</div> }
+            }
+            @case ('IMPAYES') {
+              @if (d.impayes && d.impayes.length > 0) {
+                <table class="conv-table">
+                  <thead><tr><th>{{ t('th.lot') }}</th><th>{{ t('th.owner') }}</th><th>{{ t('th.nature') }}</th><th>{{ t('mine.exercise') }}</th><th class="num">{{ t('cash.remaining') }}</th></tr></thead>
+                  <tbody>
+                    @for (r of d.impayes; track r.id) { <tr><td>{{ r.lotNumber }}</td><td>{{ r.personName }}</td><td>{{ t('recnat.' + r.nature) }}</td><td>{{ r.exercise || '—' }}</td><td class="num">{{ r.remaining | number: '1.2-2' }}</td></tr> }
+                  </tbody>
+                  <tfoot><tr><td colspan="4">{{ t('budget.total') }}</td><td class="num">{{ impayesTotal(d.impayes) | number: '1.2-2' }} €</td></tr></tfoot>
+                </table>
+              } @else { <div class="empty">{{ t('conv.noImpayes') }}</div> }
+            }
+            @case ('TRESORERIE') {
+              @if (d.dashboard) {
+                <table class="conv-table">
+                  <tbody>
+                    <tr><td>{{ t('dashboard.cash') }}</td><td class="num">{{ d.dashboard.cashBalance | number: '1.2-2' }} €</td></tr>
+                    <tr><td>{{ t('dashboard.unpaid') }}</td><td class="num">{{ d.dashboard.unpaidTotal | number: '1.2-2' }} €</td></tr>
+                  </tbody>
+                </table>
+              }
+            }
+            @case ('LIBRE') {
+              <div class="hint">{{ d.annex.note || d.annex.label }}</div>
+            }
+          }
+        </section>
+      }
+    </div>
+    } @else {
+      <div class="card"><div class="empty">{{ t('asm.empty') }}</div></div>
+    }
+  }
+</ng-container>

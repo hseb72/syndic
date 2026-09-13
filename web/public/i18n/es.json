@@ -17,7 +17,8 @@
     "acc": "Contabilidad",
     "mine": "Mis cuotas",
     "reports": "Informes",
-    "notices": "Avisos"
+    "notices": "Avisos",
+    "assemblies": "Juntas"
   },
   "health": {
     "label": "Estado de la API",
@@ -314,5 +315,69 @@
     "paid": "Pagado",
     "cancelled": "Anulado",
     "confirmCancel": "¿Anular este aviso? Las deudas vuelven a estar disponibles."
+  },
+  "asm": {
+    "title": "Juntas de propietarios",
+    "hint": "Prepare la convocatoria: orden del día, mayorías y anexos (informes de cuentas). Una junta puede abarcar varios ejercicios.",
+    "new": "Nueva junta",
+    "kind": "Tipo",
+    "ordinary": "Ordinaria",
+    "extraordinary": "Extraordinaria",
+    "meetingDate": "Fecha",
+    "meetingTime": "Hora",
+    "location": "Lugar",
+    "convocationDate": "Enviada el",
+    "empty": "Ninguna junta. Cree una.",
+    "edit": "Abrir",
+    "confirmDelete": "¿Eliminar esta junta?",
+    "agenda": "Orden del día",
+    "viewConvocation": "Ver convocatoria",
+    "noResolution": "Sin acuerdos. Añada puntos del orden del día.",
+    "resolution": "Acuerdo",
+    "resolutionPlaceholder": "Título del punto…",
+    "majority": "Mayoría",
+    "addResolution": "Añadir acuerdo",
+    "quickAdd": "Acuerdos habituales:",
+    "presetApproval": "Aprobación de cuentas",
+    "presetQuitus": "Aprobación de la gestión",
+    "presetBudget": "Votación del presupuesto",
+    "presetCouncil": "Elección de la junta rectora",
+    "annexes": "Anexos",
+    "annex": "Anexo",
+    "noAnnex": "Sin anexo.",
+    "addAnnex": "Añadir anexo",
+    "annexNote": "Título / referencia"
+  },
+  "maj": {
+    "ART_24": "Artículo 24",
+    "ART_25": "Artículo 25",
+    "ART_26": "Artículo 26",
+    "UNANIMITE": "Unanimidad",
+    "INFORMATION": "Información"
+  },
+  "annex": {
+    "BUDGET": "Presupuesto previsto",
+    "COMPARATIF": "Gastos / presupuesto",
+    "REGULARISATION": "Reparto y regularización",
+    "IMPAYES": "Estado de impagados",
+    "TRESORERIE": "Situación de tesorería",
+    "LIBRE": "Adjunto"
+  },
+  "conv": {
+    "title": "Convocatoria",
+    "format": "Formato",
+    "simple": "Simplificado",
+    "regulatory": "Reglamentario",
+    "print": "Imprimir / PDF",
+    "hint": "Vista previa. «Imprimir / PDF» abre el diálogo de impresión (elija «Guardar como PDF»).",
+    "heading": "Convocatoria de junta de propietarios",
+    "daysBefore": "días antes de la junta",
+    "delayWarn": "Plazo inferior a 21 días: verifique la validez.",
+    "annexN": "Anexo {{ n }}",
+    "budget": "Presupuesto",
+    "real": "Real",
+    "variance": "Desviación",
+    "noImpayes": "Ningún impagado.",
+    "dummy": ""
   }
 }

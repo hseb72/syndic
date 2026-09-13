@@ -288,9 +288,78 @@ export interface NoticeLine {
   remaining: number;
 }
 
+export interface Assembly {
+  id: string;
+  kind: string;
+  meeting_date: string;
+  meeting_time: string | null;
+  location: string | null;
+  convocation_date: string | null;
+  status: string;
+  notes: string | null;
+}
+export interface Resolution {
+  id: string;
+  position: number;
+  title: string;
+  body: string | null;
+  majority: string;
+  exercise_id: string | null;
+}
+export interface Annex {
+  id: string;
+  position: number;
+  report_type: string;
+  exercise_id: string | null;
+  label: string | null;
+  note: string | null;
+}
+export interface AssemblyDetail {
+  assembly: Assembly;
+  resolutions: Resolution[];
+  annexes: Annex[];
+}
+export interface ComparisonResult {
+  rows: { category: string; budget: number; real: number; variance: number }[];
+  budgetTotal: number;
+  realTotal: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private http = inject(HttpClient);
+
+  // --- Assemblées générales ---
+  listAssemblies(copId: string): Observable<Assembly[]> {
+    return this.http.get<Assembly[]>(`/api/coproperties/${copId}/assemblies`);
+  }
+  createAssembly(copId: string, input: Partial<Assembly> & { meetingDate: string }): Observable<Assembly> {
+    return this.http.post<Assembly>(`/api/coproperties/${copId}/assemblies`, input);
+  }
+  getAssembly(copId: string, id: string): Observable<AssemblyDetail> {
+    return this.http.get<AssemblyDetail>(`/api/coproperties/${copId}/assemblies/${id}`);
+  }
+  updateAssembly(copId: string, id: string, input: Record<string, unknown>): Observable<Assembly> {
+    return this.http.patch<Assembly>(`/api/coproperties/${copId}/assemblies/${id}`, input);
+  }
+  deleteAssembly(copId: string, id: string): Observable<unknown> {
+    return this.http.delete(`/api/coproperties/${copId}/assemblies/${id}`);
+  }
+  addResolution(copId: string, id: string, input: { title: string; body?: string | null; majority?: string; exerciseId?: string | null }): Observable<Resolution> {
+    return this.http.post<Resolution>(`/api/coproperties/${copId}/assemblies/${id}/resolutions`, input);
+  }
+  deleteResolution(copId: string, id: string, subId: string): Observable<unknown> {
+    return this.http.delete(`/api/coproperties/${copId}/assemblies/${id}/resolutions/${subId}`);
+  }
+  addAnnex(copId: string, id: string, input: { reportType: string; exerciseId?: string | null; label?: string | null; note?: string | null }): Observable<Annex> {
+    return this.http.post<Annex>(`/api/coproperties/${copId}/assemblies/${id}/annexes`, input);
+  }
+  deleteAnnex(copId: string, id: string, subId: string): Observable<unknown> {
+    return this.http.delete(`/api/coproperties/${copId}/assemblies/${id}/annexes/${subId}`);
+  }
+  getBudgetComparison(copId: string, exerciseId: string): Observable<ComparisonResult> {
+    return this.http.get<ComparisonResult>(`/api/coproperties/${copId}/budget-comparison?exerciseId=${exerciseId}`);
+  }
 
   listPaymentNotices(copId: string): Observable<PaymentNotice[]> {
     return this.http.get<PaymentNotice[]>(`/api/coproperties/${copId}/payment-notices`);
@@ -507,8 +576,9 @@ export class ApiService {
     return this.http.post<FundCall>(`/api/coproperties/${copId}/fund-calls`, input);
   }
 
-  listReceivables(copId: string, exerciseId: string): Observable<ReceivableRow[]> {
-    return this.http.get<ReceivableRow[]>(`/api/coproperties/${copId}/receivables?exerciseId=${exerciseId}`);
+  listReceivables(copId: string, exerciseId?: string): Observable<ReceivableRow[]> {
+    const q = exerciseId ? `?exerciseId=${exerciseId}` : '';
+    return this.http.get<ReceivableRow[]>(`/api/coproperties/${copId}/receivables${q}`);
   }
 
   closeExercise(copId: string, exerciseId: string): Observable<Exercise> {

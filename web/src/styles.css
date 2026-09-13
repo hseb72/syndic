@@ -79,6 +79,33 @@ input, select, textarea { font-family: inherit; font-size: 14px; color: var(--in
 .kv > div { display: flex; flex-direction: column; gap: 1px; }
 .kv dt { font-size: 11px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted); margin: 0; }
 .kv dd { margin: 0; font-size: 14px; color: var(--ink); }
+
+/* --- Convocation (imprimable) --- */
+.convocation { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 28px 32px; max-width: 900px; margin: 0 auto; color: var(--ink); }
+.conv-head { border-bottom: 2px solid var(--line-strong); padding-bottom: 14px; margin-bottom: 18px; }
+.conv-copro { font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; }
+.conv-head h1 { font-size: 20px; margin: 6px 0 10px; }
+.conv-meta { font-size: 14px; display: flex; flex-direction: column; gap: 3px; }
+.conv-section { margin: 20px 0; }
+.conv-section h2 { font-size: 16px; border-bottom: 1px solid var(--line); padding-bottom: 5px; margin-bottom: 10px; }
+.conv-agenda { margin: 0; padding-left: 22px; }
+.conv-agenda li { margin-bottom: 12px; }
+.conv-res-title { font-weight: 600; }
+.conv-res-body { font-size: 13px; color: var(--ink-soft); margin-top: 3px; }
+.conv-annex-ex { font-weight: 400; font-size: 13px; color: var(--muted); }
+.conv-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.conv-table th, .conv-table td { border: 1px solid var(--line); padding: 5px 8px; text-align: left; }
+.conv-table th.num, .conv-table td.num { text-align: right; }
+.conv-table tfoot td { font-weight: 700; background: var(--surface-2); }
+
+@media print {
+  .topbar, .tabbar, .app-foot, .banner.readonly, .no-print, .toast-wrap { display: none !important; }
+  .shell { padding: 0 !important; max-width: none !important; }
+  body { background: #fff; }
+  .convocation { border: none; border-radius: 0; padding: 0; max-width: none; }
+  .conv-annex { page-break-inside: avoid; }
+  .conv-section h2 { page-break-after: avoid; }
+}
 .brand-text h1 { margin: 0; font-size: 19px; font-weight: 600; line-height: 1.2; }
 .brand-text .sub { margin: 2px 0 0; font-size: 12.5px; color: var(--muted); }
 .topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }

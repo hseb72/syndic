@@ -248,6 +248,41 @@ export interface PaymentAllocationTable {
   created_at: Generated<Timestamp>;
 }
 
+export interface GeneralAssemblyTable {
+  id: string;
+  coproperty_id: string;
+  kind: Generated<string>;
+  meeting_date: DateString;
+  meeting_time: string | null;
+  location: string | null;
+  convocation_date: DateString | null;
+  status: Generated<string>;
+  notes: string | null;
+  created_at: Generated<Timestamp>;
+}
+
+export interface AssemblyResolutionTable {
+  id: string;
+  assembly_id: string;
+  position: Generated<number>;
+  title: string;
+  body: string | null;
+  majority: Generated<string>;
+  exercise_id: string | null;
+  created_at: Generated<Timestamp>;
+}
+
+export interface AssemblyAnnexTable {
+  id: string;
+  assembly_id: string;
+  position: Generated<number>;
+  report_type: string;
+  exercise_id: string | null;
+  label: string | null;
+  note: string | null;
+  created_at: Generated<Timestamp>;
+}
+
 export interface PaymentNoticeTable {
   id: string;
   coproperty_id: string;
@@ -372,6 +407,9 @@ export interface Database {
   payment_allocation: PaymentAllocationTable;
   payment_notice: PaymentNoticeTable;
   payment_notice_line: PaymentNoticeLineTable;
+  general_assembly: GeneralAssemblyTable;
+  assembly_resolution: AssemblyResolutionTable;
+  assembly_annex: AssemblyAnnexTable;
   bank_account: BankAccountTable;
   bank_transaction: BankTransactionTable;
   bank_reconciliation: BankReconciliationTable;

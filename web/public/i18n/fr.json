@@ -17,7 +17,8 @@
     "acc": "Comptabilité",
     "mine": "Mes charges",
     "reports": "Rapports",
-    "notices": "Avis"
+    "notices": "Avis",
+    "assemblies": "Assemblées"
   },
   "health": {
     "label": "État de l’API",
@@ -314,5 +315,69 @@
     "paid": "Payé",
     "cancelled": "Annulé",
     "confirmCancel": "Annuler cet avis ? Les créances redeviennent disponibles."
+  },
+  "asm": {
+    "title": "Assemblées générales",
+    "hint": "Préparez la convocation : ordre du jour, majorités et annexes (rapports de comptes). Une AG peut porter sur plusieurs exercices.",
+    "new": "Nouvelle AG",
+    "kind": "Type",
+    "ordinary": "Ordinaire",
+    "extraordinary": "Extraordinaire",
+    "meetingDate": "Date de l'AG",
+    "meetingTime": "Heure",
+    "location": "Lieu",
+    "convocationDate": "Date d'envoi",
+    "empty": "Aucune assemblée. Créez-en une.",
+    "edit": "Ouvrir",
+    "confirmDelete": "Supprimer cette assemblée ?",
+    "agenda": "Ordre du jour",
+    "viewConvocation": "Voir la convocation",
+    "noResolution": "Aucune résolution. Ajoutez les questions à l'ordre du jour.",
+    "resolution": "Résolution",
+    "resolutionPlaceholder": "Intitulé de la question…",
+    "majority": "Majorité",
+    "addResolution": "Ajouter la résolution",
+    "quickAdd": "Résolutions courantes :",
+    "presetApproval": "Approbation des comptes",
+    "presetQuitus": "Quitus au syndic",
+    "presetBudget": "Vote du budget prévisionnel",
+    "presetCouncil": "Élection du conseil syndical",
+    "annexes": "Annexes",
+    "annex": "Annexe",
+    "noAnnex": "Aucune annexe.",
+    "addAnnex": "Ajouter l'annexe",
+    "annexNote": "Intitulé / renvoi"
+  },
+  "maj": {
+    "ART_24": "Article 24",
+    "ART_25": "Article 25",
+    "ART_26": "Article 26",
+    "UNANIMITE": "Unanimité",
+    "INFORMATION": "Information"
+  },
+  "annex": {
+    "BUDGET": "Budget prévisionnel",
+    "COMPARATIF": "Comparatif charges / budget",
+    "REGULARISATION": "Répartition & régularisation",
+    "IMPAYES": "État des impayés",
+    "TRESORERIE": "Situation de trésorerie",
+    "LIBRE": "Pièce jointe"
+  },
+  "conv": {
+    "title": "Convocation",
+    "format": "Format",
+    "simple": "Simplifié",
+    "regulatory": "Réglementaire",
+    "print": "Imprimer / PDF",
+    "hint": "Aperçu de la convocation. « Imprimer / PDF » ouvre la boîte d'impression du navigateur (choisir « Enregistrer en PDF »).",
+    "heading": "Convocation à l'assemblée générale",
+    "daysBefore": "jours avant l'AG",
+    "delayWarn": "Délai inférieur à 21 jours : vérifiez la régularité de la convocation.",
+    "annexN": "Annexe {{ n }}",
+    "budget": "Budget",
+    "real": "Réel",
+    "variance": "Écart",
+    "noImpayes": "Aucun impayé.",
+    "dummy": ""
   }
 }

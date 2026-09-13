@@ -17,7 +17,8 @@
     "acc": "Contabilità",
     "mine": "Le mie spese",
     "reports": "Report",
-    "notices": "Avvisi"
+    "notices": "Avvisi",
+    "assemblies": "Assemblee"
   },
   "health": {
     "label": "Stato API",
@@ -314,5 +315,69 @@
     "paid": "Pagato",
     "cancelled": "Annullato",
     "confirmCancel": "Annullare questo avviso? I crediti tornano disponibili."
+  },
+  "asm": {
+    "title": "Assemblee condominiali",
+    "hint": "Prepara la convocazione: ordine del giorno, maggioranze e allegati (rendiconti). Un'assemblea può riguardare più esercizi.",
+    "new": "Nuova assemblea",
+    "kind": "Tipo",
+    "ordinary": "Ordinaria",
+    "extraordinary": "Straordinaria",
+    "meetingDate": "Data",
+    "meetingTime": "Ora",
+    "location": "Luogo",
+    "convocationDate": "Inviata il",
+    "empty": "Nessuna assemblea. Creane una.",
+    "edit": "Apri",
+    "confirmDelete": "Eliminare questa assemblea?",
+    "agenda": "Ordine del giorno",
+    "viewConvocation": "Vedi convocazione",
+    "noResolution": "Nessuna delibera. Aggiungi i punti.",
+    "resolution": "Delibera",
+    "resolutionPlaceholder": "Titolo del punto…",
+    "majority": "Maggioranza",
+    "addResolution": "Aggiungi delibera",
+    "quickAdd": "Delibere comuni:",
+    "presetApproval": "Approvazione del rendiconto",
+    "presetQuitus": "Discarico all'amministratore",
+    "presetBudget": "Votazione del preventivo",
+    "presetCouncil": "Elezione del consiglio",
+    "annexes": "Allegati",
+    "annex": "Allegato",
+    "noAnnex": "Nessun allegato.",
+    "addAnnex": "Aggiungi allegato",
+    "annexNote": "Titolo / rinvio"
+  },
+  "maj": {
+    "ART_24": "Articolo 24",
+    "ART_25": "Articolo 25",
+    "ART_26": "Articolo 26",
+    "UNANIMITE": "Unanimità",
+    "INFORMATION": "Informazione"
+  },
+  "annex": {
+    "BUDGET": "Preventivo",
+    "COMPARATIF": "Spese / preventivo",
+    "REGULARISATION": "Ripartizione e conguaglio",
+    "IMPAYES": "Situazione insoluti",
+    "TRESORERIE": "Situazione di cassa",
+    "LIBRE": "Allegato"
+  },
+  "conv": {
+    "title": "Convocazione",
+    "format": "Formato",
+    "simple": "Semplificato",
+    "regulatory": "Regolamentare",
+    "print": "Stampa / PDF",
+    "hint": "Anteprima. « Stampa / PDF » apre la finestra di stampa (scegli « Salva come PDF »).",
+    "heading": "Convocazione dell'assemblea condominiale",
+    "daysBefore": "giorni prima dell'assemblea",
+    "delayWarn": "Preavviso inferiore a 21 giorni: verifica la validità.",
+    "annexN": "Allegato {{ n }}",
+    "budget": "Preventivo",
+    "real": "Reale",
+    "variance": "Scostamento",
+    "noImpayes": "Nessun insoluto.",
+    "dummy": ""
   }
 }

@@ -31,6 +31,7 @@ import { dashboardRoutes } from './modules/dashboard/routes.js';
 import { accountingRoutes } from './modules/accounting/routes.js';
 import { meRoutes } from './modules/me/routes.js';
 import { noticeRoutes } from './modules/notice/routes.js';
+import { assemblyRoutes } from './modules/assembly/routes.js';
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -116,6 +117,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(accountingRoutes, { prefix: '/api' });
   await app.register(meRoutes, { prefix: '/api' });
   await app.register(noticeRoutes, { prefix: '/api' });
+  await app.register(assemblyRoutes, { prefix: '/api' });
 
   return app;
 }

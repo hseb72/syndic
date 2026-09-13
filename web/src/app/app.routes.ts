@@ -58,5 +58,15 @@ export const routes: Routes = [
     canActivate: [bureauGuard],
     loadComponent: () => import('./features/accounting.component').then((m) => m.AccountingComponent),
   },
+  {
+    path: 'assemblees',
+    canActivate: [bureauGuard],
+    loadComponent: () => import('./features/assemblies.component').then((m) => m.AssembliesComponent),
+  },
+  {
+    path: 'assemblees/:id/convocation',
+    canActivate: [bureauGuard],
+    loadComponent: () => import('./features/convocation.component').then((m) => m.ConvocationComponent),
+  },
   { path: '**', redirectTo: 'tableau-de-bord' },
 ];
