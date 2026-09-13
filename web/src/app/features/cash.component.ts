@@ -190,6 +190,24 @@ export class CashComponent implements OnInit {
       });
   }
 
+  /** Fixe le montant définitif d'une créance (situation de départ). */
+  saveReceivableAmount(row: ReceivableRow, value: string): void {
+    const cop = this.copId();
+    const n = Number(String(value).replace(/[\s ]/g, '').replace(',', '.'));
+    if (!cop || !Number.isFinite(n) || n <= 0 || Math.abs(n - Number(row.amount)) < 0.005) return;
+    this.saving.set(true);
+    this.api.updateReceivableAmount(cop, row.id, Math.round(n * 100) / 100).subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.reload();
+      },
+      error: () => {
+        this.saving.set(false);
+        this.reload(); // rétablit la valeur serveur si rejet
+      },
+    });
+  }
+
   async payRemaining(row: ReceivableRow): Promise<void> {
     const cop = this.copId();
     if (!cop || row.remaining <= 0) return;

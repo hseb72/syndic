@@ -114,6 +114,7 @@ export async function createProvisionCall(copropertyId: string, input: CreatePro
             source_id: itemId,
             nature,
             amount: amt,
+            computed_amount: amt,
             due_date: input.dueDate,
           })
           .execute();

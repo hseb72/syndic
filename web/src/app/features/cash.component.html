@@ -169,6 +169,7 @@
         <div>
           <h2>{{ t('cash.receivables') }}</h2>
           <div class="hint">{{ t('cash.payHint') }}</div>
+          <div class="hint">{{ t('cash.overrideHint') }}</div>
         </div>
       </div>
 
@@ -183,7 +184,8 @@
                 <th>{{ t('th.owner') }}</th>
                 <th>{{ t('th.nature') }}</th>
                 <th>{{ t('mine.exercise') }}</th>
-                <th class="num">{{ t('th.amount') }}</th>
+                <th class="num">{{ t('cash.computed') }}</th>
+                <th class="num">{{ t('cash.definitive') }}</th>
                 <th class="num">{{ t('th.paid') }}</th>
                 <th class="num">{{ t('cash.remaining') }}</th>
                 <th>{{ t('th.status') }}</th>
@@ -197,7 +199,21 @@
                   <td>{{ r.personName }}</td>
                   <td><span class="pill neutral">{{ t('recnat.' + r.nature) }}</span></td>
                   <td>{{ r.exercise || '—' }}</td>
-                  <td class="num">{{ num(r.amount) | number: '1.2-2' }}</td>
+                  <td class="num" style="color:var(--muted);">
+                    {{ r.computedAmount === null ? '—' : (num(r.computedAmount) | number: '1.2-2') }}
+                  </td>
+                  <td class="num">
+                    <input
+                      type="text" inputmode="decimal"
+                      [value]="num(r.amount)"
+                      (change)="saveReceivableAmount(r, $any($event.target).value)"
+                      [disabled]="saving()"
+                      [title]="t('cash.definitiveHint')"
+                      [style.font-weight]="r.computedAmount !== null && num(r.amount) !== num(r.computedAmount) ? '700' : '400'"
+                      [style.color]="r.computedAmount !== null && num(r.amount) !== num(r.computedAmount) ? 'var(--accent)' : 'inherit'"
+                      style="width:100px; text-align:right;"
+                    />
+                  </td>
                   <td class="num">{{ num(r.allocated) | number: '1.2-2' }}</td>
                   <td class="num" style="font-weight:600;">{{ r.remaining | number: '1.2-2' }}</td>
                   <td><span class="pill" [class.good]="r.status === 'PAID'" [class.warning]="r.status !== 'PAID'">{{ r.status }}</span></td>

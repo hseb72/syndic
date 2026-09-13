@@ -135,7 +135,11 @@
     "statusOpen": "Abierto",
     "carry": "Saldo a nuevo",
     "carryHint": "Saldos pendientes trasladados al ejercicio siguiente. El cierre no toca ninguna línea bancaria.",
-    "payHint": "El pago se aplica automáticamente a las deudas abiertas del pagador, de la más antigua a la más reciente."
+    "payHint": "El pago se aplica automáticamente a las deudas abiertas del pagador, de la más antigua a la más reciente.",
+    "computed": "Calculado",
+    "definitive": "Definitivo",
+    "overrideHint": "El importe definitivo es editable (p. ej. saldo inicial); el valor calculado se mantiene para comparar.",
+    "definitiveHint": "Importe definitivo editable — reemplaza el valor calculado."
   },
   "budget": {
     "title": "Presupuesto previsto",

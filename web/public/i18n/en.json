@@ -135,7 +135,11 @@
     "statusOpen": "Open",
     "carry": "Carry-forward",
     "carryHint": "Unpaid balances carried to the next year. The close touches no bank line.",
-    "payHint": "A payment is automatically applied to the payer's open receivables, oldest first."
+    "payHint": "A payment is automatically applied to the payer's open receivables, oldest first.",
+    "computed": "Computed",
+    "definitive": "Final",
+    "overrideHint": "The final amount is editable (e.g. opening balance); the computed value stays shown for comparison.",
+    "definitiveHint": "Editable final amount — overrides the computed value."
   },
   "budget": {
     "title": "Planned budget",

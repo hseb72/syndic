@@ -283,6 +283,7 @@ export interface ReceivableRow {
   personId: string;
   personName: string;
   amount: string;
+  computedAmount: string | null;
   allocated: string;
   remaining: number;
   dueDate: string;
@@ -626,6 +627,10 @@ export class ApiService {
     input: { exerciseId: string; label: string; issueDate: string; dueDate: string; totalAmount: number },
   ): Observable<FundCall> {
     return this.http.post<FundCall>(`/api/coproperties/${copId}/fund-calls`, input);
+  }
+
+  updateReceivableAmount(copId: string, receivableId: string, amount: number): Observable<unknown> {
+    return this.http.patch(`/api/coproperties/${copId}/receivables/${receivableId}`, { amount });
   }
 
   listReceivables(copId: string, exerciseId?: string): Observable<ReceivableRow[]> {

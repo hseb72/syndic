@@ -218,6 +218,7 @@ export interface ReceivableTable {
   source_id: string;
   nature: Generated<string>; // PROVISION | REGULARISATION | HORS_BUDGET | AUTRE
   amount: Numeric;
+  computed_amount: Numeric | null; // valeur calculée par répartition (comparaison)
   due_date: DateString;
   status: Generated<string>;
   cancelled_at: Timestamp | null;

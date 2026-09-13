@@ -186,6 +186,7 @@ export async function generateRegularisation(copropertyId: string, input: Genera
             source_id: itemId,
             nature: 'REGULARISATION',
             amount: amt,
+            computed_amount: amt,
             due_date: input.dueDate,
           })
           .execute();

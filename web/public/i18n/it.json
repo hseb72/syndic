@@ -135,7 +135,11 @@
     "statusOpen": "Aperto",
     "carry": "Riporto a nuovo",
     "carryHint": "Saldi non pagati riportati all’esercizio successivo. La chiusura non tocca alcuna riga bancaria.",
-    "payHint": "Un pagamento viene applicato automaticamente ai crediti aperti del pagatore, dal più vecchio."
+    "payHint": "Un pagamento viene applicato automaticamente ai crediti aperti del pagatore, dal più vecchio.",
+    "computed": "Calcolato",
+    "definitive": "Definitivo",
+    "overrideHint": "L’importo definitivo è modificabile (es. saldo iniziale); il valore calcolato resta visibile per confronto.",
+    "definitiveHint": "Importo definitivo modificabile — sostituisce il valore calcolato."
   },
   "budget": {
     "title": "Bilancio preventivo",

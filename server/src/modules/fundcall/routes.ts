@@ -1,11 +1,13 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { createProvisionCall, getRegularisationReport, listFundCalls } from './service.js';
-import { listReceivables } from '../receivable/service.js';
+import { listReceivables, updateReceivableAmount } from '../receivable/service.js';
 
 const copParams = z.object({ copId: z.string().uuid() });
 const exParams = z.object({ copId: z.string().uuid(), exId: z.string().uuid() });
+const recParams = z.object({ copId: z.string().uuid(), receivableId: z.string().uuid() });
 const listQuery = z.object({ exerciseId: z.string().uuid().optional() });
+const amountSchema = z.object({ amount: z.number().positive() });
 
 const createSchema = z.object({
   exerciseId: z.string().uuid(),
@@ -33,6 +35,13 @@ export async function fundCallRoutes(app: FastifyInstance): Promise<void> {
     const { copId } = copParams.parse(request.params);
     const { exerciseId } = listQuery.parse(request.query);
     return listReceivables(copId, exerciseId);
+  });
+
+  // Montant définitif d'une créance (saisie manuelle ; situation de départ).
+  app.patch('/coproperties/:copId/receivables/:receivableId', async (request) => {
+    const { copId, receivableId } = recParams.parse(request.params);
+    const { amount } = amountSchema.parse(request.body);
+    return updateReceivableAmount(copId, receivableId, amount);
   });
 
   // Rapport d'AG : répartition de la régularisation (lecture, tous rôles).

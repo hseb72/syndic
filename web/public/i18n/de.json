@@ -135,7 +135,11 @@
     "statusOpen": "Offen",
     "carry": "Saldovortrag",
     "carryHint": "Offene Salden werden ins nächste Jahr vorgetragen. Der Abschluss berührt keine Bankzeile.",
-    "payHint": "Eine Zahlung wird automatisch den offenen Forderungen des Zahlers zugeordnet, älteste zuerst."
+    "payHint": "Eine Zahlung wird automatisch den offenen Forderungen des Zahlers zugeordnet, älteste zuerst.",
+    "computed": "Berechnet",
+    "definitive": "Endgültig",
+    "overrideHint": "Der endgültige Betrag ist editierbar (z. B. Anfangssaldo); der berechnete Wert bleibt zum Vergleich sichtbar.",
+    "definitiveHint": "Editierbarer Endbetrag — überschreibt den berechneten Wert."
   },
   "budget": {
     "title": "Wirtschaftsplan",

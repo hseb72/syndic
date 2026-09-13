@@ -135,7 +135,11 @@
     "statusOpen": "Ouvert",
     "carry": "Report à nouveau",
     "carryHint": "Soldes impayés reportés vers l’exercice suivant. La clôture ne touche aucune ligne bancaire.",
-    "payHint": "Un paiement est lettré automatiquement sur les créances ouvertes du payeur, du plus ancien au plus récent."
+    "payHint": "Un paiement est lettré automatiquement sur les créances ouvertes du payeur, du plus ancien au plus récent.",
+    "computed": "Calculé",
+    "definitive": "Définitif",
+    "overrideHint": "Le montant définitif est modifiable (ex. solde d’ouverture) ; la valeur calculée reste affichée pour comparaison.",
+    "definitiveHint": "Montant définitif modifiable — remplace la valeur calculée."
   },
   "budget": {
     "title": "Budget prévisionnel",
