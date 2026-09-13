@@ -77,7 +77,10 @@
     "consumption": "Verbrauch",
     "saveReadings": "Zählerstände speichern",
     "readingsSaved": "Zählerstände gespeichert.",
-    "pay": "Saldo zahlen"
+    "pay": "Saldo zahlen",
+    "fund": "Fonds",
+    "fundCurrent": "Laufende Kosten",
+    "fundWorks": "Instandhaltungsrücklage"
   },
   "reg": {
     "title": "Jahresabrechnung",

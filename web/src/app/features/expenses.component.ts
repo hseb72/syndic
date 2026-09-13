@@ -52,6 +52,7 @@ export class ExpensesComponent implements OnInit {
     supplierName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     invoiceDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     category: new FormControl('', { nonNullable: true }),
+    fund: new FormControl<'COURANT' | 'TRAVAUX'>('COURANT', { nonNullable: true }),
     isWater: new FormControl(false, { nonNullable: true }),
     amount: new FormControl<number | null>(null),
     subscription: new FormControl<number | null>(null),
@@ -221,10 +222,11 @@ export class ExpensesComponent implements OnInit {
           invoiceDate: v.invoiceDate,
           amount,
           category: v.category || null,
+          fund: v.fund,
           distributions,
         }),
       );
-      this.invoiceForm.reset({ isWater: false });
+      this.invoiceForm.reset({ isWater: false, fund: 'COURANT' });
       this.showInvoiceForm.set(false);
       this.loadInvoices();
       this.charges.set(null);

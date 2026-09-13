@@ -77,7 +77,10 @@
     "consumption": "Consommation",
     "saveReadings": "Enregistrer les relevés",
     "readingsSaved": "Relevés enregistrés.",
-    "pay": "Payer le solde"
+    "pay": "Payer le solde",
+    "fund": "Fonds",
+    "fundCurrent": "Charges courantes",
+    "fundWorks": "Fonds travaux"
   },
   "reg": {
     "title": "Régularisation annuelle",

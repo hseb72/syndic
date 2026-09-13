@@ -66,6 +66,9 @@ export async function computeChargesByLot(copropertyId: string, exerciseId: stri
     ])
     .where('inv.coproperty_id', '=', copropertyId)
     .where('inv.exercise_id', '=', exerciseId)
+    // Charges COURANTES uniquement : les dépenses sur fonds travaux sont
+    // gérées à part et exclues de la base de régularisation.
+    .where('inv.fund', '=', 'COURANT')
     .execute();
 
   let exactTotal = 0;

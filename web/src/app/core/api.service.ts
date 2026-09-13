@@ -75,6 +75,7 @@ export interface InvoiceRow {
   invoiceDate: string;
   amount: string;
   category: string | null;
+  fund: string;
   status: string;
   exerciseId: string;
   supplierName: string;
@@ -94,6 +95,7 @@ export interface CreateInvoiceInput {
   invoiceDate: string;
   amount: number;
   category?: string | null;
+  fund?: 'COURANT' | 'TRAVAUX';
   invoiceNumber?: string | null;
   distributions?: InvoiceDistributionInput[];
 }

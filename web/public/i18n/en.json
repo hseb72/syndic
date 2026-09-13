@@ -77,7 +77,10 @@
     "consumption": "Consumption",
     "saveReadings": "Save readings",
     "readingsSaved": "Readings saved.",
-    "pay": "Pay balance"
+    "pay": "Pay balance",
+    "fund": "Fund",
+    "fundCurrent": "Current charges",
+    "fundWorks": "Works fund"
   },
   "reg": {
     "title": "Annual adjustment",

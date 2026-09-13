@@ -77,7 +77,10 @@
     "consumption": "Consumo",
     "saveReadings": "Salva le letture",
     "readingsSaved": "Letture salvate.",
-    "pay": "Salda il dovuto"
+    "pay": "Salda il dovuto",
+    "fund": "Fondo",
+    "fundCurrent": "Spese correnti",
+    "fundWorks": "Fondo lavori"
   },
   "reg": {
     "title": "Conguaglio annuale",

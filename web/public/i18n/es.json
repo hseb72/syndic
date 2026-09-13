@@ -77,7 +77,10 @@
     "consumption": "Consumo",
     "saveReadings": "Guardar lecturas",
     "readingsSaved": "Lecturas guardadas.",
-    "pay": "Pagar el saldo"
+    "pay": "Pagar el saldo",
+    "fund": "Fondo",
+    "fundCurrent": "Gastos corrientes",
+    "fundWorks": "Fondo de obras"
   },
   "reg": {
     "title": "Regularización anual",

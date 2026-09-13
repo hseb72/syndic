@@ -134,6 +134,7 @@ export interface SupplierInvoiceTable {
   due_date: DateString | null;
   amount: Numeric;
   category: string | null;
+  fund: Generated<string>; // COURANT | TRAVAUX
   status: Generated<string>;
   created_at: Generated<Timestamp>;
 }

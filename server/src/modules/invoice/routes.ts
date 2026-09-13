@@ -21,6 +21,7 @@ const createSchema = z.object({
   dueDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullish(),
   amount: z.number().positive(),
   category: z.string().nullish(),
+  fund: z.enum(['COURANT', 'TRAVAUX']).optional(),
   distributions: z.array(distributionSchema).optional(),
 });
 

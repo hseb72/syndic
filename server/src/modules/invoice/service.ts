@@ -18,6 +18,7 @@ export interface CreateInvoiceInput {
   dueDate?: string | null;
   amount: number;
   category?: string | null;
+  fund?: 'COURANT' | 'TRAVAUX';
   distributions?: InvoiceDistributionInput[];
 }
 
@@ -54,6 +55,7 @@ export async function createInvoice(copropertyId: string, input: CreateInvoiceIn
         due_date: input.dueDate ?? null,
         amount: input.amount,
         category: input.category ?? null,
+        fund: input.fund ?? 'COURANT',
       })
       .execute();
 
@@ -90,6 +92,7 @@ export async function listInvoices(copropertyId: string, exerciseId?: string) {
       'inv.invoice_date as invoiceDate',
       'inv.amount as amount',
       'inv.category as category',
+      'inv.fund as fund',
       'inv.status as status',
       'inv.exercise_id as exerciseId',
       's.name as supplierName',

@@ -74,6 +74,13 @@
                 <label for="inv-cat">{{ t('field.category') }}</label>
                 <input id="inv-cat" type="text" formControlName="category" />
               </div>
+              <div class="field">
+                <label for="inv-fund">{{ t('expenses.fund') }}</label>
+                <select id="inv-fund" formControlName="fund">
+                  <option value="COURANT">{{ t('expenses.fundCurrent') }}</option>
+                  <option value="TRAVAUX">{{ t('expenses.fundWorks') }}</option>
+                </select>
+              </div>
             </div>
 
             <label style="display:flex; align-items:center; gap:8px; margin:12px 0 8px; font-size:13px; font-weight:600; color:var(--ink-soft);">
@@ -129,7 +136,12 @@
                   <tr>
                     <td>{{ inv.invoiceDate }}</td>
                     <td>{{ inv.supplierName }}</td>
-                    <td>{{ inv.category || '—' }}</td>
+                    <td>
+                      {{ inv.category || '—' }}
+                      @if (inv.fund === 'TRAVAUX') {
+                        <span class="pill warning" style="margin-left:6px;">{{ t('expenses.fundWorks') }}</span>
+                      }
+                    </td>
                     <td class="num">{{ num(inv.amount) | number: '1.2-2' }}</td>
                     <td class="num">{{ num(inv.paidAmount) | number: '1.2-2' }}</td>
                     <td><span class="pill" [class.good]="inv.status === 'PAID'" [class.neutral]="inv.status !== 'PAID'">{{ inv.status }}</span></td>
