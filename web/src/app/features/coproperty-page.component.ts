@@ -505,4 +505,19 @@ export class CopropertyPageComponent {
       error: () => this.saving.set(false),
     });
   }
+
+  /** Clôture un exercice (report à nouveau) ou le rouvre. */
+  toggleExerciseClosed(ex: Exercise): void {
+    const cop = this.copCtx.currentId();
+    if (!cop) return;
+    this.saving.set(true);
+    const call = ex.status === 'CLOSED' ? this.api.reopenExercise(cop, ex.id) : this.api.closeExercise(cop, ex.id);
+    call.subscribe({
+      next: (updated: Exercise) => {
+        this.exCtx.updateLocal(updated);
+        this.saving.set(false);
+      },
+      error: () => this.saving.set(false),
+    });
+  }
 }

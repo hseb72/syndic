@@ -91,16 +91,7 @@
             </span>
           }
         </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          @if (selectedExercise(); as ex) {
-            @if (ex.status === 'CLOSED') {
-              <button class="btn sm" type="button" [disabled]="saving()" (click)="reopenExercise()">{{ t('cash.reopen') }}</button>
-            } @else {
-              <button class="btn sm" type="button" [disabled]="saving()" (click)="closeExercise()">{{ t('cash.close') }}</button>
-            }
-          }
-          <button class="btn primary" type="button" (click)="showCallForm.set(!showCallForm())">{{ t('cash.add') }}</button>
-        </div>
+        <button class="btn primary" type="button" (click)="showCallForm.set(!showCallForm())">{{ t('cash.add') }}</button>
       </div>
 
       @if (showCallForm()) {

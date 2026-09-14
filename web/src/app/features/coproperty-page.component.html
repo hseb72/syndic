@@ -145,6 +145,7 @@
                 <th>{{ t('field.startDate') }}</th>
                 <th>{{ t('field.endDate') }}</th>
                 <th>{{ t('th.status') }}</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -154,6 +155,11 @@
                   <td>{{ e.start_date }}</td>
                   <td>{{ e.end_date }}</td>
                   <td><span class="pill" [class.good]="e.status !== 'CLOSED'" [class.neutral]="e.status === 'CLOSED'">{{ e.status === 'CLOSED' ? t('cash.statusClosed') : t('cash.statusOpen') }}</span></td>
+                  <td style="text-align:right; white-space:nowrap;">
+                    <button class="btn sm ghost" type="button" [disabled]="saving()" (click)="toggleExerciseClosed(e)">
+                      {{ e.status === 'CLOSED' ? t('cash.reopen') : t('cash.close') }}
+                    </button>
+                  </td>
                 </tr>
               }
             </tbody>

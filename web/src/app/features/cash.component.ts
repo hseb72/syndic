@@ -3,7 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoModule } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
-import { ApiService, type BudgetResult, type Exercise, type FundCall, type ReceivableRow } from '../core/api.service';
+import { ApiService, type BudgetResult, type FundCall, type ReceivableRow } from '../core/api.service';
 import { CopropertyContextService } from '../core/coproperty-context.service';
 import { ExerciseContextService } from '../core/exercise-context.service';
 
@@ -114,39 +114,6 @@ export class CashComponent {
     });
   }
 
-  private updateExercise(updated: Exercise): void {
-    this.exCtx.updateLocal(updated);
-  }
-
-  closeExercise(): void {
-    const cop = this.copId();
-    const ex = this.selectedExId();
-    if (!cop || !ex) return;
-    this.saving.set(true);
-    this.api.closeExercise(cop, ex).subscribe({
-      next: (updated) => {
-        this.updateExercise(updated);
-        this.saving.set(false);
-        this.reload();
-      },
-      error: () => this.saving.set(false),
-    });
-  }
-
-  reopenExercise(): void {
-    const cop = this.copId();
-    const ex = this.selectedExId();
-    if (!cop || !ex) return;
-    this.saving.set(true);
-    this.api.reopenExercise(cop, ex).subscribe({
-      next: (updated) => {
-        this.updateExercise(updated);
-        this.saving.set(false);
-        this.reload();
-      },
-      error: () => this.saving.set(false),
-    });
-  }
 
   submitCall(): void {
     const cop = this.copId();
