@@ -1,10 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { ApiService, type NoticeLine, type PaymentNotice } from '../core/api.service';
-
-const COP_STORAGE_KEY = 'syndic.copId';
+import { CopropertyContextService } from '../core/coproperty-context.service';
 
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10);
@@ -125,11 +124,12 @@ function plusDaysIso(days: number): string {
     </ng-container>
   `,
 })
-export class NoticesComponent implements OnInit {
+export class NoticesComponent {
   private api = inject(ApiService);
   private transloco = inject(TranslocoService);
+  private copCtx = inject(CopropertyContextService);
 
-  readonly copId = signal<string | null>(null);
+  readonly copId = this.copCtx.currentId;
   readonly notices = signal<PaymentNotice[]>([]);
   readonly openId = signal<string | null>(null);
   readonly lines = signal<NoticeLine[]>([]);
@@ -142,15 +142,17 @@ export class NoticesComponent implements OnInit {
     dueDate: new FormControl(plusDaysIso(30), { nonNullable: true, validators: [Validators.required] }),
   });
 
-  ngOnInit(): void {
-    let cop: string | null = null;
-    try {
-      cop = localStorage.getItem(COP_STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
-    this.copId.set(cop);
-    if (cop) this.load();
+  constructor() {
+    effect(() => {
+      const cop = this.copCtx.currentId();
+      this.openId.set(null);
+      this.lines.set([]);
+      if (!cop) {
+        this.notices.set([]);
+        return;
+      }
+      this.api.listPaymentNotices(cop).subscribe({ next: (n) => this.notices.set(n) });
+    });
   }
 
   private load(): void {

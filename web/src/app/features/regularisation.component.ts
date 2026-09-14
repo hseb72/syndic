@@ -1,21 +1,23 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoModule } from '@jsverse/transloco';
-import { ApiService, type Exercise, type RegularisationResult } from '../core/api.service';
-
-const COP_STORAGE_KEY = 'syndic.copId';
+import { ApiService, type RegularisationResult } from '../core/api.service';
+import { CopropertyContextService } from '../core/coproperty-context.service';
+import { ExerciseContextService } from '../core/exercise-context.service';
 
 @Component({
   selector: 'app-regularisation',
   imports: [TranslocoModule, ReactiveFormsModule, DecimalPipe],
   templateUrl: './regularisation.component.html',
 })
-export class RegularisationComponent implements OnInit {
+export class RegularisationComponent {
   private api = inject(ApiService);
+  private copCtx = inject(CopropertyContextService);
+  private exCtx = inject(ExerciseContextService);
 
-  readonly copId = signal<string | null>(null);
-  readonly exercises = signal<Exercise[]>([]);
+  readonly copId = this.copCtx.currentId;
+  readonly exercises = this.exCtx.exercises;
   readonly result = signal<RegularisationResult | null>(null);
   readonly loading = signal(true);
   readonly computing = signal(false);
@@ -34,25 +36,19 @@ export class RegularisationComponent implements OnInit {
     dueDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
 
-  ngOnInit(): void {
-    let cop: string | null = null;
-    try {
-      cop = localStorage.getItem(COP_STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
-    this.copId.set(cop);
-    if (!cop) {
+  constructor() {
+    // Exercices fournis par l'entête ; on présélectionne l'exercice courant à
+    // régulariser (N-1) et on repart à zéro quand la copropriété change.
+    effect(() => {
+      const cop = this.copCtx.currentId();
+      const rows = this.exCtx.exercises();
       this.loading.set(false);
-      return;
-    }
-    this.api.listExercises(cop).subscribe({
-      next: (rows) => {
-        this.exercises.set(rows);
-        if (rows[0]) this.form.controls.exerciseN1Id.setValue(rows[0].id);
-        this.loading.set(false);
-      },
-      error: () => this.loading.set(false),
+      this.result.set(null);
+      this.genResult.set(null);
+      if (!cop) return;
+      const cur = this.exCtx.currentId();
+      const pick = rows.find((e) => e.id === cur) ?? rows[0];
+      if (pick) this.form.controls.exerciseN1Id.setValue(pick.id);
     });
   }
 

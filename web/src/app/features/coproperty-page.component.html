@@ -100,6 +100,69 @@
     }
   </div>
 
+  <!-- Exercices comptables (bureau) -->
+  @if (auth.isBureau() && selectedId()) {
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>{{ t('exercises.title') }}</h2>
+          <div class="hint">{{ t('exercises.hint') }}</div>
+        </div>
+        <button class="btn primary" type="button" (click)="showExForm.set(!showExForm())">{{ t('expenses.newExercise') }}</button>
+      </div>
+
+      @if (showExForm()) {
+        <form class="panel" [formGroup]="exForm" (ngSubmit)="submitExercise()">
+          <div class="form-grid">
+            <div class="field">
+              <label for="cx-label">{{ t('field.exerciseLabel') }}</label>
+              <input id="cx-label" type="text" formControlName="label" placeholder="2024" />
+            </div>
+            <div class="field">
+              <label for="cx-start">{{ t('field.startDate') }}</label>
+              <input id="cx-start" type="date" formControlName="startDate" />
+            </div>
+            <div class="field">
+              <label for="cx-end">{{ t('field.endDate') }}</label>
+              <input id="cx-end" type="date" formControlName="endDate" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit" [disabled]="exForm.invalid || saving()">{{ t('btn.create') }}</button>
+            <button class="btn ghost" type="button" (click)="showExForm.set(false)">{{ t('btn.cancel') }}</button>
+          </div>
+        </form>
+      }
+
+      @if (exercises().length === 0) {
+        <div class="empty">{{ t('exercises.empty') }}</div>
+      } @else {
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ t('field.exerciseLabel') }}</th>
+                <th>{{ t('field.startDate') }}</th>
+                <th>{{ t('field.endDate') }}</th>
+                <th>{{ t('th.status') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (e of exercises(); track e.id) {
+                <tr [style.font-weight]="e.id === selectedId() ? '600' : '400'">
+                  <td>{{ e.label || '—' }}</td>
+                  <td>{{ e.start_date }}</td>
+                  <td>{{ e.end_date }}</td>
+                  <td><span class="pill" [class.good]="e.status !== 'CLOSED'" [class.neutral]="e.status === 'CLOSED'">{{ e.status === 'CLOSED' ? t('cash.statusClosed') : t('cash.statusOpen') }}</span></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+
   <!-- Sauvegarde & restauration (bureau) -->
   @if (auth.isBureau()) {
     <div class="card">

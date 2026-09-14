@@ -85,11 +85,6 @@
       <div class="card-head">
         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
           <h2>{{ t('cash.calls') }}</h2>
-          <select class="lang-select" [value]="selectedExId()" (change)="selectExercise($any($event.target).value)" style="min-width:140px;">
-            @for (e of exercises(); track e.id) {
-              <option [value]="e.id" [selected]="e.id === selectedExId()">{{ e.label || (e.start_date + ' → ' + e.end_date) }}</option>
-            }
-          </select>
           @if (selectedExercise(); as ex) {
             <span class="pill" [class.good]="ex.status !== 'CLOSED'" [class.neutral]="ex.status === 'CLOSED'">
               {{ ex.status === 'CLOSED' ? t('cash.statusClosed') : t('cash.statusOpen') }}

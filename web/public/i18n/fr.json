@@ -85,7 +85,8 @@
     "fundWorks": "Fonds travaux",
     "payee": "Bénéficiaire (fournisseur, banque…)",
     "addHint": "Toute dépense de la copropriété — avec ou sans facture (ex. frais bancaires). Le numéro de facture n'est pas requis.",
-    "editHint": "Corrigez les informations de cette dépense. Le nouveau montant ré-échelonne la ventilation à l’identique."
+    "editHint": "Corrigez les informations de cette dépense. Le nouveau montant ré-échelonne la ventilation à l’identique.",
+    "noExerciseHint": "Aucun exercice pour cette copropriété. Créez-en un dans l’onglet Copropriété."
   },
   "reg": {
     "title": "Régularisation annuelle",
@@ -408,5 +409,10 @@
     "exportError": "Échec de l’export.",
     "importError": "Échec de l’import.",
     "importOk": "Import réussi : {{count}} enregistrements restaurés."
+  },
+  "exercises": {
+    "title": "Exercices comptables",
+    "hint": "Créez et consultez les exercices. La sélection de l’exercice affiché se fait dans l’entête.",
+    "empty": "Aucun exercice. Créez-en un pour commencer la saisie."
   }
 }

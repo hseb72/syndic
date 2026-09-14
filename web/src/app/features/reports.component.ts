@@ -1,10 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
-import { ApiService, type BudgetResult, type Coproperty, type Exercise, type RegularisationReport } from '../core/api.service';
-
-const COP_STORAGE_KEY = 'syndic.copId';
-const EX_STORAGE_KEY = 'syndic.exId';
+import { ApiService, type BudgetResult, type RegularisationReport } from '../core/api.service';
+import { CopropertyContextService } from '../core/coproperty-context.service';
+import { ExerciseContextService } from '../core/exercise-context.service';
 
 @Component({
   selector: 'app-reports',
@@ -15,25 +14,7 @@ const EX_STORAGE_KEY = 'syndic.exId';
         <div class="card"><div class="empty">{{ t('coprop.none') }}</div></div>
       } @else {
         <div class="card">
-          <div class="card-head">
-            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-              <h2>{{ t('reports.title') }}</h2>
-              @if (coproperties().length > 1) {
-                <select class="lang-select" [value]="copId()" (change)="selectCop($any($event.target).value)" style="min-width:180px;">
-                  @for (c of coproperties(); track c.id) {
-                    <option [value]="c.id" [selected]="c.id === copId()">{{ c.name }}</option>
-                  }
-                </select>
-              }
-              @if (exercises().length > 0) {
-                <select class="lang-select" [value]="exId()" (change)="selectExercise($any($event.target).value)" style="min-width:140px;">
-                  @for (e of exercises(); track e.id) {
-                    <option [value]="e.id" [selected]="e.id === exId()">{{ e.label || (e.start_date + ' → ' + e.end_date) }}</option>
-                  }
-                </select>
-              }
-            </div>
-          </div>
+          <div class="card-head"><h2>{{ t('reports.title') }}</h2></div>
           <div class="hint">{{ t('reports.hint') }}</div>
         </div>
 
@@ -83,66 +64,27 @@ const EX_STORAGE_KEY = 'syndic.exId';
     </ng-container>
   `,
 })
-export class ReportsComponent implements OnInit {
+export class ReportsComponent {
   private api = inject(ApiService);
+  private copCtx = inject(CopropertyContextService);
+  private exCtx = inject(ExerciseContextService);
 
-  readonly coproperties = signal<Coproperty[]>([]);
-  readonly copId = signal<string | null>(null);
-  readonly exId = signal<string | null>(null);
-  readonly exercises = signal<Exercise[]>([]);
+  readonly copId = this.copCtx.currentId;
+  readonly exId = this.exCtx.currentId;
+  readonly exercises = this.exCtx.exercises;
   readonly budget = signal<BudgetResult | null>(null);
   readonly report = signal<RegularisationReport | null>(null);
 
-  ngOnInit(): void {
-    this.api.listCoproperties().subscribe({
-      next: (rows) => {
-        this.coproperties.set(rows);
-        const stored = this.read(COP_STORAGE_KEY);
-        const initial = rows.find((c) => c.id === stored) ?? rows[0];
-        if (initial) this.selectCop(initial.id);
-      },
+  constructor() {
+    effect(() => {
+      const cop = this.copCtx.currentId();
+      const ex = this.exCtx.currentId();
+      this.budget.set(null);
+      this.report.set(null);
+      if (!cop || !ex) return;
+      this.api.getBudget(cop, ex).subscribe({ next: (b) => this.budget.set(b) });
+      this.api.getRegularisationReport(cop, ex).subscribe({ next: (r) => this.report.set(r) });
     });
-  }
-
-  selectCop(id: string): void {
-    this.copId.set(id);
-    try {
-      localStorage.setItem(COP_STORAGE_KEY, id);
-    } catch {
-      /* ignore */
-    }
-    this.exercises.set([]);
-    this.budget.set(null);
-    this.report.set(null);
-    const ex = this.read(EX_STORAGE_KEY);
-    this.api.listExercises(id).subscribe({
-      next: (rows) => {
-        this.exercises.set(rows);
-        const initial = rows.find((e) => e.id === ex) ?? rows[0];
-        if (initial) this.selectExercise(initial.id);
-      },
-    });
-  }
-
-  private read(key: string): string | null {
-    try {
-      return localStorage.getItem(key);
-    } catch {
-      return null;
-    }
-  }
-
-  selectExercise(id: string): void {
-    this.exId.set(id);
-    try {
-      localStorage.setItem(EX_STORAGE_KEY, id);
-    } catch {
-      /* ignore */
-    }
-    const cop = this.copId();
-    if (!cop) return;
-    this.api.getBudget(cop, id).subscribe({ next: (b) => this.budget.set(b) });
-    this.api.getRegularisationReport(cop, id).subscribe({ next: (r) => this.report.set(r) });
   }
 
   num(n: string | number): number {

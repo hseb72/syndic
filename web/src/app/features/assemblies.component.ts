@@ -1,10 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
-import { ApiService, type Annex, type Assembly, type Exercise, type Resolution } from '../core/api.service';
-
-const COP_STORAGE_KEY = 'syndic.copId';
+import { ApiService, type Annex, type Assembly, type Resolution } from '../core/api.service';
+import { CopropertyContextService } from '../core/coproperty-context.service';
+import { ExerciseContextService } from '../core/exercise-context.service';
 
 const MAJORITIES = ['ART_24', 'ART_25', 'ART_26', 'UNANIMITE', 'INFORMATION'];
 const REPORT_TYPES = ['BUDGET', 'COMPARATIF', 'REGULARISATION', 'IMPAYES', 'TRESORERIE', 'LIBRE'];
@@ -14,16 +14,18 @@ const REPORT_TYPES = ['BUDGET', 'COMPARATIF', 'REGULARISATION', 'IMPAYES', 'TRES
   imports: [TranslocoModule, FormsModule, RouterLink],
   templateUrl: './assemblies.component.html',
 })
-export class AssembliesComponent implements OnInit {
+export class AssembliesComponent {
   private api = inject(ApiService);
   private transloco = inject(TranslocoService);
+  private copCtx = inject(CopropertyContextService);
+  private exCtx = inject(ExerciseContextService);
 
   readonly majorities = MAJORITIES;
   readonly reportTypes = REPORT_TYPES;
 
-  readonly copId = signal<string | null>(null);
+  readonly copId = this.copCtx.currentId;
   readonly assemblies = signal<Assembly[]>([]);
-  readonly exercises = signal<Exercise[]>([]);
+  readonly exercises = this.exCtx.exercises;
   readonly selected = signal<Assembly | null>(null);
   readonly resolutions = signal<Resolution[]>([]);
   readonly annexes = signal<Annex[]>([]);
@@ -47,17 +49,18 @@ export class AssembliesComponent implements OnInit {
   anExercise = '';
   anNote = '';
 
-  ngOnInit(): void {
-    let cop: string | null = null;
-    try {
-      cop = localStorage.getItem(COP_STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
-    this.copId.set(cop);
-    if (!cop) return;
-    this.api.listAssemblies(cop).subscribe({ next: (a) => this.assemblies.set(a) });
-    this.api.listExercises(cop).subscribe({ next: (e) => this.exercises.set(e) });
+  constructor() {
+    effect(() => {
+      const cop = this.copCtx.currentId();
+      this.selected.set(null);
+      this.resolutions.set([]);
+      this.annexes.set([]);
+      if (!cop) {
+        this.assemblies.set([]);
+        return;
+      }
+      this.api.listAssemblies(cop).subscribe({ next: (a) => this.assemblies.set(a) });
+    });
   }
 
   createAssembly(): void {

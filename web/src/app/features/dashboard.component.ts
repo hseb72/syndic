@@ -1,10 +1,9 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
 import { ApiService, type DashboardSummary } from '../core/api.service';
-
-const COP_STORAGE_KEY = 'syndic.copId';
-const EX_STORAGE_KEY = 'syndic.exId';
+import { CopropertyContextService } from '../core/coproperty-context.service';
+import { ExerciseContextService } from '../core/exercise-context.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -73,24 +72,24 @@ const EX_STORAGE_KEY = 'syndic.exId';
     `,
   ],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   private api = inject(ApiService);
-  readonly copId = signal<string | null>(null);
+  private copCtx = inject(CopropertyContextService);
+  private exCtx = inject(ExerciseContextService);
+  readonly copId = this.copCtx.currentId;
   readonly data = signal<DashboardSummary | null>(null);
 
-  ngOnInit(): void {
-    let cop: string | null = null;
-    let ex: string | null = null;
-    try {
-      cop = localStorage.getItem(COP_STORAGE_KEY);
-      ex = localStorage.getItem(EX_STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
-    this.copId.set(cop);
-    if (cop) {
+  constructor() {
+    // Recharge dès que la copropriété ou l'exercice courant change (entête).
+    effect(() => {
+      const cop = this.copCtx.currentId();
+      const ex = this.exCtx.currentId();
+      if (!cop) {
+        this.data.set(null);
+        return;
+      }
       this.api.getDashboard(cop, ex ?? undefined).subscribe({ next: (d) => this.data.set(d) });
-    }
+    });
   }
 
   consumedPct(d: DashboardSummary): number {

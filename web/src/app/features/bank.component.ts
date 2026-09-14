@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
@@ -12,8 +12,8 @@ import {
   type ReceivableRow,
 } from '../core/api.service';
 import { extractPdfPages, parseStatement } from '../core/statement-import';
-
-const COP_STORAGE_KEY = 'syndic.copId';
+import { CopropertyContextService } from '../core/coproperty-context.service';
+import { ExerciseContextService } from '../core/exercise-context.service';
 
 /** Catégories de dépense/recette (codes miroir du serveur, libellés i18n bankcat.*). */
 export const BANK_CATEGORIES = [
@@ -44,12 +44,14 @@ interface ReviewRow {
   imports: [TranslocoModule, FormsModule, DecimalPipe],
   templateUrl: './bank.component.html',
 })
-export class BankComponent implements OnInit {
+export class BankComponent {
   private api = inject(ApiService);
   private transloco = inject(TranslocoService);
+  private copCtx = inject(CopropertyContextService);
+  private exCtx = inject(ExerciseContextService);
 
   readonly categories = BANK_CATEGORIES;
-  readonly copId = signal<string | null>(null);
+  readonly copId = this.copCtx.currentId;
   readonly transactions = signal<BankTx[]>([]);
   readonly showAll = signal(false);
   readonly importText = signal('');
@@ -76,15 +78,17 @@ export class BankComponent implements OnInit {
   readonly pdfName = signal<string | null>(null);
   readonly reviewRows = signal<ReviewRow[]>([]);
 
-  ngOnInit(): void {
-    let cop: string | null = null;
-    try {
-      cop = localStorage.getItem(COP_STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
-    this.copId.set(cop);
-    if (cop) this.load();
+  constructor() {
+    // La banque ne dépend que de la copropriété : on recharge à son changement.
+    effect(() => {
+      const cop = this.copCtx.currentId();
+      this.reconcileTx.set(null);
+      if (!cop) {
+        this.transactions.set([]);
+        return;
+      }
+      this.api.listBankTransactions(cop, !this.showAll()).subscribe({ next: (t) => this.transactions.set(t) });
+    });
   }
 
   private load(): void {
@@ -370,14 +374,9 @@ export class BankComponent implements OnInit {
     if (!cop || !tx || !this.ceName.trim()) return;
     this.saving.set(true);
     try {
-      // Exercice courant.
-      const ex = await firstValueFrom(this.api.listExercises(cop));
-      let exId: string | null = null;
-      try {
-        exId = localStorage.getItem('syndic.exId');
-      } catch {
-        /* ignore */
-      }
+      // Exercice courant (piloté par l'entête).
+      const exId = this.exCtx.currentId();
+      const ex = this.exCtx.exercises();
       const exercise = ex.find((e) => e.id === exId) ?? ex[0];
       if (!exercise) return;
       // Résolution du bénéficiaire (création si nouveau).

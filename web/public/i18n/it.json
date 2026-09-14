@@ -85,7 +85,8 @@
     "fundWorks": "Fondo lavori",
     "payee": "Beneficiario (fornitore, banca…)",
     "addHint": "Qualsiasi spesa — con o senza fattura (es. spese bancarie). Il numero di fattura non è richiesto.",
-    "editHint": "Correggi questa spesa. Un nuovo importo riscala la ripartizione in modo proporzionale."
+    "editHint": "Correggi questa spesa. Un nuovo importo riscala la ripartizione in modo proporzionale.",
+    "noExerciseHint": "Nessun esercizio per questo condominio. Crealo nella scheda Condominio."
   },
   "reg": {
     "title": "Conguaglio annuale",
@@ -408,5 +409,10 @@
     "exportError": "Esportazione non riuscita.",
     "importError": "Importazione non riuscita.",
     "importOk": "Importazione riuscita: {{count}} record ripristinati."
+  },
+  "exercises": {
+    "title": "Esercizi contabili",
+    "hint": "Crea e consulta gli esercizi. L’esercizio mostrato si sceglie nell’intestazione.",
+    "empty": "Nessun esercizio. Creane uno per iniziare."
   }
 }

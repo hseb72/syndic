@@ -16,8 +16,7 @@ import {
   type RegularisationReport,
   type Resolution,
 } from '../core/api.service';
-
-const COP_STORAGE_KEY = 'syndic.copId';
+import { CopropertyContextService } from '../core/coproperty-context.service';
 
 interface AnnexData {
   annex: Annex;
@@ -38,6 +37,7 @@ export class ConvocationComponent implements OnInit {
   private api = inject(ApiService);
   private route = inject(ActivatedRoute);
   private transloco = inject(TranslocoService);
+  private copCtx = inject(CopropertyContextService);
 
   readonly copId = signal<string | null>(null);
   readonly coproperty = signal<Coproperty | null>(null);
@@ -48,12 +48,7 @@ export class ConvocationComponent implements OnInit {
   readonly loading = signal(true);
 
   async ngOnInit(): Promise<void> {
-    let cop: string | null = null;
-    try {
-      cop = localStorage.getItem(COP_STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
+    const cop = this.copCtx.currentId();
     this.copId.set(cop);
     const id = this.route.snapshot.paramMap.get('id');
     if (!cop || !id) {

@@ -75,6 +75,12 @@ input, select, textarea { font-family: inherit; font-size: 14px; color: var(--in
 .cop-badge-label { font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
 .cop-badge-name { font-size: 13.5px; font-weight: 600; color: var(--accent-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
 @media (max-width: 640px) { .cop-badge { display: none; } }
+
+/* Sélecteurs contextuels (copropriété + exercice) dans l'entête. */
+.ctx-picker { display: inline-flex; align-items: flex-end; gap: 10px; margin-left: 6px; min-width: 0; flex-wrap: wrap; }
+.ctx-field { display: inline-flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ctx-label { font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.ctx-field .lang-select { max-width: 240px; }
 .kv { display: grid; gap: 8px 24px; grid-template-columns: repeat(auto-fit, minmax(180px, auto)); }
 .kv > div { display: flex; flex-direction: column; gap: 1px; }
 .kv dt { font-size: 11px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted); margin: 0; }

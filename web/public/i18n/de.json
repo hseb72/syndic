@@ -85,7 +85,8 @@
     "fundWorks": "Instandhaltungsrücklage",
     "payee": "Empfänger (Lieferant, Bank…)",
     "addHint": "Jede Ausgabe — mit oder ohne Rechnung (z. B. Bankgebühren). Eine Rechnungsnummer ist nicht erforderlich.",
-    "editHint": "Korrigieren Sie diese Ausgabe. Ein neuer Betrag skaliert die Verteilung proportional neu."
+    "editHint": "Korrigieren Sie diese Ausgabe. Ein neuer Betrag skaliert die Verteilung proportional neu.",
+    "noExerciseHint": "Kein Geschäftsjahr für diese Gemeinschaft. Legen Sie eines im Tab Eigentümergemeinschaft an."
   },
   "reg": {
     "title": "Jahresabrechnung",
@@ -408,5 +409,10 @@
     "exportError": "Export fehlgeschlagen.",
     "importError": "Import fehlgeschlagen.",
     "importOk": "Import erfolgreich: {{count}} Datensätze wiederhergestellt."
+  },
+  "exercises": {
+    "title": "Geschäftsjahre",
+    "hint": "Geschäftsjahre anlegen und einsehen. Das angezeigte Jahr wählen Sie in der Kopfzeile.",
+    "empty": "Noch kein Geschäftsjahr. Legen Sie eines an, um zu beginnen."
   }
 }

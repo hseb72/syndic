@@ -85,7 +85,8 @@
     "fundWorks": "Fondo de obras",
     "payee": "Beneficiario (proveedor, banco…)",
     "addHint": "Cualquier gasto — con o sin factura (p. ej. gastos bancarios). No se requiere número de factura.",
-    "editHint": "Corrija este gasto. Un nuevo importe reescala su reparto proporcionalmente."
+    "editHint": "Corrija este gasto. Un nuevo importe reescala su reparto proporcionalmente.",
+    "noExerciseHint": "No hay ejercicio para esta comunidad. Cree uno en la pestaña Comunidad."
   },
   "reg": {
     "title": "Regularización anual",
@@ -408,5 +409,10 @@
     "exportError": "Error al exportar.",
     "importError": "Error al importar.",
     "importOk": "Importación correcta: {{count}} registros restaurados."
+  },
+  "exercises": {
+    "title": "Ejercicios contables",
+    "hint": "Cree y consulte los ejercicios. El ejercicio mostrado se elige en la cabecera.",
+    "empty": "Aún no hay ejercicios. Cree uno para empezar."
   }
 }

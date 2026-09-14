@@ -1,13 +1,12 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
-import { ApiService, type Coproperty, type CopropertyOverview, type LotOverviewRow, type LotOwner } from '../core/api.service';
+import { ApiService, type Coproperty, type CopropertyOverview, type Exercise, type LotOverviewRow, type LotOwner } from '../core/api.service';
 import { AuthService } from '../core/auth.service';
 import { CopropertyContextService } from '../core/coproperty-context.service';
-
-const COP_STORAGE_KEY = 'syndic.copId';
+import { ExerciseContextService } from '../core/exercise-context.service';
 
 /** Parse un nombre décimal saisi avec virgule (FR) ou point. `null` si invalide. */
 function parseDecimal(raw: string | number | null | undefined): number | null {
@@ -32,14 +31,16 @@ function apiErrorMessage(err: unknown, fallback: string): string {
   imports: [TranslocoModule, ReactiveFormsModule, DecimalPipe],
   templateUrl: './coproperty-page.component.html',
 })
-export class CopropertyPageComponent implements OnInit {
+export class CopropertyPageComponent {
   private api = inject(ApiService);
   private transloco = inject(TranslocoService);
   readonly auth = inject(AuthService);
   private copCtx = inject(CopropertyContextService);
+  private exCtx = inject(ExerciseContextService);
 
-  readonly coproperties = signal<Coproperty[]>([]);
-  readonly selectedId = signal<string | null>(null);
+  // Liste et sélection partagées avec l'entête (source unique de vérité).
+  readonly coproperties = this.copCtx.coproperties;
+  readonly selectedId = this.copCtx.currentId;
   readonly overview = signal<CopropertyOverview | null>(null);
 
   readonly loadingList = signal(true);
@@ -102,37 +103,36 @@ export class CopropertyPageComponent implements OnInit {
     password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
   });
 
-  ngOnInit(): void {
-    this.loadCoproperties();
-  }
+  // --- Exercices comptables (création ; la sélection se fait dans l'entête) ---
+  readonly exercises = this.exCtx.exercises;
+  readonly showExForm = signal(false);
+  readonly exForm = new FormGroup({
+    label: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    startDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    endDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+  });
 
-  private loadCoproperties(): void {
-    this.loadingList.set(true);
-    this.api.listCoproperties().subscribe({
-      next: (rows) => {
-        this.coproperties.set(rows);
-        this.loadingList.set(false);
-        const stored = this.readStoredCop();
-        const initial = rows.find((c) => c.id === stored) ?? rows[0];
-        if (initial) this.selectCop(initial.id);
-      },
-      error: () => this.loadingList.set(false),
+  constructor() {
+    // La copropriété courante vient de l'entête : on recharge le détail à chaque
+    // changement (et on referme les panneaux d'édition ouverts).
+    effect(() => {
+      const id = this.copCtx.currentId();
+      this.loadingList.set(false);
+      this.editingLotId.set(null);
+      this.showLotForm.set(false);
+      this.showEditCop.set(false);
+      this.ownersLotId.set(null);
+      this.showExForm.set(false);
+      if (!id) {
+        this.overview.set(null);
+        return;
+      }
+      this.loadOverview();
     });
   }
 
   selectCop(id: string): void {
-    this.selectedId.set(id);
-    this.editingLotId.set(null);
-    this.showLotForm.set(false);
-    this.showEditCop.set(false);
-    this.ownersLotId.set(null);
-    try {
-      localStorage.setItem(COP_STORAGE_KEY, id);
-    } catch {
-      /* ignore */
-    }
-    this.copCtx.select(id); // met à jour le bandeau de l'application
-    this.loadOverview();
+    this.copCtx.select(id); // pilote l'entête ; l'effet ci-dessus recharge le détail.
   }
 
   startEditCop(): void {
@@ -164,7 +164,6 @@ export class CopropertyPageComponent implements OnInit {
       })
       .subscribe({
         next: (updated) => {
-          this.coproperties.update((list) => list.map((c) => (c.id === updated.id ? updated : c)));
           this.copCtx.upsert(updated);
           this.showEditCop.set(false);
           this.saving.set(false);
@@ -192,7 +191,6 @@ export class CopropertyPageComponent implements OnInit {
     const v = this.copForm.getRawValue();
     this.api.createCoproperty({ name: v.name, address: v.address || null, city: v.city || null }).subscribe({
       next: (created) => {
-        this.coproperties.update((list) => [...list, created]);
         this.copCtx.upsert(created);
         this.copForm.reset();
         this.showCopForm.set(false);
@@ -491,11 +489,20 @@ export class CopropertyPageComponent implements OnInit {
     }
   }
 
-  private readStoredCop(): string | null {
-    try {
-      return localStorage.getItem(COP_STORAGE_KEY);
-    } catch {
-      return null;
-    }
+  /** Crée un exercice comptable pour la copropriété courante et le sélectionne. */
+  submitExercise(): void {
+    const cop = this.copCtx.currentId();
+    if (!cop || this.exForm.invalid) return;
+    this.saving.set(true);
+    const v = this.exForm.getRawValue();
+    this.api.createExercise(cop, { label: v.label, startDate: v.startDate, endDate: v.endDate }).subscribe({
+      next: (ex: Exercise) => {
+        this.exCtx.addLocal(ex); // ajoute et sélectionne dans l'entête
+        this.exForm.reset();
+        this.showExForm.set(false);
+        this.saving.set(false);
+      },
+      error: () => this.saving.set(false),
+    });
   }
 }

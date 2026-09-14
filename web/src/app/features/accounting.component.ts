@@ -1,11 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
 import { ApiService, type BalanceResult, type JournalLine } from '../core/api.service';
 import { AuthService } from '../core/auth.service';
-
-const COP_STORAGE_KEY = 'syndic.copId';
-const EX_STORAGE_KEY = 'syndic.exId';
+import { CopropertyContextService } from '../core/coproperty-context.service';
+import { ExerciseContextService } from '../core/exercise-context.service';
 
 @Component({
   selector: 'app-accounting',
@@ -104,28 +103,30 @@ const EX_STORAGE_KEY = 'syndic.exId';
     </ng-container>
   `,
 })
-export class AccountingComponent implements OnInit {
+export class AccountingComponent {
   private api = inject(ApiService);
   readonly auth = inject(AuthService);
+  private copCtx = inject(CopropertyContextService);
+  private exCtx = inject(ExerciseContextService);
 
-  readonly copId = signal<string | null>(null);
-  readonly exId = signal<string | null>(null);
+  readonly copId = this.copCtx.currentId;
+  readonly exId = this.exCtx.currentId;
   readonly balance = signal<BalanceResult | null>(null);
   readonly journal = signal<JournalLine[]>([]);
   readonly generating = signal(false);
 
-  ngOnInit(): void {
-    let cop: string | null = null;
-    let ex: string | null = null;
-    try {
-      cop = localStorage.getItem(COP_STORAGE_KEY);
-      ex = localStorage.getItem(EX_STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
-    this.copId.set(cop);
-    this.exId.set(ex);
-    if (cop && ex) this.load();
+  constructor() {
+    effect(() => {
+      const cop = this.copCtx.currentId();
+      const ex = this.exCtx.currentId();
+      if (!cop || !ex) {
+        this.balance.set(null);
+        this.journal.set([]);
+        return;
+      }
+      this.api.getBalance(cop, ex).subscribe({ next: (b) => this.balance.set(b) });
+      this.api.getJournal(cop, ex).subscribe({ next: (j) => this.journal.set(j) });
+    });
   }
 
   private load(): void {

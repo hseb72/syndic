@@ -1,31 +1,15 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
-import { ApiService, type Coproperty, type MySummary } from '../core/api.service';
-
-const COP_STORAGE_KEY = 'syndic.copId';
-const EX_STORAGE_KEY = 'syndic.exId';
+import { ApiService, type MySummary } from '../core/api.service';
+import { CopropertyContextService } from '../core/coproperty-context.service';
+import { ExerciseContextService } from '../core/exercise-context.service';
 
 @Component({
   selector: 'app-mycharges',
   imports: [TranslocoModule, DecimalPipe],
   template: `
     <ng-container *transloco="let t">
-      @if (coproperties().length > 1) {
-        <div class="card">
-          <div class="card-head">
-            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-              <h2>{{ t('coprop.select') }}</h2>
-              <select class="lang-select" [value]="copId()" (change)="selectCop($any($event.target).value)" style="min-width:200px;">
-                @for (c of coproperties(); track c.id) {
-                  <option [value]="c.id" [selected]="c.id === copId()">{{ c.name }}</option>
-                }
-              </select>
-            </div>
-          </div>
-        </div>
-      }
-
       @if (data(); as d) {
         @if (!d.linked) {
           <div class="card"><div class="banner tip">{{ t('mine.notLinked') }}</div></div>
@@ -89,47 +73,27 @@ const EX_STORAGE_KEY = 'syndic.exId';
             }
           </div>
         }
-      } @else if (coproperties().length === 0) {
-        <div class="card"><div class="banner tip">{{ t('mine.notLinked') }}</div></div>
+      } @else if (!copId()) {
+        <div class="card"><div class="empty">{{ t('coprop.none') }}</div></div>
       }
     </ng-container>
   `,
 })
-export class MyChargesComponent implements OnInit {
+export class MyChargesComponent {
   private api = inject(ApiService);
+  private copCtx = inject(CopropertyContextService);
+  private exCtx = inject(ExerciseContextService);
   readonly data = signal<MySummary | null>(null);
-  readonly coproperties = signal<Coproperty[]>([]);
-  readonly copId = signal<string | null>(null);
+  readonly copId = this.copCtx.currentId;
 
-  ngOnInit(): void {
-    this.api.listCoproperties().subscribe({
-      next: (rows) => {
-        this.coproperties.set(rows);
-        const stored = this.read(COP_STORAGE_KEY);
-        const initial = rows.find((c) => c.id === stored) ?? rows[0];
-        if (initial) this.selectCop(initial.id);
-      },
+  constructor() {
+    effect(() => {
+      const cop = this.copCtx.currentId();
+      const ex = this.exCtx.currentId();
+      this.data.set(null);
+      if (!cop) return;
+      this.api.getMySummary(cop, ex ?? undefined).subscribe({ next: (d) => this.data.set(d) });
     });
-  }
-
-  selectCop(id: string): void {
-    this.copId.set(id);
-    try {
-      localStorage.setItem(COP_STORAGE_KEY, id);
-    } catch {
-      /* ignore */
-    }
-    const ex = this.read(EX_STORAGE_KEY);
-    this.data.set(null);
-    this.api.getMySummary(id, ex ?? undefined).subscribe({ next: (d) => this.data.set(d) });
-  }
-
-  private read(key: string): string | null {
-    try {
-      return localStorage.getItem(key);
-    } catch {
-      return null;
-    }
   }
 
   lotsLabel(d: MySummary): string {

@@ -12,10 +12,26 @@
             <h1>{{ t('app.name') }}</h1>
             <p class="sub">{{ t('app.sub') }}</p>
           </div>
-          @if (copCtx.current(); as cop) {
-            <div class="cop-badge" [title]="t('coprop.current')">
-              <span class="cop-badge-label">{{ t('coprop.select') }}</span>
-              <span class="cop-badge-name">{{ cop.name }}</span>
+          @if (copCtx.coproperties().length > 0) {
+            <div class="ctx-picker">
+              <label class="ctx-field">
+                <span class="ctx-label">{{ t('coprop.select') }}</span>
+                <select class="lang-select" [value]="copCtx.currentId()" (change)="selectCop($any($event.target).value)">
+                  @for (c of copCtx.coproperties(); track c.id) {
+                    <option [value]="c.id" [selected]="c.id === copCtx.currentId()">{{ c.name }}</option>
+                  }
+                </select>
+              </label>
+              @if (exCtx.exercises().length > 0) {
+                <label class="ctx-field">
+                  <span class="ctx-label">{{ t('expenses.exercise') }}</span>
+                  <select class="lang-select" [value]="exCtx.currentId()" (change)="selectExercise($any($event.target).value)">
+                    @for (e of exCtx.exercises(); track e.id) {
+                      <option [value]="e.id" [selected]="e.id === exCtx.currentId()">{{ e.label || (e.start_date + ' → ' + e.end_date) }}</option>
+                    }
+                  </select>
+                </label>
+              }
             </div>
           }
         </div>

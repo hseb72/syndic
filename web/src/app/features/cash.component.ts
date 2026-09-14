@@ -1,9 +1,11 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoModule } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
 import { ApiService, type BudgetResult, type Exercise, type FundCall, type ReceivableRow } from '../core/api.service';
+import { CopropertyContextService } from '../core/coproperty-context.service';
+import { ExerciseContextService } from '../core/exercise-context.service';
 
 interface CarryForwardRow {
   id: string;
@@ -12,20 +14,19 @@ interface CarryForwardRow {
   amount: string;
 }
 
-const COP_STORAGE_KEY = 'syndic.copId';
-const EX_STORAGE_KEY = 'syndic.exId';
-
 @Component({
   selector: 'app-cash',
   imports: [TranslocoModule, ReactiveFormsModule, DecimalPipe],
   templateUrl: './cash.component.html',
 })
-export class CashComponent implements OnInit {
+export class CashComponent {
   private api = inject(ApiService);
+  private copCtx = inject(CopropertyContextService);
+  private exCtx = inject(ExerciseContextService);
 
-  readonly copId = signal<string | null>(null);
-  readonly exercises = signal<Exercise[]>([]);
-  readonly selectedExId = signal<string | null>(null);
+  readonly copId = this.copCtx.currentId;
+  readonly exercises = this.exCtx.exercises;
+  readonly selectedExId = this.exCtx.currentId;
   readonly fundCalls = signal<FundCall[]>([]);
   readonly receivables = signal<ReceivableRow[]>([]);
   readonly carryForward = signal<CarryForwardRow[]>([]);
@@ -41,7 +42,7 @@ export class CashComponent implements OnInit {
     plannedAmount: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
   });
 
-  readonly selectedExercise = computed(() => this.exercises().find((e) => e.id === this.selectedExId()) ?? null);
+  readonly selectedExercise = this.exCtx.current;
 
   readonly callForm = new FormGroup({
     label: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -50,48 +51,30 @@ export class CashComponent implements OnInit {
     totalAmount: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0.01)] }),
   });
 
-  ngOnInit(): void {
-    let cop: string | null = null;
-    try {
-      cop = localStorage.getItem(COP_STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
-    this.copId.set(cop);
-    if (cop) {
-      this.api.listExercises(cop).subscribe({
-        next: (rows) => {
-          this.exercises.set(rows);
-          this.loading.set(false);
-          let stored: string | null = null;
-          try {
-            stored = localStorage.getItem(EX_STORAGE_KEY);
-          } catch {
-            /* ignore */
-          }
-          const initial = rows.find((e) => e.id === stored) ?? rows[0];
-          if (initial) this.selectExercise(initial.id);
-        },
-        error: () => this.loading.set(false),
-      });
-    } else {
+  constructor() {
+    // Copropriété + exercice pilotés par l'entête : on recharge à chaque changement.
+    effect(() => {
+      const cop = this.copCtx.currentId();
+      const ex = this.exCtx.currentId();
       this.loading.set(false);
-    }
-  }
-
-  selectExercise(id: string): void {
-    this.selectedExId.set(id);
-    try {
-      localStorage.setItem(EX_STORAGE_KEY, id);
-    } catch {
-      /* ignore */
-    }
-    this.reload();
+      if (!cop || !ex) {
+        this.fundCalls.set([]);
+        this.receivables.set([]);
+        this.carryForward.set([]);
+        this.budget.set(null);
+        return;
+      }
+      this.api.listFundCalls(cop, ex).subscribe({ next: (c) => this.fundCalls.set(c) });
+      this.api.listReceivables(cop, ex).subscribe({ next: (r) => this.receivables.set(r) });
+      this.api.listCarryForward(cop, ex).subscribe({ next: (cf) => this.carryForward.set(cf) });
+      this.api.getBudget(cop, ex).subscribe({ next: (b) => this.budget.set(b) });
+    });
   }
 
   private reload(): void {
-    const cop = this.copId();
-    const ex = this.selectedExId();
+    // Force un rechargement (après une écriture) en re-sélectionnant l'exercice courant.
+    const cop = this.copCtx.currentId();
+    const ex = this.exCtx.currentId();
     if (!cop || !ex) return;
     this.api.listFundCalls(cop, ex).subscribe({ next: (c) => this.fundCalls.set(c) });
     this.api.listReceivables(cop, ex).subscribe({ next: (r) => this.receivables.set(r) });
@@ -132,7 +115,7 @@ export class CashComponent implements OnInit {
   }
 
   private updateExercise(updated: Exercise): void {
-    this.exercises.update((list) => list.map((e) => (e.id === updated.id ? updated : e)));
+    this.exCtx.updateLocal(updated);
   }
 
   closeExercise(): void {

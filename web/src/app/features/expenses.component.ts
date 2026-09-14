@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoModule } from '@jsverse/transloco';
@@ -6,26 +6,26 @@ import { firstValueFrom } from 'rxjs';
 import {
   ApiService,
   type ChargesResult,
-  type Exercise,
   type InvoiceRow,
   type LotOverviewRow,
   type Supplier,
 } from '../core/api.service';
-
-const COP_STORAGE_KEY = 'syndic.copId';
-const EX_STORAGE_KEY = 'syndic.exId';
+import { CopropertyContextService } from '../core/coproperty-context.service';
+import { ExerciseContextService } from '../core/exercise-context.service';
 
 @Component({
   selector: 'app-expenses',
   imports: [TranslocoModule, ReactiveFormsModule, DecimalPipe],
   templateUrl: './expenses.component.html',
 })
-export class ExpensesComponent implements OnInit {
+export class ExpensesComponent {
   private api = inject(ApiService);
+  private copCtx = inject(CopropertyContextService);
+  private exCtx = inject(ExerciseContextService);
 
-  readonly copId = signal<string | null>(null);
-  readonly exercises = signal<Exercise[]>([]);
-  readonly selectedExId = signal<string | null>(null);
+  readonly copId = this.copCtx.currentId;
+  readonly exercises = this.exCtx.exercises;
+  readonly selectedExId = this.exCtx.currentId;
   readonly suppliers = signal<Supplier[]>([]);
   readonly invoices = signal<InvoiceRow[]>([]);
   readonly charges = signal<ChargesResult | null>(null);
@@ -37,17 +37,10 @@ export class ExpensesComponent implements OnInit {
 
   readonly loading = signal(true);
   readonly saving = signal(false);
-  readonly showExForm = signal(false);
   readonly showInvoiceForm = signal(false);
   readonly editingInv = signal<InvoiceRow | null>(null);
 
-  readonly selectedExercise = computed(() => this.exercises().find((e) => e.id === this.selectedExId()) ?? null);
-
-  readonly exForm = new FormGroup({
-    label: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    startDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    endDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-  });
+  readonly selectedExercise = this.exCtx.current;
 
   readonly invoiceForm = new FormGroup({
     supplierName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -60,50 +53,32 @@ export class ExpensesComponent implements OnInit {
     consumption: new FormControl<number | null>(null),
   });
 
-  ngOnInit(): void {
-    let cop: string | null = null;
-    try {
-      cop = localStorage.getItem(COP_STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
-    this.copId.set(cop);
-    if (cop) this.loadExercises(cop);
-    else this.loading.set(false);
-  }
-
-  private loadExercises(cop: string): void {
-    this.loading.set(true);
-    this.api.listExercises(cop).subscribe({
-      next: (rows) => {
-        this.exercises.set(rows);
-        this.loading.set(false);
-        let stored: string | null = null;
-        try {
-          stored = localStorage.getItem(EX_STORAGE_KEY);
-        } catch {
-          /* ignore */
-        }
-        const initial = rows.find((e) => e.id === stored) ?? rows[0];
-        if (initial) this.selectExercise(initial.id);
-      },
-      error: () => this.loading.set(false),
+  constructor() {
+    // Fournisseurs et lots ne dépendent que de la copropriété.
+    effect(() => {
+      const cop = this.copCtx.currentId();
+      this.loading.set(false);
+      if (!cop) {
+        this.suppliers.set([]);
+        this.lots.set([]);
+        return;
+      }
+      this.api.listSuppliers(cop).subscribe({ next: (s) => this.suppliers.set(s) });
+      this.api.getOverview(cop).subscribe({ next: (o) => this.lots.set(o.lots) });
     });
-    this.api.listSuppliers(cop).subscribe({ next: (s) => this.suppliers.set(s) });
-    this.api.getOverview(cop).subscribe({ next: (o) => this.lots.set(o.lots) });
-  }
-
-  selectExercise(id: string): void {
-    this.selectedExId.set(id);
-    this.charges.set(null);
-    this.readingsSaved.set(false);
-    try {
-      localStorage.setItem(EX_STORAGE_KEY, id);
-    } catch {
-      /* ignore */
-    }
-    this.loadInvoices();
-    this.loadReadings();
+    // Factures et relevés dépendent de la copropriété ET de l'exercice courant.
+    effect(() => {
+      const cop = this.copCtx.currentId();
+      const ex = this.exCtx.currentId();
+      this.charges.set(null);
+      this.readingsSaved.set(false);
+      if (!cop || !ex) {
+        this.invoices.set([]);
+        return;
+      }
+      this.loadInvoices();
+      this.loadReadings();
+    });
   }
 
   private readingsPeriod(): string {
@@ -169,23 +144,6 @@ export class ExpensesComponent implements OnInit {
     const ex = this.selectedExId();
     if (!cop || !ex) return;
     this.api.listInvoices(cop, ex).subscribe({ next: (rows) => this.invoices.set(rows) });
-  }
-
-  submitExercise(): void {
-    const cop = this.copId();
-    if (!cop || this.exForm.invalid) return;
-    this.saving.set(true);
-    const v = this.exForm.getRawValue();
-    this.api.createExercise(cop, { label: v.label, startDate: v.startDate, endDate: v.endDate }).subscribe({
-      next: (ex) => {
-        this.exercises.update((list) => [...list, ex]);
-        this.exForm.reset();
-        this.showExForm.set(false);
-        this.saving.set(false);
-        this.selectExercise(ex.id);
-      },
-      error: () => this.saving.set(false),
-    });
   }
 
   startAdd(): void {

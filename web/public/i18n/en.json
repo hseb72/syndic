@@ -85,7 +85,8 @@
     "fundWorks": "Works fund",
     "payee": "Payee (supplier, bank…)",
     "addHint": "Any expense — with or without an invoice (e.g. bank fees). An invoice number is not required.",
-    "editHint": "Correct this expense. A new amount re-scales its allocation proportionally."
+    "editHint": "Correct this expense. A new amount re-scales its allocation proportionally.",
+    "noExerciseHint": "No accounting period for this coproperty. Create one in the Coproperty tab."
   },
   "reg": {
     "title": "Annual adjustment",
@@ -408,5 +409,10 @@
     "exportError": "Export failed.",
     "importError": "Import failed.",
     "importOk": "Import successful: {{count}} records restored."
+  },
+  "exercises": {
+    "title": "Accounting periods",
+    "hint": "Create and review periods. Pick the period to display in the header.",
+    "empty": "No period yet. Create one to start entering data."
   }
 }
