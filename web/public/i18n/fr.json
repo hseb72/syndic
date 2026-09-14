@@ -395,5 +395,18 @@
     "variance": "Écart",
     "noImpayes": "Aucun impayé.",
     "dummy": ""
+  },
+  "backup": {
+    "title": "Sauvegarde & restauration",
+    "hint": "Exportez tous les comptes de cette copropriété (pour archiver, changer de logiciel, ou sauvegarder), ou reconstruisez une copropriété à partir d’un fichier exporté. Les identifiants de connexion ne sont pas inclus.",
+    "export": "Exporter les comptes",
+    "exporting": "Export…",
+    "importNew": "Importer → nouvelle copropriété",
+    "importRestore": "Restaurer à l’identique",
+    "restoreConfirm": "Restaurer à l’identique réinsère les données avec leurs identifiants d’origine et échoue si la copropriété existe déjà. Continuer ?",
+    "parseError": "Fichier illisible : JSON invalide.",
+    "exportError": "Échec de l’export.",
+    "importError": "Échec de l’import.",
+    "importOk": "Import réussi : {{count}} enregistrements restaurés."
   }
 }

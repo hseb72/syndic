@@ -18,6 +18,21 @@ export interface Coproperty {
   created_at: string;
 }
 
+export interface CopropertyBackup {
+  formatVersion: number;
+  kind: string;
+  exportedAt: string;
+  copropertyId: string;
+  copropertyName: string;
+  tables: Record<string, Record<string, unknown>[]>;
+}
+
+export interface ImportResult {
+  copropertyId: string;
+  mode: 'NEW' | 'RESTORE';
+  inserted: Record<string, number>;
+}
+
 export interface CreateCopropertyInput {
   name: string;
   address?: string | null;
@@ -471,6 +486,14 @@ export class ApiService {
 
   updateCoproperty(id: string, input: Partial<CreateCopropertyInput>): Observable<Coproperty> {
     return this.http.patch<Coproperty>(`/api/coproperties/${id}`, input);
+  }
+
+  exportCoproperty(copId: string): Observable<CopropertyBackup> {
+    return this.http.get<CopropertyBackup>(`/api/coproperties/${copId}/export`);
+  }
+
+  importCoproperty(file: CopropertyBackup, mode: 'NEW' | 'RESTORE'): Observable<ImportResult> {
+    return this.http.post<ImportResult>('/api/coproperty-import', { mode, file });
   }
 
   getOverview(copId: string): Observable<CopropertyOverview> {

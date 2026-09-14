@@ -395,5 +395,18 @@
     "variance": "Desviación",
     "noImpayes": "Ningún impagado.",
     "dummy": ""
+  },
+  "backup": {
+    "title": "Copia de seguridad y restauración",
+    "hint": "Exporte todas las cuentas de esta comunidad (para archivar, cambiar de software o hacer copia), o reconstruya una comunidad a partir de un archivo exportado. Las credenciales de acceso no se incluyen.",
+    "export": "Exportar cuentas",
+    "exporting": "Exportando…",
+    "importNew": "Importar → nueva comunidad",
+    "importRestore": "Restaurar de forma idéntica",
+    "restoreConfirm": "La restauración idéntica reinserta los datos con sus ID originales y falla si la comunidad ya existe. ¿Continuar?",
+    "parseError": "Archivo ilegible: JSON no válido.",
+    "exportError": "Error al exportar.",
+    "importError": "Error al importar.",
+    "importOk": "Importación correcta: {{count}} registros restaurados."
   }
 }

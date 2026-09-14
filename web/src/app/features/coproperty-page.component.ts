@@ -419,6 +419,78 @@ export class CopropertyPageComponent implements OnInit {
     return String(Number(n));
   }
 
+  // --- Sauvegarde / restauration des comptes ---
+  readonly backupBusy = signal(false);
+  readonly backupError = signal<string | null>(null);
+  readonly backupInfo = signal<string | null>(null);
+
+  /** Exporte tous les comptes de la copropriété courante en fichier JSON. */
+  async exportBackup(): Promise<void> {
+    const cop = this.selectedCop;
+    if (!cop) return;
+    this.backupBusy.set(true);
+    this.backupError.set(null);
+    this.backupInfo.set(null);
+    try {
+      const data = await firstValueFrom(this.api.exportCoproperty(cop.id));
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const stamp = new Date().toISOString().slice(0, 10);
+      const slug = cop.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase() || 'copro';
+      a.href = url;
+      a.download = `syndic-${slug}-${stamp}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      this.backupError.set(apiErrorMessage(err, this.transloco.translate('backup.exportError')));
+    } finally {
+      this.backupBusy.set(false);
+    }
+  }
+
+  /** Importe un fichier de sauvegarde ; `mode` = 'NEW' (nouvelle copro) ou 'RESTORE'. */
+  async importBackup(event: Event, mode: 'NEW' | 'RESTORE'): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const f = input.files?.[0];
+    input.value = '';
+    if (!f) return;
+    if (mode === 'RESTORE' && !confirm(this.transloco.translate('backup.restoreConfirm'))) return;
+    this.backupBusy.set(true);
+    this.backupError.set(null);
+    this.backupInfo.set(null);
+    try {
+      const text = await f.text();
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(text);
+      } catch {
+        this.backupError.set(this.transloco.translate('backup.parseError'));
+        return;
+      }
+      const res = await firstValueFrom(this.api.importCoproperty(parsed as never, mode));
+      const total = Object.values(res.inserted).reduce((a, n) => a + n, 0);
+      this.backupInfo.set(this.transloco.translate('backup.importOk', { count: total }));
+      // Recharge la liste et sélectionne la copropriété reconstruite.
+      await new Promise<void>((resolve) => {
+        this.api.listCoproperties().subscribe({
+          next: (rows) => {
+            this.coproperties.set(rows);
+            if (rows.some((c) => c.id === res.copropertyId)) this.selectCop(res.copropertyId);
+            resolve();
+          },
+          error: () => resolve(),
+        });
+      });
+    } catch (err) {
+      this.backupError.set(apiErrorMessage(err, this.transloco.translate('backup.importError')));
+    } finally {
+      this.backupBusy.set(false);
+    }
+  }
+
   private readStoredCop(): string | null {
     try {
       return localStorage.getItem(COP_STORAGE_KEY);

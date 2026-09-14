@@ -395,5 +395,18 @@
     "variance": "Scostamento",
     "noImpayes": "Nessun insoluto.",
     "dummy": ""
+  },
+  "backup": {
+    "title": "Backup e ripristino",
+    "hint": "Esporta tutti i conti di questo condominio (per archiviare, cambiare software o salvare), oppure ricostruisci un condominio da un file esportato. Le credenziali di accesso non sono incluse.",
+    "export": "Esporta i conti",
+    "exporting": "Esportazione…",
+    "importNew": "Importa → nuovo condominio",
+    "importRestore": "Ripristina in modo identico",
+    "restoreConfirm": "Il ripristino identico reinserisce i dati con gli ID originali e fallisce se il condominio esiste già. Continuare?",
+    "parseError": "File illeggibile: JSON non valido.",
+    "exportError": "Esportazione non riuscita.",
+    "importError": "Importazione non riuscita.",
+    "importOk": "Importazione riuscita: {{count}} record ripristinati."
   }
 }

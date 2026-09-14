@@ -395,5 +395,18 @@
     "variance": "Abweichung",
     "noImpayes": "Keine offenen Posten.",
     "dummy": ""
+  },
+  "backup": {
+    "title": "Sicherung & Wiederherstellung",
+    "hint": "Exportieren Sie alle Konten dieser Eigentümergemeinschaft (zum Archivieren, Softwarewechsel oder als Backup) oder erstellen Sie eine Gemeinschaft aus einer Exportdatei neu. Anmeldedaten sind nicht enthalten.",
+    "export": "Konten exportieren",
+    "exporting": "Export…",
+    "importNew": "Import → neue Gemeinschaft",
+    "importRestore": "Identisch wiederherstellen",
+    "restoreConfirm": "Die identische Wiederherstellung fügt Daten mit ihren ursprünglichen IDs ein und schlägt fehl, wenn die Gemeinschaft bereits existiert. Fortfahren?",
+    "parseError": "Datei unlesbar: ungültiges JSON.",
+    "exportError": "Export fehlgeschlagen.",
+    "importError": "Import fehlgeschlagen.",
+    "importOk": "Import erfolgreich: {{count}} Datensätze wiederhergestellt."
   }
 }

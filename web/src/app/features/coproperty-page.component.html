@@ -100,6 +100,37 @@
     }
   </div>
 
+  <!-- Sauvegarde & restauration (bureau) -->
+  @if (auth.isBureau()) {
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>{{ t('backup.title') }}</h2>
+          <div class="hint">{{ t('backup.hint') }}</div>
+        </div>
+      </div>
+      <div class="form-actions" style="align-items:center; gap:10px; flex-wrap:wrap;">
+        <button class="btn primary" type="button" [disabled]="!selectedCop || backupBusy()" (click)="exportBackup()">
+          {{ backupBusy() ? t('backup.exporting') : t('backup.export') }}
+        </button>
+        <label class="btn" [class.disabled]="backupBusy()">
+          {{ t('backup.importNew') }}
+          <input type="file" accept="application/json,.json" hidden [disabled]="backupBusy()" (change)="importBackup($event, 'NEW')" />
+        </label>
+        <label class="btn ghost" [class.disabled]="backupBusy()">
+          {{ t('backup.importRestore') }}
+          <input type="file" accept="application/json,.json" hidden [disabled]="backupBusy()" (change)="importBackup($event, 'RESTORE')" />
+        </label>
+      </div>
+      @if (backupError()) {
+        <div class="banner error" role="alert" style="margin-top:8px;">{{ backupError() }}</div>
+      }
+      @if (backupInfo()) {
+        <div class="banner" style="margin-top:8px;">{{ backupInfo() }}</div>
+      }
+    </div>
+  }
+
   <!-- Lots de la copropriété sélectionnée -->
   @if (selectedId()) {
     <div class="card">

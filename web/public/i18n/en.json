@@ -395,5 +395,18 @@
     "variance": "Variance",
     "noImpayes": "No unpaid balance.",
     "dummy": ""
+  },
+  "backup": {
+    "title": "Backup & restore",
+    "hint": "Export all the accounts of this coproperty (to archive, switch software, or back up), or rebuild a coproperty from an exported file. Login credentials are not included.",
+    "export": "Export accounts",
+    "exporting": "Exporting…",
+    "importNew": "Import → new coproperty",
+    "importRestore": "Restore identically",
+    "restoreConfirm": "Restoring identically reinserts data with its original IDs and fails if the coproperty already exists. Continue?",
+    "parseError": "Unreadable file: invalid JSON.",
+    "exportError": "Export failed.",
+    "importError": "Import failed.",
+    "importOk": "Import successful: {{count}} records restored."
   }
 }
